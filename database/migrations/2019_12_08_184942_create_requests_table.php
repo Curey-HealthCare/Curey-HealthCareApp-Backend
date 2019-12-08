@@ -17,9 +17,9 @@ class CreateRequestsTable extends Migration
             $table->Increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('product_id');
-            $table->boolean('is_available');
-            $table->dateTime('available_at');
-            $table->unsignedInteger('pharmacy_id');
+            $table->boolean('is_available')->default(false);
+            $table->dateTime('available_at')->nullable(true);
+            $table->unsignedInteger('pharmacy_id')->nullable(true);
             $table->timestamps();
 
 //            Constraints
