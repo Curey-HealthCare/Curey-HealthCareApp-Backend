@@ -35,7 +35,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('gender_id')->nullable(true);
             $table->unsignedInteger('country_id')->nullable(true);
             $table->unsignedInteger('city_id')->nullable(true);
-            $table->text('address')->nullable();
+            $table->text('address')->nullable(true);
             $table->boolean('first_login')->default('1');
             $table->rememberToken()->nullable(true);
             $table->timestamps();
@@ -56,7 +56,7 @@ class CreateUsersTable extends Migration
 
         Schema::table('users', function ($table) {
 //            API Token
-            $table->string('api_token',"80")->after('password')->unique()->nullable()->default(null);
+            $table->string('api_token',"80")->after('password')->unique()->nullable(true)->default(null);
         });
     }
 
