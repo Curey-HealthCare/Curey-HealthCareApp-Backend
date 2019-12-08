@@ -19,10 +19,10 @@ class CreateAppointmentsTable extends Migration
             $table->unsignedInteger('doctor_id');
             $table->boolean('is_callup');
             $table->dateTime('appointment_time');
-            $table->text('diagnosis');
+            $table->text('diagnosis')->nullable(true);
             $table->float('duration');
-            $table->dateTime('last_checkup');
-            $table->boolean('re_examination');
+            $table->dateTime('last_checkup')->nullable(true);
+            $table->boolean('re_examination')->default(false);
             $table->timestamps();
 
 //            Constraints
