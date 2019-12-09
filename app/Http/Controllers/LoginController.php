@@ -42,6 +42,13 @@ class LoginController extends Controller
         }
         else{
 //            if there's no match in database (phone or email or username)
+            if($existing_data == null){
+                $isFailed = true;
+                array_push($errors, 'This user data does not exist');
+            }
+        }
+
+        if($existing_data == null){
             $isFailed = true;
             array_push($errors, 'This user data does not exist');
         }
