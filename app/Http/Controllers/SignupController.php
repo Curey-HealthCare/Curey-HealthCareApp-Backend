@@ -34,5 +34,6 @@ class SignupController extends Controller
             'errors' => null];
 
         return response()->json($response, 200);
-    }
+    } 
+
 }
