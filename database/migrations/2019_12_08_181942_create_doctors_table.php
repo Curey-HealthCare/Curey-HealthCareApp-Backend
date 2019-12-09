@@ -22,8 +22,8 @@ class CreateDoctorsTable extends Migration
             $table->unsignedInteger('speciality_id');
             $table->text('address');
             $table->boolean('offers_callup');
-            $table->decimal('benefit');
-            $table->boolean('cu_benefit');
+            $table->decimal('benefit')->nullable(true);
+            $table->boolean('cu_benefit')->nullable(true);
             $table->timestamps();
 
 //            constraints

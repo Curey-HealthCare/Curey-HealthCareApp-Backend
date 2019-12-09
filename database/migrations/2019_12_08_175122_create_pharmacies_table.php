@@ -16,8 +16,8 @@ class CreatePharmaciesTable extends Migration
         Schema::create('pharmacies', function (Blueprint $table) {
             $table->Increments('id');
             $table->unsignedInteger('user_id')->unique();
-            $table->decimal('benefit_delivery');
-            $table->decimal('benefit_pharmacy');
+            $table->decimal('benefit_delivery')->nullable(true);
+            $table->decimal('benefit_pharmacy')->nullable(true);
             $table->text('address');
             $table->timestamps();
 
