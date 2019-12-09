@@ -13,7 +13,7 @@ class user extends Model
      *
      * @var array
      */
-    protected $hidden = [
+    /*protected $hidden = [
         'remember_token', 'first_login', 'password'
-    ];
+    ];*/
 }
