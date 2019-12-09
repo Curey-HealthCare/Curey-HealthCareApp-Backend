@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use http\Client\Response;
 use Illuminate\Http\Request;
 
 use App\user;
@@ -37,3 +38,4 @@ class SignupController extends Controller
     } 
 
 }
+
