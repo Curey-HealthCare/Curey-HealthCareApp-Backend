@@ -16,52 +16,66 @@ use App\user_role;
 
 class LoginController extends Controller
 {
-public function login(Request $request){
-    
-    $isFailed = false;
-    $data = [];
-    $errors =  [];
-    $user -> username = $request -> username;
-    $user -> email = $request -> email;
-    $user -> phone = $request -> phone;
-    $user -> password = $request -> password;
-    if($isFailed == false){
-    if($user-> username !=null)
-    {
-        if ([$user => $request('email')])
-    
-        {
-            $existing_data = user::find(email);
+    public function login(Request $request){
+
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $login_user = new user;
+        $username = $request -> username;
+        $email = $request -> email;
+        $phone = $request -> phone;
+        $password = $request -> password;
+
+        $existing_data = null;
+
+//        Check for username or email or phone in database
+        if($username != null){
+            $existing_data = \App\User::where('username', $username)->first();
         }
-        else if ([$user => $request('username')])
-    
-        { 
-            $existing_data = user::find(username);
-           
+        elseif ($email != null){
+            $existing_data = \App\User::where('email', $email)->first();
         }
-        else if ([$user => $request('phone')])
-    
-        {
-            
-            $existing_data = user::find(email);
+        elseif ($phone != null){
+            $existing_data = \App\User::where('phone', $phone)->first();
         }
-        if ($existing_data != null)
-        {
-            if ($login_user -> password == $existing_data -> password)
-            {
-                $response = [
-                    'isFailed' => $isFailed,
-                    'data' => $data,
-                    'errors' => $errors,
-                ];
-                return response()->json($response);
+        else{
+//            if there's no match in database (phone or email or username)
+            $isFailed = true;
+            array_push($errors, 'This user data does not exist');
+        }
+
+        if ($isFailed != true){
+//            get the password from database
+            $existing_password = $existing_data -> password;
+//            compare with the password which came in request
+            if ($existing_password == $password){
+//                the passwords matched, get more data
+
+                $role_id = $existing_data -> role_id;
+
+                if ($role_id == '1'){
+                    array_push($data, $existing_data);
+                }
+                elseif ($role_id == '2'){
+                    $pharmacy = pharmacy::where('user_id', $existing_data -> id)->first();
+                    array_push($data, [$existing_data, $pharmacy]);
+                }
+                elseif ($role_id == '3'){
+                    $doctor = doctor::where('user_id', $existing_data -> id)->first();
+                    array_push($data, [$existing_data, $doctor]);
+                }
             }
-    }
-       
+        }
 
-    }
 
-    }
-}
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
 
+        return response()->json($response);
+    }
 }
