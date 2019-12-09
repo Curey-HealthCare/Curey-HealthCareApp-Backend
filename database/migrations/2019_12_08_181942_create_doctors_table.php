@@ -16,12 +16,12 @@ class CreateDoctorsTable extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->Increments('id');
             $table->unsignedInteger('user_id')->unique();
-            $table->float('fees');
-            $table->float('call-fees');
             $table->text('qualifications');
             $table->unsignedInteger('speciality_id');
             $table->text('address');
             $table->boolean('offers_callup');
+            $table->float('fees');
+            $table->float('callup_fees')->nullable(true);
             $table->decimal('benefit')->nullable(true);
             $table->boolean('cu_benefit')->nullable(true);
             $table->timestamps();
