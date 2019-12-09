@@ -83,11 +83,30 @@ class SignupController extends Controller
                 $new_user -> password = $request -> password;
 
 
-                $new_user->save();
+                $new_user -> save();
                 array_push($data, $new_user);
             }
             elseif ($role == '2'){
-//             sign up as pharmacy, need to make the user first then get the user id for pharmacies table
+//                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
+                $new_ph = new user;
+                $new_ph -> first_name = $request -> first_name;
+                $new_ph -> username = $request -> username;
+                $new_ph -> email = $request -> email;
+                $new_ph -> phone = $request -> phone;
+                $new_ph -> country_id = $request -> country_id;
+                $new_ph -> city_id = $request -> city_id;
+                $new_ph -> role_id = $request -> user_role;
+                $new_ph -> password = $request -> password;
+
+                $new_ph -> save();
+
+                $pharmacy = new pharmacy;
+                $pharmacy -> user_id = $new_ph -> id;
+                $pharmacy -> address = $request -> address;
+
+                $pharmacy -> save();
+
+                array_push($data, [$new_ph, $pharmacy]);
             }
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
