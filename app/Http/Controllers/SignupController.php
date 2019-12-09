@@ -38,7 +38,7 @@ class SignupController extends Controller
     }
 
     public function signUp(Request $request){
-        $role = $request -> user_role;
+        $role = $request -> role_id;
         $email = $request -> email;
         $username = $request -> username;
         $phone = $request -> phone;
@@ -79,7 +79,7 @@ class SignupController extends Controller
                 $new_user -> country_id = $request -> country_id;
                 $new_user -> city_id = $request -> city_id;
                 $new_user -> address = $request -> address;
-                $new_user -> role_id = $request -> user_role;
+                $new_user -> role_id = $request -> role_id;
                 $new_user -> password = $request -> password;
 
 
@@ -95,7 +95,7 @@ class SignupController extends Controller
                 $new_ph -> phone = $request -> phone;
                 $new_ph -> country_id = $request -> country_id;
                 $new_ph -> city_id = $request -> city_id;
-                $new_ph -> role_id = $request -> user_role;
+                $new_ph -> role_id = $request -> role_id;
                 $new_ph -> password = $request -> password;
 
                 $new_ph -> save();
@@ -110,6 +110,31 @@ class SignupController extends Controller
             }
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
+                $new_dr = new user;
+                $new_dr -> first_name = $request -> first_name;
+                $new_dr -> last_name = $request -> last_name;
+                $new_dr -> username = $request -> username;
+                $new_dr -> email = $request -> email;
+                $new_dr -> phone = $request -> phone;
+                $new_dr -> country_id = $request -> country_id;
+                $new_dr -> city_id = $request -> city_id;
+                $new_dr -> role_id = $request -> role_id;
+                $new_dr -> password = $request -> password;
+
+                $new_dr -> save();
+
+                $doctor = new doctor;
+                $doctor -> user_id = $new_dr -> id;
+                $doctor -> speciality_id = $request -> speciality_id;
+                $doctor -> qualifications = $request -> qualifications;
+                $doctor -> address = $request -> address;
+                $doctor -> fees = $request -> fees;
+                $doctor -> offers_callup = $request -> offers_callup;
+                $doctor -> callup_fees = $request -> callup_fees;
+
+                $doctor -> save();
+
+                array_push($data, [$new_dr, $doctor]);
             }
         }
 
