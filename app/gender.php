@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class gender extends Model
 {
-    public $table = "gender";
+    public $table = "genders";
 
 }

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class prescription extends Model
 {
-    public $table = "prescription";
+    public $table = "prescriptions";
 }
