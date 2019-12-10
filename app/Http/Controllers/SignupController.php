@@ -19,17 +19,11 @@ use App\user_role;
 class SignupController extends Controller
 {
     public function show(){
-        $countries = country::all();
-        $cities = city::all();
-        $genders = gender::all();
-        $specialities = specialities::all();
         $user_roles = user_role::all();
 
-        $data = ['countries' => $countries,
-            'cities' => $cities,
-            'genders' => $genders,
-            'specialities' => $specialities,
-            'user_roles' => $user_roles];
+        $data = [
+            'user_roles' => $user_roles
+        ];
 
         $response = ['isFailed' => false,
             'data' => $data,
@@ -47,7 +41,7 @@ class SignupController extends Controller
         $data = [];
         $errors =  [];
 
-        $validator = Validator::make($request, [
+        $validator = Validator::make($request->all(), [
             'username' => 'required|min:6|max:50',
             'email' => 'required|max:50',
             'password' => 'required|min:8|max:50',
