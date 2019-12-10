@@ -23,3 +23,5 @@ Route::post('signup', 'SignupController@signUp');
 
 // Login route
 Route::post('login', 'LoginController@login');
+Route::get('files','fileController@show');
+Route::post('files','fileController@save');
