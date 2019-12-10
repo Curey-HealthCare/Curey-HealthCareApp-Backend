@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use http\Client\Response;
 use Illuminate\Http\Request;
+
 
 use App\user;
 use App\city;
@@ -45,7 +47,6 @@ class SignupController extends Controller
             'username' => 'required|min:6|max:50',
             'email' => 'required|max:50',
             'password' => 'required|min:8|max:50',
-            'confirm_password' => 'required|min:8|max:50'
         ]);
 
 
@@ -72,10 +73,14 @@ class SignupController extends Controller
                 $new_user -> username = $request -> username;
                 $new_user -> email = $request -> email;
                 $new_user -> role_id = $request -> role_id;
-                $new_user -> password = $request -> password;
+
+                $hashed = Hash::make($request -> password);
+                $new_user -> password = $hashed;
 
                 $new_user -> save();
-                array_push($data, $new_user);
+                $data = [
+                    'user' => $new_user
+                ];
             }
             elseif ($role == '2'){
 //                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
@@ -83,7 +88,9 @@ class SignupController extends Controller
                 $new_ph -> username = $request -> username;
                 $new_ph -> email = $request -> email;
                 $new_ph -> role_id = $request -> role_id;
-                $new_ph -> password = $request -> password;
+
+                $hashed = Hash::make($request -> password);
+                $new_ph -> password = $hashed;
 
                 $new_ph -> save();
 
@@ -92,7 +99,10 @@ class SignupController extends Controller
 
                 $pharmacy -> save();
 
-                array_push($data, [$new_ph, $pharmacy]);
+                $data = [
+                    'user' => $new_ph,
+                    'pharmacy' => $pharmacy
+                ];
             }
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
@@ -100,7 +110,9 @@ class SignupController extends Controller
                 $new_dr -> username = $request -> username;
                 $new_dr -> email = $request -> email;
                 $new_dr -> role_id = $request -> role_id;
-                $new_dr -> password = $request -> password;
+
+                $hashed = Hash::make($request -> password);
+                $new_dr -> password = $hashed;
 
                 $new_dr -> save();
 
@@ -109,7 +121,10 @@ class SignupController extends Controller
 
                 $doctor -> save();
 
-                array_push($data, [$new_dr, $doctor]);
+                $data = [
+                    'user' => $new_dr,
+                    'doctor' => $doctor
+                ];
             }
         }
 
