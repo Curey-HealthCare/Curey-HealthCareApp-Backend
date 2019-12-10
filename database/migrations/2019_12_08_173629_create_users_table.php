@@ -58,6 +58,7 @@ class CreateUsersTable extends Migration
 //            API Token
             $table->string('api_token',"125")->after('password')->unique()
                 ->nullable(true)->default(null);
+            $table->boolean('is_confirmed')->default(0);
         });
     }
 
