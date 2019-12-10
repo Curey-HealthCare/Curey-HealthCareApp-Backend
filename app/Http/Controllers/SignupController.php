@@ -186,11 +186,29 @@ class SignupController extends Controller
             ];
         }
         elseif ($complete_user -> role_id == '2'){
-            $complete_user -> save();
+            $pharmacy = new pharmacy;
+            $pharmacy -> address = $request -> address;
 
-            $pharmcay = new pharmacy;
-            $pharmcay -> address = $request -> address;
+            $complete_user -> where('id', $complete_user -> id)
+                -> update(
+                    ['first_name' => $complete_user -> first_name,
+                        'phone' => $complete_user -> phone,
+                        'country_id' => $complete_user -> country_id,
+                        'city_id' => $complete_user -> city_id]);
 
+            $user = user::where('id', $complete_user -> id)->first();
+
+            $pharmacy -> where('user_id', $complete_user -> id)
+                -> update([
+                    'address' => $pharmacy -> address
+                ]);
+
+            $pharmacy = pharmacy::where('user_id', $complete_user -> id)->first();
+
+            $data = [
+                'user' => $user,
+                'pharmacy' => $pharmacy
+            ];
 
         }
         elseif ($complete_user -> role_id == '3'){
