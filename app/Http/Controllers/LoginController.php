@@ -37,7 +37,7 @@ class LoginController extends Controller
 
         if ($validator->fails()){
             $isFailed = true;
-            $errors = $validator -> errors();
+            $errors += $validator -> errors();
         }
 
 //        Check for username or email or phone in database
@@ -53,7 +53,9 @@ class LoginController extends Controller
 //        if There's no user data
         if($existing_data == null){
             $isFailed = true;
-            array_push($errors, 'This user data does not exist');
+            $errors += [
+                'user' => "This user data doesn't exist"
+            ];
         }
 
         if ($isFailed != true){
@@ -74,19 +76,29 @@ class LoginController extends Controller
                 $role_id = $existing_data -> role_id;
 
                 if ($role_id == '1'){
-                    array_push($data, $existing_data);
+                    $data = [
+                        'user' => $existing_data
+                    ];
                 }
                 elseif ($role_id == '2'){
                     $pharmacy = pharmacy::where('user_id', $existing_data -> id)->first();
-                    array_push($data, [$existing_data, $pharmacy]);
+                    $data = [
+                        'user' => $existing_data,
+                        'pharmacy' => $pharmacy
+                    ];
                 }
                 elseif ($role_id == '3'){
                     $doctor = doctor::where('user_id', $existing_data -> id)->first();
-                    array_push($data, [$existing_data, $doctor]);
+                    $data = [
+                        'user' => $existing_data,
+                        'doctor' => $doctor
+                    ];
                 }
             }
             else{
-                array_push($errors, ['password does not match']);
+                $errors = [
+                    'password' => "The password doesn't match"
+                ];
                 $isFailed = true;
             }
         }

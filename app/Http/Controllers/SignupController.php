@@ -49,6 +49,11 @@ class SignupController extends Controller
             'password' => 'required|min:8|max:50',
         ]);
 
+        if ($validator->fails()){
+            $isFailed = true;
+            $errors += $validator -> errors();
+        }
+
 
 //        Check existing records in database for conflicts
         $all_users = user::all();
@@ -56,12 +61,16 @@ class SignupController extends Controller
         foreach ($all_users as $user){
             if ($user -> email == $email and $user -> role_id == $role){
 //                Add error that this email is already in database with same user role
-                array_push($errors, 'This email is already signed up with the same user type');
+                $errors += [
+                    'email' => 'This email address is already in use'
+                ];
                 $isFailed = true;
             }
             if ($user -> username == $username){
 //                Add error that this username is used
-                array_push($errors, 'This username is already used');
+                $errors += [
+                    'username' => 'this username is already in use'
+                ];
                 $isFailed = true;
             }
         }
