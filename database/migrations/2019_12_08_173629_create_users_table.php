@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->Increments('id');
             $table->string('first_name',"60")
-                ->nullable(false);
+                ->nullable(true);
             $table->string('last_name',"60")
                 ->nullable(true);
             $table->string('username',"125")
@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')
                 ->nullable(true);
             $table->string('phone',"15")
-                ->nullable(false);
+                ->nullable(true);
             $table->string('password',"125")
                 ->nullable(false);
             $table->unsignedInteger('image_id')
@@ -45,8 +45,8 @@ class CreateUsersTable extends Migration
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->foreign('role_id')->references('id')->on('user_roles');
 
-            $table->foreign('gender_id')->references('id')->on('genders');
-
+            $table->foreign('gender_id')->references('id')->on('genders')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->foreign('country_id')->references('id')->on('countries')
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->foreign('city_id')->references('id')->on('cities')
@@ -56,7 +56,8 @@ class CreateUsersTable extends Migration
 
         Schema::table('users', function ($table) {
 //            API Token
-            $table->string('api_token',"80")->after('password')->unique()->nullable(true)->default(null);
+            $table->string('api_token',"125")->after('password')->unique()
+                ->nullable(true)->default(null);
         });
     }
 

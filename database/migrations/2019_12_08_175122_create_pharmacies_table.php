@@ -18,7 +18,7 @@ class CreatePharmaciesTable extends Migration
             $table->unsignedInteger('user_id')->unique();
             $table->decimal('benefit_delivery')->nullable(true);
             $table->decimal('benefit_pharmacy')->nullable(true);
-            $table->text('address');
+            $table->text('address')->nullable(true);
             $table->timestamps();
 
 //            Constraints
