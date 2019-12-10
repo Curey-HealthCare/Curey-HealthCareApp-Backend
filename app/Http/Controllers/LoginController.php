@@ -75,6 +75,10 @@ class LoginController extends Controller
                     array_push($data, [$existing_data, $doctor]);
                 }
             }
+            else{
+                array_push($errors, ['password does not match']);
+                $isFailed = true;
+            }
         }
 
 
