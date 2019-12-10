@@ -150,7 +150,65 @@ class SignupController extends Controller
     }
 
     public function signup2(Request $request){
+        $complete_user = new user;
 
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $complete_user -> id = $request -> id;
+        $complete_user -> role_id = $request -> role_id;
+        $complete_user -> first_name = $request -> first_name;
+        $complete_user -> country_id = $request -> country_id;
+        $complete_user -> city_id = $request -> city_id;
+        $complete_user -> phone = $request -> phone;
+
+        if ($complete_user -> role_id == '1'){
+            $complete_user -> last_name = $request -> last_name;
+            $complete_user -> address = $request -> address;
+            $complete_user -> gender_id = $request -> gender_id;
+
+            $complete_user -> where('id', $complete_user -> id)
+                -> update(
+                    ['first_name' => $complete_user -> first_name,
+                    'last_name' => $complete_user -> last_name,
+                    'phone' => $complete_user -> phone,
+                    'gender_id' => $complete_user -> gender_id,
+                    'country_id' => $complete_user -> country_id,
+                    'city_id' => $complete_user -> city_id,
+                    'address' => $complete_user -> address]
+                );
+
+            $user = user::where('id', $complete_user -> id)->first();
+
+            $data = [
+                'user' => $user
+            ];
+        }
+        elseif ($complete_user -> role_id == '2'){
+            $complete_user -> save();
+
+            $pharmcay = new pharmacy;
+            $pharmcay -> address = $request -> address;
+
+
+        }
+        elseif ($complete_user -> role_id == '3'){
+            $doctor = new doctor;
+            $doctor -> lastname = $request -> lastname;
+            $doctor -> speciality_id = $request -> speciality_id;
+            $doctor -> qualifications = $request -> qualifications;
+            $doctor -> address = $request -> address;
+
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
+
+        return response()->json($response);
     }
 }
 
