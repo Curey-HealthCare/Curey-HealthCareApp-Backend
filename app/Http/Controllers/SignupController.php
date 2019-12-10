@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use http\Client\Response;
 use Illuminate\Http\Request;
 
@@ -41,14 +42,22 @@ class SignupController extends Controller
         $role = $request -> role_id;
         $email = $request -> email;
         $username = $request -> username;
-        $phone = $request -> phone;
 
         $isFailed = false;
         $data = [];
         $errors =  [];
 
+        $validator = Validator::make($request, [
+            'username' => 'required|min:6|max:50',
+            'email' => 'required|max:50',
+            'password' => 'required|min:8|max:50',
+            'confirm_password' => 'required|min:8|max:50'
+        ]);
+
+
 //        Check existing records in database for conflicts
         $all_users = user::all();
+
         foreach ($all_users as $user){
             if ($user -> email == $email and $user -> role_id == $role){
 //                Add error that this email is already in database with same user role
@@ -60,28 +69,16 @@ class SignupController extends Controller
                 array_push($errors, 'This username is already used');
                 $isFailed = true;
             }
-            if ($user -> phone == $phone){
-//                Add error that this phone number is used
-                array_push($errors, 'This phone number is already used');
-                $isFailed = true;
-            }
         }
 
         if($isFailed == false){
             if($role == '1'){
 //                sign up as customer
                 $new_user = new user;
-                $new_user -> first_name = $request -> first_name;
-                $new_user -> last_name = $request -> last_name;
                 $new_user -> username = $request -> username;
                 $new_user -> email = $request -> email;
-                $new_user -> phone = $request -> phone;
-                $new_user -> country_id = $request -> country_id;
-                $new_user -> city_id = $request -> city_id;
-                $new_user -> address = $request -> address;
                 $new_user -> role_id = $request -> role_id;
                 $new_user -> password = $request -> password;
-
 
                 $new_user -> save();
                 array_push($data, $new_user);
@@ -89,12 +86,8 @@ class SignupController extends Controller
             elseif ($role == '2'){
 //                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
                 $new_ph = new user;
-                $new_ph -> first_name = $request -> first_name;
                 $new_ph -> username = $request -> username;
                 $new_ph -> email = $request -> email;
-                $new_ph -> phone = $request -> phone;
-                $new_ph -> country_id = $request -> country_id;
-                $new_ph -> city_id = $request -> city_id;
                 $new_ph -> role_id = $request -> role_id;
                 $new_ph -> password = $request -> password;
 
@@ -102,7 +95,6 @@ class SignupController extends Controller
 
                 $pharmacy = new pharmacy;
                 $pharmacy -> user_id = $new_ph -> id;
-                $pharmacy -> address = $request -> address;
 
                 $pharmacy -> save();
 
@@ -111,13 +103,8 @@ class SignupController extends Controller
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
                 $new_dr = new user;
-                $new_dr -> first_name = $request -> first_name;
-                $new_dr -> last_name = $request -> last_name;
                 $new_dr -> username = $request -> username;
                 $new_dr -> email = $request -> email;
-                $new_dr -> phone = $request -> phone;
-                $new_dr -> country_id = $request -> country_id;
-                $new_dr -> city_id = $request -> city_id;
                 $new_dr -> role_id = $request -> role_id;
                 $new_dr -> password = $request -> password;
 
@@ -125,12 +112,6 @@ class SignupController extends Controller
 
                 $doctor = new doctor;
                 $doctor -> user_id = $new_dr -> id;
-                $doctor -> speciality_id = $request -> speciality_id;
-                $doctor -> qualifications = $request -> qualifications;
-                $doctor -> address = $request -> address;
-                $doctor -> fees = $request -> fees;
-                $doctor -> offers_callup = $request -> offers_callup;
-                $doctor -> callup_fees = $request -> callup_fees;
 
                 $doctor -> save();
 
