@@ -122,5 +122,35 @@ class SignupController extends Controller
         return response()->json($response);
     }
 
+    public function show2(){
+        $countries = country::all();
+        $cities = city::all();
+        $genders = gender::all();
+        $specialities = specialities::all();
+
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $data = [
+            'countries' => $countries,
+            'cities' => $cities,
+            'genders' => $genders,
+            'specialites' => $specialities,
+        ];
+
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
+
+        return response()->json($response);
+    }
+
+    public function signup2(Request $request){
+
+    }
 }
 
