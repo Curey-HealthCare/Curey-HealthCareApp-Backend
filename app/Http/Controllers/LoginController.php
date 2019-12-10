@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
+use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 use App\user;
 use App\city;
@@ -22,32 +25,30 @@ class LoginController extends Controller
         $data = [];
         $errors =  [];
 
-        $login_user = new user;
-        $username = $request -> username;
-        $email = $request -> email;
-        $phone = $request -> phone;
-        $password = $request -> password;
 
         $existing_data = null;
 
-//        Check for username or email or phone in database
-        if($username != null){
-            $existing_data = \App\User::where('username', $username)->first();
-        }
-        elseif ($email != null){
-            $existing_data = \App\User::where('email', $email)->first();
-        }
-        elseif ($phone != null){
-            $existing_data = \App\User::where('phone', $phone)->first();
-        }
-        else{
-//            if there's no match in database (phone or email or username)
-            if($existing_data == null){
-                $isFailed = true;
-                array_push($errors, 'This user data does not exist');
-            }
+        $validator = Validator::make($request->all(), [
+                'user' => 'required|min:6|max:50',
+                'password' => 'required|min:8|max:50'
+            ]
+        );
+
+        if ($validator->fails()){
+            $errors = $validator -> errors();
         }
 
+//        Check for username or email or phone in database
+        $existing_data = \App\User::where('username', $request -> user)->first();
+
+        if($existing_data == null){
+            $existing_data = \App\User::where('email', $request -> user)->first();
+        }
+        if ($existing_data == null){
+            $existing_data = \App\User::where('phone', $request -> user)->first();
+        }
+
+//        if There's no user data
         if($existing_data == null){
             $isFailed = true;
             array_push($errors, 'This user data does not exist');
@@ -57,7 +58,7 @@ class LoginController extends Controller
 //            get the password from database
             $existing_password = $existing_data -> password;
 //            compare with the password which came in request
-            if ($existing_password == $password){
+            if ($existing_password == $request -> password){
 //                the passwords matched, get more data
 
                 $role_id = $existing_data -> role_id;
