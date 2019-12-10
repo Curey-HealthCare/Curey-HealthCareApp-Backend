@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 use App\user;
@@ -35,6 +35,7 @@ class LoginController extends Controller
         );
 
         if ($validator->fails()){
+            $isFailed = true;
             $errors = $validator -> errors();
         }
 
@@ -58,7 +59,7 @@ class LoginController extends Controller
 //            get the password from database
             $existing_password = $existing_data -> password;
 //            compare with the password which came in request
-            if ($existing_password == $request -> password){
+            if (Hash::check($request -> password, $existing_password)){
 //                the passwords matched, get more data
 
                 $role_id = $existing_data -> role_id;
