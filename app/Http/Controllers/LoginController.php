@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,6 +62,14 @@ class LoginController extends Controller
 //            compare with the password which came in request
             if (Hash::check($request -> password, $existing_password)){
 //                the passwords matched, get more data
+
+                $api_token = Str::random(80);
+                $existing_data -> where('id', $existing_data -> id)
+                    -> update([
+                       'api_token' => $api_token
+                    ]);
+
+                $existing_data = user::where('id', $existing_data -> id)->first();
 
                 $role_id = $existing_data -> role_id;
 
