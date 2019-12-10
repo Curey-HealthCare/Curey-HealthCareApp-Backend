@@ -213,11 +213,36 @@ class SignupController extends Controller
         }
         elseif ($complete_user -> role_id == '3'){
             $doctor = new doctor;
-            $doctor -> lastname = $request -> lastname;
+            $doctor -> last_name = $request -> last_name;
             $doctor -> speciality_id = $request -> speciality_id;
             $doctor -> qualifications = $request -> qualifications;
             $doctor -> address = $request -> address;
 
+            $complete_user -> where('id', $complete_user -> id)
+                -> update(
+                    ['first_name' => $complete_user -> first_name,
+                        'last_name' => $doctor -> last_name,
+                        'phone' => $complete_user -> phone,
+                        'gender_id' => $complete_user -> gender_id,
+                        'country_id' => $complete_user -> country_id,
+                        'city_id' => $complete_user -> city_id]
+                );
+
+            $user = user::where('id', $complete_user -> id)->first();
+
+            $doctor -> where('user_id', $complete_user -> id)
+                -> update([
+                    'speciality_id' => $doctor -> speciality_id,
+                    'qualifications' => $doctor -> qualifications,
+                    'address' => $doctor -> address
+                ]);
+
+            $doctor = doctor::where('user_id', $complete_user -> id)->first();
+
+            $data = [
+                'user' => $user,
+                'doctor' => $doctor
+            ];
         }
 
         $response = [
