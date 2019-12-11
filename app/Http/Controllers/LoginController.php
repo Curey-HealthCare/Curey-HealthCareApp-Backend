@@ -37,7 +37,10 @@ class LoginController extends Controller
 
         if ($validator->fails()){
             $isFailed = true;
-            $errors += $validator -> errors();
+            $validator_errors = $validator -> errors();
+            $errors += [
+                'validator' => $validator_errors
+            ];
         }
 
 //        Check for username or email or phone in database
