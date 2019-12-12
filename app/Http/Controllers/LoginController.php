@@ -44,65 +44,67 @@ class LoginController extends Controller
         }
 
 //        Check for username or email or phone in database
-        $existing_data = \App\User::where('username', $request -> user)->first();
+        if($isFailed == false){
+            $existing_data = \App\User::where('username', $request -> user)->first();
 
-        if($existing_data == null){
-            $existing_data = \App\User::where('email', $request -> user)->first();
-        }
-        if ($existing_data == null){
-            $existing_data = \App\User::where('phone', $request -> user)->first();
-        }
+            if($existing_data == null){
+                $existing_data = \App\User::where('email', $request -> user)->first();
+            }
+            if ($existing_data == null){
+                $existing_data = \App\User::where('phone', $request -> user)->first();
+            }
 
 //        if There's no user data
-        if($existing_data == null){
-            $isFailed = true;
-            $errors += [
-                'user' => "This user data doesn't exist"
-            ];
-        }
+            if($existing_data == null){
+                $isFailed = true;
+                $errors += [
+                    'user' => "This user data doesn't exist"
+                ];
+            }
 
-        if ($isFailed != true){
+            if ($isFailed != true){
 //            get the password from database
-            $existing_password = $existing_data -> password;
+                $existing_password = $existing_data -> password;
 //            compare with the password which came in request
-            if (Hash::check($request -> password, $existing_password)){
+                if (Hash::check($request -> password, $existing_password)){
 //                the passwords matched, get more data
 
-                $api_token = Str::random(80);
-                $existing_data -> where('id', $existing_data -> id)
-                    -> update([
-                       'api_token' => $api_token
-                    ]);
+                    $api_token = Str::random(80);
+                    $existing_data -> where('id', $existing_data -> id)
+                        -> update([
+                            'api_token' => $api_token
+                        ]);
 
-                $existing_data = user::where('id', $existing_data -> id)->first();
+                    $existing_data = user::where('id', $existing_data -> id)->first();
 
-                $role_id = $existing_data -> role_id;
+                    $role_id = $existing_data -> role_id;
 
-                if ($role_id == '1'){
-                    $data = [
-                        'user' => $existing_data
-                    ];
+                    if ($role_id == '1'){
+                        $data = [
+                            'user' => $existing_data
+                        ];
+                    }
+                    elseif ($role_id == '2'){
+                        $pharmacy = pharmacy::where('user_id', $existing_data -> id)->first();
+                        $data = [
+                            'user' => $existing_data,
+                            'pharmacy' => $pharmacy
+                        ];
+                    }
+                    elseif ($role_id == '3'){
+                        $doctor = doctor::where('user_id', $existing_data -> id)->first();
+                        $data = [
+                            'user' => $existing_data,
+                            'doctor' => $doctor
+                        ];
+                    }
                 }
-                elseif ($role_id == '2'){
-                    $pharmacy = pharmacy::where('user_id', $existing_data -> id)->first();
-                    $data = [
-                        'user' => $existing_data,
-                        'pharmacy' => $pharmacy
+                else{
+                    $errors = [
+                        'password' => "The password doesn't match"
                     ];
+                    $isFailed = true;
                 }
-                elseif ($role_id == '3'){
-                    $doctor = doctor::where('user_id', $existing_data -> id)->first();
-                    $data = [
-                        'user' => $existing_data,
-                        'doctor' => $doctor
-                    ];
-                }
-            }
-            else{
-                $errors = [
-                    'password' => "The password doesn't match"
-                ];
-                $isFailed = true;
             }
         }
 
