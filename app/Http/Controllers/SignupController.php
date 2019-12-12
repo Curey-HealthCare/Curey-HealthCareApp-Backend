@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use http\Client\Response;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 
@@ -20,6 +20,9 @@ use App\user_role;
 
 class SignupController extends Controller
 {
+
+//    Removed
+/*
     public function show(){
         $user_roles = user_role::all();
 
@@ -33,6 +36,8 @@ class SignupController extends Controller
 
         return response()->json($response, 200);
     }
+*/
+//    End of Removed
 
     public function signUp(Request $request){
         $role = $request -> role_id;
@@ -79,12 +84,17 @@ class SignupController extends Controller
         }
 
         if($isFailed == false){
+
+//            Generate api_token
+
+            $api_token = Str::random(80);
             if($role == '1'){
 //                sign up as customer
                 $new_user = new user;
                 $new_user -> username = $request -> username;
                 $new_user -> email = $request -> email;
                 $new_user -> role_id = $request -> role_id;
+                $new_user -> api_token = $api_token;
 
                 $hashed = Hash::make($request -> password);
                 $new_user -> password = $hashed;
@@ -100,6 +110,7 @@ class SignupController extends Controller
                 $new_ph -> username = $request -> username;
                 $new_ph -> email = $request -> email;
                 $new_ph -> role_id = $request -> role_id;
+                $new_ph -> api_token = $api_token;
 
                 $hashed = Hash::make($request -> password);
                 $new_ph -> password = $hashed;
@@ -122,6 +133,7 @@ class SignupController extends Controller
                 $new_dr -> username = $request -> username;
                 $new_dr -> email = $request -> email;
                 $new_dr -> role_id = $request -> role_id;
+                $new_dr -> api_token = $api_token;
 
                 $hashed = Hash::make($request -> password);
                 $new_dr -> password = $hashed;
@@ -149,6 +161,10 @@ class SignupController extends Controller
         return response()->json($response);
     }
 
+
+//    Will be moved to settings / Edit profile
+
+/*
     public function show2(){
         $countries = country::all();
         $cities = city::all();
@@ -280,5 +296,10 @@ class SignupController extends Controller
 
         return response()->json($response);
     }
+
+*/
+
+// End of edited code
+
 }
 

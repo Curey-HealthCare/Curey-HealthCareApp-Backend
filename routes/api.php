@@ -18,10 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Sign up routes
-Route::get('signup', 'SignupController@show');
+//Route::get('signup', 'SignupController@show');
 Route::post('signup', 'SignupController@signUp');
+
+/*
 Route::get('completeSignup', 'SignupController@show2');
 Route::post('completeSignup', 'SignupController@signup2');
+*/
 
 // Login route
 Route::post('login', 'LoginController@login');
