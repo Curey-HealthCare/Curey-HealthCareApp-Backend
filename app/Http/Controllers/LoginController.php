@@ -39,7 +39,7 @@ class LoginController extends Controller
             $isFailed = true;
             $validator_errors = $validator -> errors();
             $errors += [
-                'validator' => $validator_errors
+                $validator_errors
             ];
         }
 
