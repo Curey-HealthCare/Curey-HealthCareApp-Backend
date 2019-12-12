@@ -21,8 +21,7 @@ use App\user_role;
 class SignupController extends Controller
 {
 
-//    Removed
-/*
+
     public function show(){
         $user_roles = user_role::all();
 
@@ -36,8 +35,7 @@ class SignupController extends Controller
 
         return response()->json($response, 200);
     }
-*/
-//    End of Removed
+
 
     public function signUp(Request $request){
         $role = $request -> role_id;
@@ -164,7 +162,7 @@ class SignupController extends Controller
 
 //    Will be moved to settings / Edit profile
 
-/*
+
     public function show2(){
         $countries = country::all();
         $cities = city::all();
@@ -297,7 +295,7 @@ class SignupController extends Controller
         return response()->json($response);
     }
 
-*/
+
 
 // End of edited code
 
