@@ -58,7 +58,7 @@ class SignupController extends Controller
             $isFailed = true;
             $validator_errors = $validator -> errors();
             $errors += [
-                $validator_errors
+                'validator' => $validator_errors
             ];
         }
 
@@ -301,5 +301,33 @@ class SignupController extends Controller
 
 // End of edited code
 
+
+    public function validateToken(request $request){
+        $user = user::where('api_token', $request -> api_token)->first();
+
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        if ($user != null){
+            $data = [
+                'user' => $user
+            ];
+        }
+        else {
+            $isFailed = true;
+            $errors = [
+                'api_token' => 'failed to authorize token'
+            ];
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
+
+        return response()->json($response);
+    }
 }
 
