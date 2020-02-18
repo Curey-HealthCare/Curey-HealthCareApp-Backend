@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class country extends Model
+class Country extends Model
 {
-    public $table = "countries";
-
+    public $table = "countrie";
 }
