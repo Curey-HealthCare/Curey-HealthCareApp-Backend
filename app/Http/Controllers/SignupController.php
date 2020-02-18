@@ -23,7 +23,7 @@ class SignupController extends Controller
 
 
     public function show(){
-        $user_roles = user_role::all();
+        $user_roles = UserRole::all();
 
         $data = [
             'user_roles' => $user_roles
@@ -62,7 +62,7 @@ class SignupController extends Controller
 
 
 //        Check existing records in database for conflicts
-        $all_users = user::all();
+        $all_users = User::all();
 
         foreach ($all_users as $user){
             if ($user -> email == $email and $user -> role_id == $role){
@@ -164,10 +164,10 @@ class SignupController extends Controller
 
 
     public function show2(){
-        $countries = country::all();
-        $cities = city::all();
-        $genders = gender::all();
-        $specialities = specialities::all();
+        $countries = Country::all();
+        $cities = City::all();
+        $genders = Gender::all();
+        $specialities = Speciality::all();
 
         $isFailed = false;
         $data = [];
@@ -220,7 +220,7 @@ class SignupController extends Controller
                     'address' => $complete_user -> address]
                 );
 
-            $user = user::where('id', $complete_user -> id)->first();
+            $user = User::where('id', $complete_user -> id)->first();
 
             $data = [
                 'user' => $user
@@ -237,14 +237,14 @@ class SignupController extends Controller
                         'country_id' => $complete_user -> country_id,
                         'city_id' => $complete_user -> city_id]);
 
-            $user = user::where('id', $complete_user -> id)->first();
+            $user = User::where('id', $complete_user -> id)->first();
 
             $pharmacy -> where('user_id', $complete_user -> id)
                 -> update([
                     'address' => $pharmacy -> address
                 ]);
 
-            $pharmacy = pharmacy::where('user_id', $complete_user -> id)->first();
+            $pharmacy = Pharmacy::where('user_id', $complete_user -> id)->first();
 
             $data = [
                 'user' => $user,
@@ -269,7 +269,7 @@ class SignupController extends Controller
                         'city_id' => $complete_user -> city_id]
                 );
 
-            $user = user::where('id', $complete_user -> id)->first();
+            $user = User::where('id', $complete_user -> id)->first();
 
             $doctor -> where('user_id', $complete_user -> id)
                 -> update([
@@ -278,7 +278,7 @@ class SignupController extends Controller
                     'address' => $doctor -> address
                 ]);
 
-            $doctor = doctor::where('user_id', $complete_user -> id)->first();
+            $doctor = Doctor::where('user_id', $complete_user -> id)->first();
 
             $data = [
                 'user' => $user,
@@ -301,7 +301,7 @@ class SignupController extends Controller
 
 
     public function validateToken(request $request){
-        $user = user::where('api_token', $request -> api_token)->first();
+        $user = User::where('api_token', $request -> api_token)->first();
 
         $isFailed = false;
         $data = [];

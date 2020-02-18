@@ -75,7 +75,7 @@ class LoginController extends Controller
                             'api_token' => $api_token
                         ]);
 
-                    $existing_data = user::where('id', $existing_data -> id)->first();
+                    $existing_data = User::where('id', $existing_data -> id)->first();
 
                     $role_id = $existing_data -> role_id;
 
@@ -85,14 +85,14 @@ class LoginController extends Controller
                         ];
                     }
                     elseif ($role_id == '2'){
-                        $pharmacy = pharmacy::where('user_id', $existing_data -> id)->first();
+                        $pharmacy = Pharmacy::where('user_id', $existing_data -> id)->first();
                         $data = [
                             'user' => $existing_data,
                             'pharmacy' => $pharmacy
                         ];
                     }
                     elseif ($role_id == '3'){
-                        $doctor = doctor::where('user_id', $existing_data -> id)->first();
+                        $doctor = Doctor::where('user_id', $existing_data -> id)->first();
                         $data = [
                             'user' => $existing_data,
                             'doctor' => $doctor
