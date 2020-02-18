@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class appointment extends Model
+class Appointment extends Model
 {
-
     public $table ="appointments";
 }
