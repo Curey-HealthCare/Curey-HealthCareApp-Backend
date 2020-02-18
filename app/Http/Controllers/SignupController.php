@@ -88,7 +88,7 @@ class SignupController extends Controller
             $api_token = Str::random(80);
             if($role == '1'){
 //                sign up as customer
-                $new_user = new user;
+                $new_user = new User;
                 $new_user -> username = $request -> username;
                 $new_user -> email = $request -> email;
                 $new_user -> role_id = $request -> role_id;
@@ -104,7 +104,7 @@ class SignupController extends Controller
             }
             elseif ($role == '2'){
 //                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
-                $new_ph = new user;
+                $new_ph = new User;
                 $new_ph -> username = $request -> username;
                 $new_ph -> email = $request -> email;
                 $new_ph -> role_id = $request -> role_id;
@@ -115,7 +115,7 @@ class SignupController extends Controller
 
                 $new_ph -> save();
 
-                $pharmacy = new pharmacy;
+                $pharmacy = new Pharmacy;
                 $pharmacy -> user_id = $new_ph -> id;
 
                 $pharmacy -> save();
@@ -127,7 +127,7 @@ class SignupController extends Controller
             }
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
-                $new_dr = new user;
+                $new_dr = new User;
                 $new_dr -> username = $request -> username;
                 $new_dr -> email = $request -> email;
                 $new_dr -> role_id = $request -> role_id;
@@ -138,7 +138,7 @@ class SignupController extends Controller
 
                 $new_dr -> save();
 
-                $doctor = new doctor;
+                $doctor = new Doctor;
                 $doctor -> user_id = $new_dr -> id;
 
                 $doctor -> save();
@@ -191,7 +191,7 @@ class SignupController extends Controller
     }
 
     public function signup2(Request $request){
-        $complete_user = new user;
+        $complete_user = new User;
 
         $isFailed = false;
         $data = [];
@@ -227,7 +227,7 @@ class SignupController extends Controller
             ];
         }
         elseif ($complete_user -> role_id == '2'){
-            $pharmacy = new pharmacy;
+            $pharmacy = new Pharmacy;
             $pharmacy -> address = $request -> address;
 
             $complete_user -> where('id', $complete_user -> id)
@@ -253,7 +253,7 @@ class SignupController extends Controller
 
         }
         elseif ($complete_user -> role_id == '3'){
-            $doctor = new doctor;
+            $doctor = new Doctor;
             $doctor -> last_name = $request -> last_name;
             $doctor -> speciality_id = $request -> speciality_id;
             $doctor -> qualifications = $request -> qualifications;
