@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class user_role extends Model
+class UserRole extends Model
 {
     public $table = "user_roles";
+
 }
