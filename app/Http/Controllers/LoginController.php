@@ -8,15 +8,15 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-use App\user;
-use App\city;
-use App\country;
-use App\doctor;
-use App\gender;
-use App\image;
-use App\pharmacy;
-use App\specialities;
-use App\user_role;
+use App\User;
+use App\City;
+use App\Country;
+use App\Doctor;
+use App\Gender;
+use App\Image;
+use App\Pharmacy;
+use App\Speciality;
+use App\UserRole;
 
 class LoginController extends Controller
 {
