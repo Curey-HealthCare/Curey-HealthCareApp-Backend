@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class payment_method extends Model
+class PaymentMethod extends Model
 {
     public $table = "payment_methods";
+
 }
