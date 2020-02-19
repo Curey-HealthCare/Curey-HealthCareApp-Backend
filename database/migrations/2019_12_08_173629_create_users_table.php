@@ -19,8 +19,10 @@ class CreateUsersTable extends Migration
                 ->nullable(true);
             $table->string('last_name',"60")
                 ->nullable(true);
+            $table->string('full_name',"60")
+                ->nullable(true);
             $table->string('username',"125")
-                ->nullable(false);
+                ->nullable(true);
             $table->string('email',"125")
                 ->nullable(false);
             $table->timestamp('email_verified_at')
@@ -33,7 +35,6 @@ class CreateUsersTable extends Migration
                 ->nullable(true);
             $table->unsignedInteger('role_id');
             $table->unsignedInteger('gender_id')->nullable(true);
-            $table->unsignedInteger('country_id')->nullable(true);
             $table->unsignedInteger('city_id')->nullable(true);
             $table->text('address')->nullable(true);
             $table->boolean('first_login')->default('1');
@@ -44,10 +45,7 @@ class CreateUsersTable extends Migration
             $table->foreign('image_id')->references('id')->on('images')
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->foreign('role_id')->references('id')->on('user_roles');
-
             $table->foreign('gender_id')->references('id')->on('genders')
-                ->onDelete('SET NULL')->onUpdate('CASCADE');
-            $table->foreign('country_id')->references('id')->on('countries')
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->foreign('city_id')->references('id')->on('cities')
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
