@@ -34,6 +34,6 @@ class LocalController extends Controller
             'errors' => $errors,
         ];
 
-        return $response;
+        return response()->json($response);
     }
 }

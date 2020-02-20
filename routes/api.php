@@ -44,5 +44,8 @@ Route::group(['prefix' => '/mobile'], function(){
 
     //Token Validation
     Route::post('/validateToken', 'SignupController@validateToken');
+
+    // Home Route
+    Route::post('/', 'HomeController@mobileIndex');
 });
 
