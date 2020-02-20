@@ -40,14 +40,14 @@ class SignupController extends Controller
     public function signUp(Request $request){
         $role = $request -> role_id;
         $email = $request -> email;
-        $username = $request -> full_name;
+        $full_name = $request -> full_name;
 
         $isFailed = false;
         $data = [];
         $errors =  [];
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:6|max:50',
+            'full_name' => 'required|min:6|max:50',
             'email' => 'required|max:50',
             'password' => 'required|min:8|max:50',
         ]);
