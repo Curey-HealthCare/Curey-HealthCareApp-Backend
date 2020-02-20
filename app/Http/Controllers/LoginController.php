@@ -45,11 +45,8 @@ class LoginController extends Controller
 
 //        Check for username or email or phone in database
         if($isFailed == false){
-            $existing_data = \App\User::where('username', $request -> user)->first();
+            $existing_data = \App\User::where('email', $request -> user)->first();
 
-            if($existing_data == null){
-                $existing_data = \App\User::where('email', $request -> user)->first();
-            }
             if ($existing_data == null){
                 $existing_data = \App\User::where('phone', $request -> user)->first();
             }
