@@ -18,7 +18,7 @@ class DoctorsController extends Controller
     // for mobile
     public function mobileShowAll(Request $request){
         // TO DO
-        // make this function accept the location of the user and get doctors nearby
+        // DONE!!! make this function accept the location of the user and get doctors nearby //
         // add image instead of image id
         // Hash IDs
 
@@ -39,7 +39,9 @@ class DoctorsController extends Controller
 
 
         if ($isFailed == false){
-            $doctors = User::where('role_id', '3')->get();
+            $city = $user -> city_id;
+            $doctors = User::where('role_id', '3')->where('city_id', $city)->get();
+
             if($doctors == null){
                 $isFailed = true;
                 $errors += [
@@ -49,9 +51,26 @@ class DoctorsController extends Controller
             else{
                 // TO DO
                 // only show name / specialization / image / overall rating
-                $data += [
-                    $doctors
-                ];
+                $doctor = [];
+                foreach ($doctors as $doc){
+
+                    $id = $doc -> id;
+                    $doc2 = Doctor::where('user_id', $id)->first();
+                    $spec_id = $doc2 -> speciality_id;
+                    $speciality = Speciality::find($spec_id);
+                    // TO DO
+                    // show reviews / show photo
+
+                    // build response
+                    $doctor = [
+                        'full_name' => $doc -> full_name,
+                        'speciality' => $speciality -> name
+                    ];
+                    $data += [
+                        $doctor
+                    ];
+                }
+
             }
         }
 
