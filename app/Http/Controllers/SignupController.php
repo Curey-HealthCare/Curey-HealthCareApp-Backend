@@ -21,7 +21,7 @@ use App\UserRole;
 class SignupController extends Controller
 {
 
-
+/*
     public function show(){
         $user_roles = UserRole::all();
 
@@ -35,19 +35,19 @@ class SignupController extends Controller
 
         return response()->json($response, 200);
     }
-
+*/
 
     public function signUp(Request $request){
         $role = $request -> role_id;
         $email = $request -> email;
-        $username = $request -> username;
+        $username = $request -> full_name;
 
         $isFailed = false;
         $data = [];
         $errors =  [];
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|min:6|max:50',
+            'name' => 'required|min:6|max:50',
             'email' => 'required|max:50',
             'password' => 'required|min:8|max:50',
         ]);
@@ -72,6 +72,7 @@ class SignupController extends Controller
                 ];
                 $isFailed = true;
             }
+            /*
             if ($user -> username == $username){
 //                Add error that this username is used
                 $errors += [
@@ -79,6 +80,7 @@ class SignupController extends Controller
                 ];
                 $isFailed = true;
             }
+            */
         }
 
         if($isFailed == false){
@@ -89,7 +91,7 @@ class SignupController extends Controller
             if($role == '1'){
 //                sign up as customer
                 $new_user = new User;
-                $new_user -> username = $request -> username;
+                $new_user -> full_name = $request -> full_name;
                 $new_user -> email = $request -> email;
                 $new_user -> role_id = $request -> role_id;
                 $new_user -> api_token = $api_token;
@@ -105,7 +107,7 @@ class SignupController extends Controller
             elseif ($role == '2'){
 //                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
                 $new_ph = new User;
-                $new_ph -> username = $request -> username;
+                $new_ph -> full_name = $request -> full_name;
                 $new_ph -> email = $request -> email;
                 $new_ph -> role_id = $request -> role_id;
                 $new_ph -> api_token = $api_token;
@@ -128,7 +130,7 @@ class SignupController extends Controller
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
                 $new_dr = new User;
-                $new_dr -> username = $request -> username;
+                $new_dr -> full_name = $request -> full_name;
                 $new_dr -> email = $request -> email;
                 $new_dr -> role_id = $request -> role_id;
                 $new_dr -> api_token = $api_token;
@@ -162,7 +164,7 @@ class SignupController extends Controller
 
 //    Will be moved to settings / Edit profile
 
-
+/*
     public function show2(){
         $countries = Country::all();
         $cities = City::all();
@@ -295,7 +297,7 @@ class SignupController extends Controller
         return response()->json($response);
     }
 
-
+*/
 
 // End of edited code
 
