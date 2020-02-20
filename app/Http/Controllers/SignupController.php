@@ -37,7 +37,7 @@ class SignupController extends Controller
     }
 */
 
-    public function signUp(Request $request){
+    public function mobileSignUp(Request $request){
         $role = $request -> role_id;
         $email = $request -> email;
         $full_name = $request -> full_name;
@@ -302,7 +302,7 @@ class SignupController extends Controller
 // End of edited code
 
 
-    public function validateToken(request $request){
+    public function mobileValidateToken(request $request){
         $user = User::where('api_token', $request -> api_token)->first();
 
         $isFailed = false;

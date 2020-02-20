@@ -34,16 +34,16 @@ Route::post('login', 'LoginController@login');
 // mobile routes
 Route::group(['prefix' => '/mobile'], function(){
     // Localizaiton
-    Route::get('/{lang}', 'LocalController@local');
+    Route::get('/{lang}', 'LocalController@mobileLocal');
 
     // Sign up
-    Route::post('/signup', 'SignupController@signUp');
+    Route::post('/signup', 'SignupController@mobileSignUp');
 
     // Login
-    Route::post('/login', 'LoginController@login');
+    Route::post('/login', 'LoginController@mobileLogin');
 
     //Token Validation
-    Route::post('/validateToken', 'SignupController@validateToken');
+    Route::post('/validateToken', 'SignupController@mobileValidateToken');
 
     // Home Route
     Route::post('/', 'HomeController@mobileIndex');

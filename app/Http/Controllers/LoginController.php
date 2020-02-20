@@ -20,7 +20,7 @@ use App\UserRole;
 
 class LoginController extends Controller
 {
-    public function login(Request $request){
+    public function mobileLogin(Request $request){
 
         $isFailed = false;
         $data = [];
