@@ -17,29 +17,32 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/*
 // Sign up routes
 Route::get('signup', 'SignupController@show');
 Route::post('signup', 'SignupController@signUp');
-
 // API token validation
 Route::post('validateToken', 'SignupController@validateToken');
 
-
 Route::get('completeSignup', 'SignupController@show2');
 Route::post('completeSignup', 'SignupController@signup2');
-
-
 // Login route
 Route::post('login', 'LoginController@login');
-
-
-
-Route::get('mobile/{lang}', 'LocalController@local');
-
-/*
-// mobile routes
-Route::group(['prefix' => 'mobile'], function(){
-    // Localizaiton
-    Route::get('/{lang}', 'LocalizationController@local');
-});
+// Route::get('mobile/{lang}', 'LocalController@local');
 */
+
+// mobile routes
+Route::group(['prefix' => '/mobile'], function(){
+    // Localizaiton
+    Route::get('/{lang}', 'LocalController@local');
+
+    // Sign up
+    Route::post('/signup', 'SignupController@signUp');
+
+    // Login
+    Route::post('/login', 'LoginController@login');
+
+    //Token Validation
+    Route::post('/validateToken', 'SignupController@validateToken');
+});
+
