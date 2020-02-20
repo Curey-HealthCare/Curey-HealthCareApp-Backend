@@ -31,3 +31,15 @@ Route::post('completeSignup', 'SignupController@signup2');
 
 // Login route
 Route::post('login', 'LoginController@login');
+
+
+
+Route::get('mobile/{lang}', 'LocalController@local');
+
+/*
+// mobile routes
+Route::group(['prefix' => 'mobile'], function(){
+    // Localizaiton
+    Route::get('/{lang}', 'LocalizationController@local');
+});
+*/
