@@ -12,7 +12,6 @@ use App\Image;
 use App\Speciality;
 use App\UserRole;
 use App\DoctorRating;
-use PhpParser\Comment\Doc;
 
 class DoctorsController extends Controller
 {
@@ -51,7 +50,7 @@ class DoctorsController extends Controller
             }
             else{
                 // TO DO
-                // only show name / specialization / image / overall rating
+                // only show name -done / specialization -done / image -done / overall rating
                 $doctor = [];
                 foreach ($doctors as $doc){
 
@@ -61,12 +60,24 @@ class DoctorsController extends Controller
                     $speciality = Speciality::find($spec_id);
                     // TO DO
                     // show reviews / show photo
+                    /******************************/
+                    // Get the doctor's photo
+                    $image_id = $doc -> image_id;
+                    $image = Image::where('id', $image_id)->first();
+                    if($image != null){
+                        $image_path = $image -> path;
+                    }
+                    else{
+                        $image_path = null;
+                    }
+
 
                     // build response
                     $doctor = [
                         'id' => $doc -> id,
                         'full_name' => $doc -> full_name,
-                        'speciality' => $speciality -> name
+                        'speciality' => $speciality -> name,
+                        'image' => $image_path
                     ];
                     $data += [
                         $doctor
