@@ -54,9 +54,6 @@ class DoctorsController extends Controller
                     $doc2 = Doctor::where('user_id', $id)->first();
                     $spec_id = $doc2 -> speciality_id;
                     $speciality = Speciality::find($spec_id);
-                    // TO DO
-                    // show reviews / show photo -done / show fees
-                    /******************************/
                     // Get the doctor's photo
                     $image_id = $doc -> image_id;
                     $image = Image::where('id', $image_id)->first();
@@ -66,14 +63,16 @@ class DoctorsController extends Controller
                     else{
                         $image_path = null;
                     }
-
-
+                    // TO DO
+                    // show reviews
+                    /** */
                     // build response
                     $doctor = [
                         'id' => $doc -> id,
                         'full_name' => $doc -> full_name,
                         'speciality' => $speciality -> name,
-                        'image' => $image_path
+                        'image' => $image_path,
+                        'fees' => $doc2 -> fees,
                     ];
                     $data += [
                         $doctor
@@ -123,16 +122,11 @@ class DoctorsController extends Controller
             ];
         }
         else{
-            // get extra iformation of doctor
+            // get all informatiom about the doctor
             $doc2 = Doctor::where('user_id', $id)->first();
-
             // get doctor speciality name
             $spec_id = $doc2 -> speciality_id;
             $spec = Speciality::find($spec_id);
-
-            // TO DO
-            // Add reviews, iformation about doctor, fees
-
             // Get the doctor's photo
             $image_id = $doc_user -> image_id;
             $image = Image::where('id', $image_id)->first();
@@ -144,6 +138,7 @@ class DoctorsController extends Controller
             }
 
             // Build Response
+
             // Basic doctor data
             $doctor = [
                 'id' => $id,
@@ -155,13 +150,16 @@ class DoctorsController extends Controller
                 'offers_callup' => $doc2 -> offers_callup,
                 'callup_fees' => $doc2 -> callup_fees
             ];
+            // TO DO
+            // Add reviews
 
             // Doctor reviews
             $reviews = [
                 // TODO
             ];
             $data += [
-                $doctor
+                'doctor' => $doctor,
+                'reviews' => $reviews
             ];
         }
 
