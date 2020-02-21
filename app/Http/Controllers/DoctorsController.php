@@ -18,8 +18,6 @@ class DoctorsController extends Controller
     // for mobile
     public function mobileShowAll(Request $request){
         // TO DO
-        // DONE!!! make this function accept the location of the user and get doctors nearby //
-        // add image instead of image id
         // Hash IDs
 
         $isFailed = false;
@@ -49,8 +47,6 @@ class DoctorsController extends Controller
                 ];
             }
             else{
-                // TO DO
-                // only show name -done / specialization -done / image -done / overall rating
                 $doctor = [];
                 foreach ($doctors as $doc){
 
@@ -59,7 +55,7 @@ class DoctorsController extends Controller
                     $spec_id = $doc2 -> speciality_id;
                     $speciality = Speciality::find($spec_id);
                     // TO DO
-                    // show reviews / show photo
+                    // show reviews / show photo -done / show fees
                     /******************************/
                     // Get the doctor's photo
                     $image_id = $doc -> image_id;
@@ -98,7 +94,6 @@ class DoctorsController extends Controller
 
     public function mobileShowOne(Request $request){
         // TO DO
-        // add image instead of image id
         // Hash IDs
 
         $isFailed = false;
@@ -129,18 +124,41 @@ class DoctorsController extends Controller
         }
         else{
             // get extra iformation of doctor
-            $doc_2 = Doctor::where('user_id', $id)->first();
+            $doc2 = Doctor::where('user_id', $id)->first();
 
             // get doctor speciality name
-            $spec_id = $doc_2 -> speciality_id;
+            $spec_id = $doc2 -> speciality_id;
             $spec = Speciality::find($spec_id);
 
             // TO DO
-            // Add reviews, iformation about doctor, image, fees
+            // Add reviews, iformation about doctor, fees
+
+            // Get the doctor's photo
+            $image_id = $doc_user -> image_id;
+            $image = Image::where('id', $image_id)->first();
+            if($image != null){
+                $image_path = $image -> path;
+            }
+            else{
+                $image_path = null;
+            }
+
+            // Build Response
+            // Basic doctor data
             $doctor = [
                 'id' => $id,
                 'full_name' => $doc_user -> full_name,
-                'speciality' => $spec -> name
+                'speciality' => $spec -> name,
+                'image' => $image_path,
+                'qualifications' => $doc2 -> qualifications,
+                'fees' => $doc2 -> fees,
+                'offers_callup' => $doc2 -> offers_callup,
+                'callup_fees' => $doc2 -> callup_fees
+            ];
+
+            // Doctor reviews
+            $reviews = [
+                // TODO
             ];
             $data += [
                 $doctor
