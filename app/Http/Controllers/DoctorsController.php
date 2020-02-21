@@ -49,6 +49,7 @@ class DoctorsController extends Controller
             }
             else{
                 $doctor = [];
+                $i = 0;
                 foreach ($doctors as $doc){
 
                     $id = $doc -> id;
@@ -99,17 +100,6 @@ class DoctorsController extends Controller
                         ];
                     }
 
-                    /*
-                    $reviews = DoctorRating::where('doctor_id', $doc_id)->get();
-                    if($reviews == null){
-                        $ratings = [];
-                    }
-                    else{
-
-                    }
-                    */
-
-                    /** */
                     // build response
                     $doctor = [
                         'id' => $doc -> id,
@@ -117,11 +107,12 @@ class DoctorsController extends Controller
                         'speciality' => $speciality -> name,
                         'image' => $image_path,
                         'fees' => $doc2 -> fees,
+                        'overall_rating' => $ratings
                     ];
                     $data += [
-                        'doctor' => $doctor,
-                        'rating' => $ratings
+                        $i => $doctor,
                     ];
+                    $i += 1;
                 }
 
             }
@@ -180,8 +171,9 @@ class DoctorsController extends Controller
             // Get Reviews
             $doc_id = $doc2 -> id;
             $appointments = Appointment::where('doctor_id', $doc_id)->get();
+            $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
             $ratings = [];
-            if($appointments != null){
+            if($appointments != null and $appointments_count == 0){
                 $overall_rate = 0;
                 $i = 0;
                 foreach($appointments as $appointment){
@@ -219,7 +211,7 @@ class DoctorsController extends Controller
                         ];
 
                         $ratings += [
-                            $i => $rate
+                            $rate
                         ];
                     }
 
