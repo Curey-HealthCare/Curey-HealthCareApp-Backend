@@ -50,9 +50,10 @@ Route::group(['prefix' => '/mobile'], function(){
 
     // Doctors Page
     Route::post('/doctors', 'DoctorsController@mobileShowAll');
-
     // Doctor page
     Route::post('/doctor', 'DoctorsController@mobileShowOne');
+
+
     //show order page
     Route::post('/orders', 'OrderController@mobileShowOrder');
     //store order page

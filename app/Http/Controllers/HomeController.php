@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\User;
+use App\Image;
 
 class HomeController extends Controller
 {
@@ -25,11 +26,17 @@ class HomeController extends Controller
             ];
         }
         else{
-            // TO DO
-            // replace the image id in the response with the image path from images table
+            $image_id = $user -> image_id;
+            $image = Image::where('id', $image_id)->first();
+            if($image != null){
+                $image_path = $image -> path;
+            }
+            else{
+                $image_path = null;
+            }
             $data += [
                 'full_name' => $user -> full_name,
-                'image' => $user -> image_id
+                'image' => $image_path
             ];
         }
 
