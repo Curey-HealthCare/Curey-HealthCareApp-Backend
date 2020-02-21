@@ -72,21 +72,10 @@ class SignupController extends Controller
                 ];
                 $isFailed = true;
             }
-            /*
-            if ($user -> username == $username){
-//                Add error that this username is used
-                $errors += [
-                    'username' => 'this username is already in use'
-                ];
-                $isFailed = true;
-            }
-            */
         }
 
         if($isFailed == false){
-
 //            Generate api_token
-
             $api_token = Str::random(80);
             if($role == '1'){
 //                sign up as customer
@@ -95,13 +84,12 @@ class SignupController extends Controller
                 $new_user -> email = $request -> email;
                 $new_user -> role_id = $request -> role_id;
                 $new_user -> api_token = $api_token;
-
                 $hashed = Hash::make($request -> password);
                 $new_user -> password = $hashed;
-
                 $new_user -> save();
+
                 $data = [
-                    'user' => $new_user
+                    'api_token' => $api_token
                 ];
             }
             elseif ($role == '2'){
@@ -111,20 +99,16 @@ class SignupController extends Controller
                 $new_ph -> email = $request -> email;
                 $new_ph -> role_id = $request -> role_id;
                 $new_ph -> api_token = $api_token;
-
                 $hashed = Hash::make($request -> password);
                 $new_ph -> password = $hashed;
-
                 $new_ph -> save();
 
                 $pharmacy = new Pharmacy;
                 $pharmacy -> user_id = $new_ph -> id;
-
                 $pharmacy -> save();
 
                 $data = [
-                    'user' => $new_ph,
-                    'pharmacy' => $pharmacy
+                    'api_token' => $api_token
                 ];
             }
             elseif ($role == '3'){
@@ -134,20 +118,16 @@ class SignupController extends Controller
                 $new_dr -> email = $request -> email;
                 $new_dr -> role_id = $request -> role_id;
                 $new_dr -> api_token = $api_token;
-
                 $hashed = Hash::make($request -> password);
                 $new_dr -> password = $hashed;
-
                 $new_dr -> save();
 
                 $doctor = new Doctor;
                 $doctor -> user_id = $new_dr -> id;
-
                 $doctor -> save();
 
                 $data = [
-                    'user' => $new_dr,
-                    'doctor' => $doctor
+                    'api_token' => $api_token
                 ];
             }
         }
@@ -161,9 +141,7 @@ class SignupController extends Controller
         return response()->json($response);
     }
 
-
 //    Will be moved to settings / Edit profile
-
 /*
     public function show2(){
         $countries = Country::all();
@@ -296,11 +274,8 @@ class SignupController extends Controller
 
         return response()->json($response);
     }
-
 */
-
 // End of edited code
-
 
     public function mobileValidateToken(request $request){
         $user = User::where('api_token', $request -> api_token)->first();
