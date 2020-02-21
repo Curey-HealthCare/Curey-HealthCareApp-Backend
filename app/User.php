@@ -16,4 +16,8 @@ class user extends Model
     /*protected $hidden = [
         'remember_token', 'first_login', 'password'
     ];*/
+    public function order()
+    { 
+        return $this->hasMany(Order::class);
+    }
 }
