@@ -171,7 +171,12 @@ class DoctorsController extends Controller
             $appointments = Appointment::where('doctor_id', $doc_id)->get();
             $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
             $ratings = [];
-            if($appointments != null or $appointments_count != 0){
+            if($appointments == null or $appointments_count == 0){
+                $ratings = [
+                    'error' => 'no available ratings yet'
+                ];
+            }
+            else{
                 $overall_rate = 0;
                 foreach($appointments as $appointment){
                     $appointment_id = $appointment -> id;
@@ -209,11 +214,6 @@ class DoctorsController extends Controller
                         ];
                     }
                 }
-            }
-            else{
-                $ratings = [
-                    'error' => 'no available ratings yet'
-                ];
             }
             // Build Response
 
