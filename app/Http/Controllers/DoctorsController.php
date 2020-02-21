@@ -12,6 +12,7 @@ use App\Image;
 use App\Speciality;
 use App\UserRole;
 use App\DoctorRating;
+use App\Appointment;
 
 class DoctorsController extends Controller
 {
@@ -54,6 +55,7 @@ class DoctorsController extends Controller
                     $doc2 = Doctor::where('user_id', $id)->first();
                     $spec_id = $doc2 -> speciality_id;
                     $speciality = Speciality::find($spec_id);
+
                     // Get the doctor's photo
                     $image_id = $doc -> image_id;
                     $image = Image::where('id', $image_id)->first();
@@ -63,8 +65,50 @@ class DoctorsController extends Controller
                     else{
                         $image_path = null;
                     }
+
                     // TO DO
-                    // show reviews
+                    // show overall rating
+                    $doc_id = $doc2 -> id;
+                    $appointments = Appointment::where('doctor_id', $doc_id)->get();
+                    $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
+                    $ratings = [];
+                    $overall_rating = 0;
+                    if($appointments != null and $appointments_count != 0){
+                        $overall_rate = 0;
+                        foreach($appointments as $appointment){
+                            $appointment_id = $appointment -> id;
+                            $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
+                            $appointment_rating = 0;
+
+                            if($rating != null){
+                                $behavior = $rating -> behavior;
+                                $price = $rating -> price;
+                                $efficiency = $rating -> efficiency;
+                                $appointment_rating = ($behavior + $price + $efficiency) / 3;
+                                $overall_rate += $appointment_rating;
+                            }
+                        }
+                        $overall_rating = $overall_rate / $appointments_count;
+                        $ratings = [
+                            'rating' => $overall_rating
+                        ];
+                    }
+                    else{
+                        $ratings = [
+                            'error' => 'no available ratings yet'
+                        ];
+                    }
+
+                    /*
+                    $reviews = DoctorRating::where('doctor_id', $doc_id)->get();
+                    if($reviews == null){
+                        $ratings = [];
+                    }
+                    else{
+
+                    }
+                    */
+
                     /** */
                     // build response
                     $doctor = [
@@ -75,7 +119,8 @@ class DoctorsController extends Controller
                         'fees' => $doc2 -> fees,
                     ];
                     $data += [
-                        $doctor
+                        'doctor' => $doctor,
+                        'rating' => $ratings
                     ];
                 }
 
