@@ -49,7 +49,6 @@ class DoctorsController extends Controller
             }
             else{
                 $doctor = [];
-                $i = 0;
                 foreach ($doctors as $doc){
 
                     $id = $doc -> id;
@@ -110,9 +109,8 @@ class DoctorsController extends Controller
                         'overall_rating' => $ratings
                     ];
                     $data += [
-                        $i => $doctor,
+                        $doctor,
                     ];
-                    $i += 1;
                 }
 
             }
