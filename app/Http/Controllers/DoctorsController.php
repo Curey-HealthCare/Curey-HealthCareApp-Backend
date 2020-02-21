@@ -139,7 +139,6 @@ class DoctorsController extends Controller
     public function mobileShowOne(Request $request){
         // TO DO
         // Hash IDs
-
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -147,19 +146,15 @@ class DoctorsController extends Controller
         $api_token = $request -> api_token;
         $user = null;
         $user = User::where('api_token', $api_token)->first();
-
         if ($user == null){
             $isFailed = true;
             $errors += [
                 'auth' => 'authentication failed'
             ];
         }
-
         $id = $request -> id;
-
         // get basic information of doctor
         $doc_user = User::find($id);
-
         if($doc_user == null){
             $isFailed = true;
             $errors += [
@@ -182,6 +177,60 @@ class DoctorsController extends Controller
                 $image_path = null;
             }
 
+            // Get Reviews
+            $doc_id = $doc2 -> id;
+            $appointments = Appointment::where('doctor_id', $doc_id)->get();
+            $ratings = [];
+            if($appointments != null){
+                $overall_rate = 0;
+                $i = 0;
+                foreach($appointments as $appointment){
+                    $appointment_id = $appointment -> id;
+                    $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
+                    $appointment_rating = 0;
+                    if($rating != null){
+                        $i += 1;
+                        $behavior = $rating -> behavior;
+                        $price = $rating -> price;
+                        $efficiency = $rating -> efficiency;
+                        $appointment_rating = ($behavior + $price + $efficiency) / 3;
+                        $overall_rate += $appointment_rating;
+
+                        $review = $rating -> review;
+
+                        // Get the user who wrote the review
+                        $user_id = $appointment -> user_id;
+                        $user = User::where('id', $user_id)->first();
+                        $full_name = $user -> full_name;
+                        $image_id = $user -> image_id;
+                        $image = Image::where('id', $image_id)->first();
+                        if($image != null){
+                            $image_path = $image -> path;
+                        }
+                        else{
+                            $image_path = null;
+                        }
+
+                        $rate = [
+                            'rating' => $overall_rate,
+                            'full_name' => $full_name,
+                            'review' => $review,
+                            'image' => $image_path
+                        ];
+
+                        $ratings += [
+                            $i => $rate
+                        ];
+                    }
+
+                }
+
+            }
+            else{
+                $ratings += [
+                    'error' => 'no available ratings yet'
+                ];
+            }
             // Build Response
 
             // Basic doctor data
@@ -195,16 +244,13 @@ class DoctorsController extends Controller
                 'offers_callup' => $doc2 -> offers_callup,
                 'callup_fees' => $doc2 -> callup_fees
             ];
+
             // TO DO
             // Add reviews
 
-            // Doctor reviews
-            $reviews = [
-                // TODO
-            ];
             $data += [
                 'doctor' => $doctor,
-                'reviews' => $reviews
+                'reviews' => $ratings
             ];
         }
 
