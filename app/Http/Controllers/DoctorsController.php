@@ -170,7 +170,7 @@ class DoctorsController extends Controller
             $doc_id = $doc2 -> id;
             $appointments = Appointment::where('doctor_id', $doc_id)->get();
             $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
-            $ratings = null;
+            $ratings = [];
             if($appointments != null or $appointments_count != 0){
                 $overall_rate = 0;
                 foreach($appointments as $appointment){
