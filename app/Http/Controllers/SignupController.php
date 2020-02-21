@@ -285,8 +285,9 @@ class SignupController extends Controller
         $errors =  [];
 
         if ($user != null){
-            $data = [
-                'user' => $user
+            $api_token = $user -> api_token;
+            $data += [
+                'api_token' => $api_token
             ];
         }
         else {

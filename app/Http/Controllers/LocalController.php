@@ -7,7 +7,7 @@ use App\Localization;
 
 class LocalController extends Controller
 {
-    public function mobileLocal($lang){
+    public function mobileUserLocal($lang){
         $language = Localization::select('key', $lang)->get();
 
         $isFailed = false;
