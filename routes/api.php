@@ -40,7 +40,7 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/signup', 'SignupController@mobileSignUp');
 
     // Login
-    Route::post('/login', 'LoginController@mobileLogin');
+    Route::post('/userLogin', 'LoginController@mobileUserLogin');
 
     //Token Validation
     Route::post('/validateToken', 'SignupController@mobileValidateToken');

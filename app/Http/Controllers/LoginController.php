@@ -20,7 +20,7 @@ use App\UserRole;
 
 class LoginController extends Controller
 {
-    public function mobileLogin(Request $request){
+    public function mobileUserLogin(Request $request){
 
         $isFailed = false;
         $data = [];
@@ -45,12 +45,11 @@ class LoginController extends Controller
 
 //        Check for username or email or phone in database
         if($isFailed == false){
-            $existing_data = \App\User::where('email', $request -> user)->first();
 
+            $existing_data = \App\User::where('email', $request -> user)->first();
             if ($existing_data == null){
                 $existing_data = \App\User::where('phone', $request -> user)->first();
             }
-
 //        if There's no user data
             if($existing_data == null){
                 $isFailed = true;
@@ -65,17 +64,18 @@ class LoginController extends Controller
 //            compare with the password which came in request
                 if (Hash::check($request -> password, $existing_password)){
 //                the passwords matched, get more data
-
+                    // Generate new api token
                     $api_token = Str::random(80);
                     $existing_data -> where('id', $existing_data -> id)
                         -> update([
                             'api_token' => $api_token
                         ]);
 
-                    $existing_data = User::where('id', $existing_data -> id)->first();
+                    $data = [
+                        'api_token' => $api_token
+                    ];
 
-                    $role_id = $existing_data -> role_id;
-
+                    /*
                     if ($role_id == '1'){
                         $data = [
                             'user' => $existing_data
@@ -95,6 +95,7 @@ class LoginController extends Controller
                             'doctor' => $doctor
                         ];
                     }
+                    */
                 }
                 else{
                     $errors = [
