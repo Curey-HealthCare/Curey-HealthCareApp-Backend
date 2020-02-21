@@ -170,16 +170,14 @@ class DoctorsController extends Controller
             $doc_id = $doc2 -> id;
             $appointments = Appointment::where('doctor_id', $doc_id)->get();
             $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
-            $ratings = [];
-            if($appointments != null and $appointments_count == 0){
+            $ratings = null;
+            if($appointments != null or $appointments_count != 0){
                 $overall_rate = 0;
-                $i = 0;
                 foreach($appointments as $appointment){
                     $appointment_id = $appointment -> id;
                     $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
                     $appointment_rating = 0;
                     if($rating != null){
-                        $i += 1;
                         $behavior = $rating -> behavior;
                         $price = $rating -> price;
                         $efficiency = $rating -> efficiency;
@@ -200,24 +198,20 @@ class DoctorsController extends Controller
                         else{
                             $image_path = null;
                         }
-
                         $rate = [
                             'rating' => $overall_rate,
                             'full_name' => $full_name,
                             'review' => $review,
                             'image' => $image_path
                         ];
-
                         $ratings += [
                             $rate
                         ];
                     }
-
                 }
-
             }
             else{
-                $ratings += [
+                $ratings = [
                     'error' => 'no available ratings yet'
                 ];
             }
@@ -235,8 +229,6 @@ class DoctorsController extends Controller
                 'callup_fees' => $doc2 -> callup_fees
             ];
 
-            // TO DO
-            // Add reviews
 
             $data += [
                 'doctor' => $doctor,
