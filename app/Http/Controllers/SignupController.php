@@ -10,10 +10,7 @@ use Illuminate\Http\Request;
 
 use App\User;
 use App\City;
-use App\Country;
 use App\Doctor;
-use App\Gender;
-use App\Image;
 use App\Pharmacy;
 use App\Speciality;
 use App\UserRole;
@@ -21,12 +18,12 @@ use App\UserRole;
 class SignupController extends Controller
 {
 
-/*
+
     public function show(){
-        $user_roles = UserRole::all();
+        $cities = City::all();
 
         $data = [
-            'user_roles' => $user_roles
+            'cities' => $cities
         ];
 
         $response = ['isFailed' => false,
@@ -35,12 +32,13 @@ class SignupController extends Controller
 
         return response()->json($response, 200);
     }
-*/
 
-    public function mobileSignUp(Request $request){
+
+    public function mobileUserSignUp(Request $request){
         $role = $request -> role_id;
         $email = $request -> email;
         $full_name = $request -> full_name;
+        $city_id = $request -> city_id;
 
         $isFailed = false;
         $data = [];
@@ -77,10 +75,26 @@ class SignupController extends Controller
         if($isFailed == false){
 //            Generate api_token
             $api_token = Str::random(80);
+
+            $new_user = new User;
+            $new_user -> full_name = $full_name;
+            $new_user -> email = $email;
+            $new_user -> role_id = '1';
+            $new_user -> city_id = $city_id;
+            $new_user -> api_token = $api_token;
+            $hashed = Hash::make($request -> password);
+            $new_user -> password = $hashed;
+            $new_user -> save();
+
+            $data = [
+                'api_token' => $api_token
+            ];
+
+            /*
             if($role == '1'){
 //                sign up as customer
                 $new_user = new User;
-                $new_user -> full_name = $request -> full_name;
+                $new_user -> full_name = $full_name;
                 $new_user -> email = $request -> email;
                 $new_user -> role_id = $request -> role_id;
                 $new_user -> api_token = $api_token;
@@ -130,6 +144,7 @@ class SignupController extends Controller
                     'api_token' => $api_token
                 ];
             }
+            */
         }
 
         $response = [

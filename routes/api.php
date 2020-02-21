@@ -37,7 +37,7 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::get('/{lang}', 'LocalController@mobileUserLocal');
 
     // Sign up
-    Route::post('/signup', 'SignupController@mobileSignUp');
+    Route::post('/signup', 'SignupController@mobileUserSignUp');
 
     // Login
     Route::post('/userLogin', 'LoginController@mobileUserLogin');
