@@ -50,13 +50,13 @@ class OrderController extends Controller
                 $ph_id = $ord -> pharmacy_id;
                 $pharmacy = Pharmacy::find($ph_id);
                 //name of the product 
-                $product = Porduct::find('product_name')->where('order_id',$ord_id);
+                $product = Product::find('product_id')->where('order_id',$ord_id);
                 //check the amount of the order 
                 $amount = OrderDetail::where('order_id', $ord_id);
                 //to get user address
-                $user_address= User::find('user_address')->where('user_id',$id);
+                $user_address= User::find('user_id')->where('user_id',$id);
                 //get the price from product table
-                $pr_price = Product::find('price')->where('order_id',$ord_id);
+                $pr_price = Product::find('price_id')->where('order_id',$ord_id);
                 
                  //ph_id , ord_id , ph_name, ph_add, ord_status, user_add, price , orders 
                 $order_de=[
@@ -86,6 +86,7 @@ class OrderController extends Controller
    
 
     //store request to store new order 
+    /*
     public function mobileStoreOrder(Request $request)
     {
        //validate data 
@@ -122,5 +123,5 @@ class OrderController extends Controller
        $order->save();
 
 
-    }
+    }*/
 }
