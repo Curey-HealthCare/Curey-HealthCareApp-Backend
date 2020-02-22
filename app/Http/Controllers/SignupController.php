@@ -87,7 +87,7 @@ class SignupController extends Controller
             $new_user -> save();
 
             $data = [
-                'api_token' => $api_token
+                'success' => 'Registeration successful'
             ];
 
             /*
