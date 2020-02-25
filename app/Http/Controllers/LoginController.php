@@ -67,12 +67,20 @@ class LoginController extends Controller
                     // Generate new api token
                     $api_token = Str::random(80);
                     $existing_data -> where('id', $existing_data -> id)
-                        -> update([
-                            'api_token' => $api_token
-                        ]);
+                        -> update(['api_token' => $api_token]);
 
+                    $image_id = $existing_data -> image_id;
+                    $image = Image::where('id', $image_id)->first();
+                    if($image != null){
+                        $image_path = $image -> path;
+                    }
+                    else{
+                        $image_path = null;
+                    }
                     $data = [
-                        'api_token' => $api_token
+                        'api_token' => $api_token,
+                        'full_name' => $existing_data -> full_name,
+                        'image' => $image_path
                     ];
 
                     /*
