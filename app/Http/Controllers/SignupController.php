@@ -76,21 +76,7 @@ class SignupController extends Controller
 //            Generate api_token
             $api_token = Str::random(80);
 
-            $new_user = new User;
-            $new_user -> full_name = $full_name;
-            $new_user -> email = $email;
-            $new_user -> role_id = '1';
-            $new_user -> city_id = $city_id;
-            $new_user -> api_token = $api_token;
-            $hashed = Hash::make($request -> password);
-            $new_user -> password = $hashed;
-            $new_user -> save();
 
-            $data = [
-                'success' => 'Registeration successful'
-            ];
-
-            /*
             if($role == '1'){
 //                sign up as customer
                 $new_user = new User;
@@ -103,7 +89,7 @@ class SignupController extends Controller
                 $new_user -> save();
 
                 $data = [
-                    'api_token' => $api_token
+                    'success' => 'Registeration successful'
                 ];
             }
             elseif ($role == '2'){
@@ -122,7 +108,7 @@ class SignupController extends Controller
                 $pharmacy -> save();
 
                 $data = [
-                    'api_token' => $api_token
+                    'success' => 'Registeration successful'
                 ];
             }
             elseif ($role == '3'){
@@ -141,10 +127,10 @@ class SignupController extends Controller
                 $doctor -> save();
 
                 $data = [
-                    'api_token' => $api_token
+                    'success' => 'Registeration successful'
                 ];
             }
-            */
+
         }
 
         $response = [
