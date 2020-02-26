@@ -35,6 +35,44 @@ class MedicationsController extends Controller
         }
 
         if($isFailed == false){
+            $city_id = $user -> city_id;
+            $pharmacies = User::where('city_id', $city_id)->get();
+
+            if($pharmacies != []){
+                $all_pharmacies = [];
+                foreach($pharmacies as $pharmacy){
+                    $pharma_id = $pharmacy -> id;
+                    $pharma = Pharmacy::find($pharma_id);
+                    if($pharma != null){
+                        $pharma_id =  $pharma -> id;
+                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->get();
+
+                        if($products_pharmacy != []){
+                            foreach($products_pharmacy as $pro){
+                                $product_id = $pro -> product_id;
+                                $product = Product::find($product_id);
+                                $image_id = $product -> image_id;
+                                $image = Image::where('id', $image_id)->first();
+                                if($image != null){
+                                    $image_path = $image -> path;
+                                }
+                                else{
+                                    $image_path = null;
+                                }
+                                $final_product = [
+                                    'id' => $product -> id,
+                                    'name' => $product -> name,
+                                    'image' => $image_path,
+                                    'price' => $product -> price
+                                ];
+
+                                $data[] = $final_product;
+                            }
+                        }
+                    }
+                }
+            }
+/*
             $all_products = Product::all();
             $product = [];
             foreach($all_products as $pro){
@@ -58,7 +96,7 @@ class MedicationsController extends Controller
 
                 $data[] = $product;
             }
-
+*/
         }
 
 
