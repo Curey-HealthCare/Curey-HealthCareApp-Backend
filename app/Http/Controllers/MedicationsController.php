@@ -39,10 +39,9 @@ class MedicationsController extends Controller
             $pharmacies = User::where('city_id', $city_id)->get();
 
             if($pharmacies != []){
-                $all_pharmacies = [];
                 foreach($pharmacies as $pharmacy){
                     $pharma_id = $pharmacy -> id;
-                    $pharma = Pharmacy::find($pharma_id);
+                    $pharma = Pharmacy::where('user_id', $pharma_id)->first();
                     if($pharma != null){
                         $pharma_id =  $pharma -> id;
                         $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->get();
@@ -50,9 +49,11 @@ class MedicationsController extends Controller
                         if($products_pharmacy != []){
                             foreach($products_pharmacy as $pro){
                                 $product_id = $pro -> product_id;
+
                                 $product = Product::find($product_id);
                                 $image_id = $product -> image_id;
                                 $image = Image::where('id', $image_id)->first();
+
                                 if($image != null){
                                     $image_path = $image -> path;
                                 }

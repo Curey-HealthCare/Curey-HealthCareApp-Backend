@@ -86,6 +86,7 @@ class SignupController extends Controller
                 $new_user -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_user -> password = $hashed;
+                $new_user -> city_id = $request -> city_id;
                 $new_user -> save();
 
                 $data = [
@@ -101,6 +102,7 @@ class SignupController extends Controller
                 $new_ph -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_ph -> password = $hashed;
+                $new_ph -> city_id = $request -> city_id;
                 $new_ph -> save();
 
                 $pharmacy = new Pharmacy;
@@ -120,6 +122,7 @@ class SignupController extends Controller
                 $new_dr -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_dr -> password = $hashed;
+                $new_dr -> city_id = $request -> city_id;
                 $new_dr -> save();
 
                 $doctor = new Doctor;
