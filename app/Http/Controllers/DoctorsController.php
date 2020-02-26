@@ -141,99 +141,101 @@ class DoctorsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-        $id = $request -> id;
-        // get basic information of doctor
-        $doc_user = User::find($id);
-        if($doc_user == null){
-            $isFailed = true;
-            $errors += [
-                'null' => 'can not find this doctor'
-            ];
-        }
-        else{
-            // get all informatiom about the doctor
-            $doc2 = Doctor::where('user_id', $id)->first();
-            // get doctor speciality name
-            $spec_id = $doc2 -> speciality_id;
-            $spec = Speciality::find($spec_id);
-            // Get the doctor's photo
-            $image_id = $doc_user -> image_id;
-            $image = Image::where('id', $image_id)->first();
-            if($image != null){
-                $image_path = $image -> path;
-            }
-            else{
-                $image_path = null;
-            }
-
-            // Get Reviews
-            $doc_id = $doc2 -> id;
-            $appointments = Appointment::where('doctor_id', $doc_id)->get();
-            $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
-            $ratings = [];
-            if($appointments == null || $appointments_count == 0){
-                $ratings = [
-                    'error' => 'no available ratings yet'
+        if($isFailed == false){
+            $id = $request -> id;
+            // get basic information of doctor
+            $doc_user = User::find($id);
+            if($doc_user == null){
+                $isFailed = true;
+                $errors += [
+                    'null' => 'can not find this doctor'
                 ];
             }
             else{
-                $overall_rate = 0;
-                foreach($appointments as $appointment){
-                    $appointment_id = $appointment -> id;
-                    $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
-                    $appointment_rating = 0;
-                    if($rating != null){
-                        $behavior = $rating -> behavior;
-                        $price = $rating -> price;
-                        $efficiency = $rating -> efficiency;
-                        $appointment_rating = ($behavior + $price + $efficiency) / 3;
-                        $overall_rate += $appointment_rating;
+                // get all informatiom about the doctor
+                $doc2 = Doctor::where('user_id', $id)->first();
+                // get doctor speciality name
+                $spec_id = $doc2 -> speciality_id;
+                $spec = Speciality::find($spec_id);
+                // Get the doctor's photo
+                $image_id = $doc_user -> image_id;
+                $image = Image::where('id', $image_id)->first();
+                if($image != null){
+                    $image_path = $image -> path;
+                }
+                else{
+                    $image_path = null;
+                }
 
-                        $review = $rating -> review;
+                // Get Reviews
+                $doc_id = $doc2 -> id;
+                $appointments = Appointment::where('doctor_id', $doc_id)->get();
+                $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
+                $ratings = [];
+                if($appointments == null || $appointments_count == 0){
+                    $ratings = [
+                        'error' => 'no available ratings yet'
+                    ];
+                }
+                else{
+                    $overall_rate = 0;
+                    foreach($appointments as $appointment){
+                        $appointment_id = $appointment -> id;
+                        $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
+                        $appointment_rating = 0;
+                        if($rating != null){
+                            $behavior = $rating -> behavior;
+                            $price = $rating -> price;
+                            $efficiency = $rating -> efficiency;
+                            $appointment_rating = ($behavior + $price + $efficiency) / 3;
+                            $overall_rate += $appointment_rating;
 
-                        // Get the user who wrote the review
-                        $user_id = $appointment -> user_id;
-                        $user = User::where('id', $user_id)->first();
-                        $full_name = $user -> full_name;
-                        $image_id = $user -> image_id;
-                        $image = Image::where('id', $image_id)->first();
-                        if($image != null){
-                            $image_path = $image -> path;
+                            $review = $rating -> review;
+
+                            // Get the user who wrote the review
+                            $user_id = $appointment -> user_id;
+                            $user = User::where('id', $user_id)->first();
+                            $full_name = $user -> full_name;
+                            $image_id = $user -> image_id;
+                            $image = Image::where('id', $image_id)->first();
+                            if($image != null){
+                                $image_path = $image -> path;
+                            }
+                            else{
+                                $image_path = null;
+                            }
+                            $rate = [
+                                'rating' => $overall_rate,
+                                'full_name' => $full_name,
+                                'review' => $review,
+                                'image' => $image_path
+                            ];
+                            $ratings += [
+                                $rate
+                            ];
                         }
-                        else{
-                            $image_path = null;
-                        }
-                        $rate = [
-                            'rating' => $overall_rate,
-                            'full_name' => $full_name,
-                            'review' => $review,
-                            'image' => $image_path
-                        ];
-                        $ratings += [
-                            $rate
-                        ];
                     }
                 }
+                // Build Response
+
+                // Basic doctor data
+                $doctor = [
+                    'id' => $id,
+                    'full_name' => $doc_user -> full_name,
+                    'speciality' => $spec -> name,
+                    'image' => $image_path,
+                    'qualifications' => $doc2 -> qualifications,
+                    'fees' => $doc2 -> fees,
+                    'offers_callup' => $doc2 -> offers_callup,
+                    'callup_fees' => $doc2 -> callup_fees
+                ];
+
+
+                $data += [
+                    'doctor' => $doctor,
+                    'reviews' => $ratings
+                ];
             }
-            // Build Response
-
-            // Basic doctor data
-            $doctor = [
-                'id' => $id,
-                'full_name' => $doc_user -> full_name,
-                'speciality' => $spec -> name,
-                'image' => $image_path,
-                'qualifications' => $doc2 -> qualifications,
-                'fees' => $doc2 -> fees,
-                'offers_callup' => $doc2 -> offers_callup,
-                'callup_fees' => $doc2 -> callup_fees
-            ];
-
-
-            $data += [
-                'doctor' => $doctor,
-                'reviews' => $ratings
-            ];
         }
 
         $response = [

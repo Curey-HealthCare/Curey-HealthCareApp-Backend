@@ -46,9 +46,9 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/', 'HomeController@mobileIndex');
 
     // Doctors Page
-    Route::get('/doctors', 'DoctorsController@mobileShowAll');
+    Route::post('/doctors', 'DoctorsController@mobileShowAll');
     // Doctor page
-    Route::get('/doctor', 'DoctorsController@mobileShowOne');
+    Route::post('/doctor', 'DoctorsController@mobileShowOne');
 
 
     //show order page
