@@ -15,6 +15,7 @@ class CreateLocalizationTable extends Migration
     {
         Schema::create('localization', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('app');
             $table->string('key');
             $table->string('en')
                 ->nullable(true);
