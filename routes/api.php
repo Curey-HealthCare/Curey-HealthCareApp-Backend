@@ -42,22 +42,19 @@ Route::group(['prefix' => '/mobile'], function(){
     // Login
     Route::post('/userLogin', 'LoginController@mobileUserLogin');
 
-    //Token Validation
-    Route::post('/validateToken', 'SignupController@mobileValidateToken');
-
     // Home Route
     Route::post('/', 'HomeController@mobileIndex');
 
     // Doctors Page
-    Route::post('/doctors', 'DoctorsController@mobileShowAll');
+    Route::get('/doctors', 'DoctorsController@mobileShowAll');
     // Doctor page
-    Route::post('/doctor', 'DoctorsController@mobileShowOne');
+    Route::get('/doctor', 'DoctorsController@mobileShowOne');
 
 
     //show order page
     Route::post('/orders', 'OrderController@mobileShowOrder');
     //show appointment page
     Route::post('/appointments', 'AppointmentsController@mobileAppShowAll');
-    
+
 });
 
