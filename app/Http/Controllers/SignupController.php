@@ -34,7 +34,7 @@ class SignupController extends Controller
     }
 
 
-    public function mobileUserSignUp(Request $request){
+    public function mobileSignUp(Request $request){
         $role = $request -> role_id;
         $email = $request -> email;
         $full_name = $request -> full_name;
