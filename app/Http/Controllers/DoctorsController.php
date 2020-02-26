@@ -108,9 +108,7 @@ class DoctorsController extends Controller
                         'fees' => $doc2 -> fees,
                         'overall_rating' => $ratings
                     ];
-                    $data += [
-                        $doctor,
-                    ];
+                    $data[] = $doctor;
                 }
 
             }
@@ -210,9 +208,7 @@ class DoctorsController extends Controller
                                 'review' => $review,
                                 'image' => $image_path
                             ];
-                            $ratings += [
-                                $rate
-                            ];
+                            $ratings[] = $rate;
                         }
                     }
                 }

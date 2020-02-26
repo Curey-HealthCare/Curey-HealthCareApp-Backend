@@ -26,4 +26,5 @@ INSERT INTO `keywords` (`id`, `name`, `created_at`, `updated_at`) VALUES ('6', '
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `full_name`, `username`, `email`, `email_verified_at`, `phone`, `password`, `api_token`, `image_id`, `role_id`, `gender_id`, `city_id`, `address`, `first_login`, `remember_token`, `created_at`, `updated_at`, `is_confirmed`) VALUES ('1', 'Ahmed', 'El-Moselhy', 'Ahmed Hani El-Moselhy', 'ahmedhani', 'test@gmail.com', NULL, '01200000000', '22334455', NULL, NULL, '3', '1', '1', '32', '1', NULL, NULL, NULL, '1');
 INSERT INTO `doctors` (`id`, `user_id`, `qualifications`, `speciality_id`, `address`, `offers_callup`, `fees`, `callup_fees`, `benefit`, `cu_benefit`, `created_at`, `updated_at`) VALUES ('1', '1', NULL, '1', '32', '1', '250', '150', '0.3', '1', NULL, NULL);
 
-
+INSERT INTO `products` (`id`, `name`, `price`, `description`, `image_id`, `created_at`, `updated_at`) VALUES (NULL, 'Panadol', '20', NULL, NULL, NULL, NULL);
+INSERT INTO `products` (`id`, `name`, `price`, `description`, `image_id`, `created_at`, `updated_at`) VALUES (NULL, 'Neuroton', '15', NULL, NULL, NULL, NULL);
