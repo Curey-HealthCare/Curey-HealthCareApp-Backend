@@ -47,7 +47,7 @@ class DoctorSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->command->info('    ---------------------------------------');
-        $this->command->info('        Doctor table updated ¯\_(ツ)_/¯');
+        $this->command->info('       Doctors table updated ¯\_(ツ)_/¯');
         $this->command->info('    ---------------------------------------');
     }
 }
