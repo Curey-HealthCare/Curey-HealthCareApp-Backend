@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 $factory->define(Doctor::class, function (Faker $faker) {
     return [
         'qualifications' => $faker->catchPhrase,
-        'speciality_id' => $faker->numberBetween($min = 1, $max = 2),
         'address' => $faker->address,
         'offers_callup' => $faker->numberBetween($min = 0, $max = 1),
         'fees' => $faker->numberBetween($min = 100, $max = 500),

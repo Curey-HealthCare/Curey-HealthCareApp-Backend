@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 use App\Doctor;
 use App\User;
+use App\Speciality;
 
 class DoctorSeeder extends Seeder
 {
@@ -28,13 +29,22 @@ class DoctorSeeder extends Seeder
         // Check for doctors in users
         $doctors = User::where('role_id', '3')->get();
 
+        // Get IDs available in database
+        $specialities = Speciality::select('id')->get()->toArray();
+
+        // Remove the foreign key checks to change the IDs
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         // Then passes the IDs of them to the create factory, the rest is added through it
         foreach ($doctors as $doctor){
             factory(Doctor::class)->create([
                 'user_id' => $doctor -> id,
+                'speciality_id' => array_rand($specialities)
             ]);
         }
         
+        // Re add the foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->command->info('    ---------------------------------------');
         $this->command->info('        Doctor table updated ¯\_(ツ)_/¯');
