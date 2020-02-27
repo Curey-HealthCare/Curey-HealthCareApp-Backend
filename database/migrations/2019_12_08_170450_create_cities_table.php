@@ -16,7 +16,7 @@ class CreateCitiesTable extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->Increments('id');
             $table->string('name', "60")->nullable(false);
-            $table->float('delivery-fees');
+            $table->float('delivery_fees');
             // $table->foreign('country_id')->references('id')->on('countries');
             $table->timestamps();
         });

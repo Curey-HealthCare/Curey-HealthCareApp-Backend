@@ -109,4 +109,111 @@ class MedicationsController extends Controller
 
         return response()->json($response);
     }
+
+    public function mobileShowOne(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+
+        if($isFailed == false){
+            $product_id = $request -> product_id;
+            $pro = Product::where('id', $product_id)->first();
+            if($pro == null){
+                $isFailed = true;
+                $errors[] = [
+                    'error' => 'can not find this product'
+                ];
+            }
+            else{
+                $image_id = $pro -> image_id;
+                $image = Image::where('id', $image_id)->first();
+                if($image != null){
+                    $image_path = $image -> path;
+                }
+                else{
+                    $image_path = null;
+                }
+
+                $product = [
+                    'id' => $product_id,
+                    'name' => $pro -> name,
+                    'image' => $image_path,
+                    'description' => $pro -> description,
+                    'price' => $pro -> price,
+                ];
+
+                // get the pharmacies that has this product and exist in my city
+                $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
+                if($pharmacies_product == []){
+                    $isFailed = true;
+                    $errors[] = [
+                        'error' => 'can not find this product near you'
+                    ];
+                }
+                else{
+                    $pharmacies_response = [];
+                    foreach($pharmacies_product as $pharmacy_product){
+                        $pharmacy_id = $pharmacy_product -> pharmacy_id;
+                        $pharmacies = Pharmacy::find($pharmacy_id);
+                        $pharmacy_userid = $pharmacies -> user_id;
+                        $pharmacy = User::where('id',$pharmacy_userid)->where('city_id', $user -> city_id)->first();
+
+                        if($pharmacy != null){
+                            $image_id = $pharmacy -> image_id;
+                            $image = Image::where('id', $image_id)->first();
+                            if($image != null){
+                                $image_path = $image -> path;
+                            }
+                            else{
+                                $image_path = null;
+                            }
+                            $city = City::find($user -> city_id);
+
+                            $delivery_fees = $city -> delivery_fees;
+                            // buid response for each pharmacy
+                            $pharma = [
+                                'name' => $pharmacy -> full_name,
+                                'address' => $pharmacies -> address,
+                                'image' => $image_path,
+                                'delivery_fees' => $delivery_fees
+                            ];
+                            $pharmacies_response[] = $pharma;
+                        }
+                        else{
+                            $isFailed = true;
+                            $errors[] = [
+                                'error' => 'can not find this product near you'
+                            ];
+                        }
+
+                    }
+                    if($isFailed == false){
+                        $data = [
+                            'product' => $product,
+                            'pharmacies' => $pharmacies_response,
+                        ];
+                    }
+                }
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
 }
