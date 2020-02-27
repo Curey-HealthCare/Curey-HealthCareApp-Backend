@@ -161,7 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        App\Providers\FakerServiceProvider::class
+        App\Providers\FakerServiceProvider::class,
 
         /*
          * Package Service Providers...
