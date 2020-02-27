@@ -27,9 +27,9 @@ class UserSeeder extends Seeder
         }
 
         // Get IDs available in database
-        $roles = UserRole::select('id')->get()->toArray();
-        $genders = Gender::select('id')->get()->toArray();
-        $cities = City::select('id')->get()->toArray();
+        $roles = UserRole::get()->toArray();
+        $genders = Gender::get()->toArray();
+        $cities = City::get()->toArray();
 
         // Remove the foreign key checks to change the IDs
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -39,9 +39,9 @@ class UserSeeder extends Seeder
             factory(User::class)->create([
 
                 // Assign random IDs in every iteration
-                'role_id' => array_rand($roles)+1,
-                'gender_id' => array_rand($genders)+1,
-                'city_id' => array_rand($cities)+1
+                'role_id' => $roles[array_rand($roles)]['id'],
+                'gender_id' => $genders[array_rand($genders)]['id'],
+                'city_id' => $cities[array_rand($cities)]['id']
             ]);
         }
         

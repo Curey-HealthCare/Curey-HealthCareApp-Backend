@@ -30,7 +30,7 @@ class DoctorSeeder extends Seeder
         $doctors = User::where('role_id', '3')->get();
 
         // Get IDs available in database
-        $specialities = Speciality::select('id')->get()->toArray();
+        $specialities = Speciality::get()->toArray();
 
         // Remove the foreign key checks to change the IDs
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -39,7 +39,7 @@ class DoctorSeeder extends Seeder
         foreach ($doctors as $doctor){
             factory(Doctor::class)->create([
                 'user_id' => $doctor -> id,
-                'speciality_id' => array_rand($specialities)+1
+                'speciality_id' => $specialities[array_rand($specialities)]['id']
             ]);
         }
         
