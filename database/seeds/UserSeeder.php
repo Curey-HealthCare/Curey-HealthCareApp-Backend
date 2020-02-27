@@ -39,9 +39,9 @@ class UserSeeder extends Seeder
             factory(User::class)->create([
 
                 // Assign random IDs in every iteration
-                'role_id' => array_rand($roles),
-                'gender_id' => array_rand($genders),
-                'city_id' => array_rand($cities)
+                'role_id' => array_rand($roles)+1,
+                'gender_id' => array_rand($genders)+1,
+                'city_id' => array_rand($cities)+1
             ]);
         }
         

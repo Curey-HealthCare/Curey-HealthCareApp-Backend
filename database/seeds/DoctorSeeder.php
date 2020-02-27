@@ -39,7 +39,7 @@ class DoctorSeeder extends Seeder
         foreach ($doctors as $doctor){
             factory(Doctor::class)->create([
                 'user_id' => $doctor -> id,
-                'speciality_id' => array_rand($specialities)
+                'speciality_id' => array_rand($specialities)+1
             ]);
         }
         
