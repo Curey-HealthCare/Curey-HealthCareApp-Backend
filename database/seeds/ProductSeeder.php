@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
-        foreach(range(1,100) as $index) {
+        for ($i = 0; $i < 100; $i++) {
             factory(Product::class)->create();
         }
 

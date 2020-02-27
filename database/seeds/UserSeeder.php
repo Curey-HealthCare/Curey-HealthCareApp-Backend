@@ -34,8 +34,8 @@ class UserSeeder extends Seeder
         // Remove the foreign key checks to change the IDs
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // Change the second number to change number of users created
-        foreach(range(1,100) as $index) {
+        // Change the second i to change number of users created
+        for ($i = 0; $i < 100; $i++) {
             factory(User::class)->create([
 
                 // Assign random IDs in every iteration
