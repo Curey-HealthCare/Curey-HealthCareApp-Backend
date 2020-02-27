@@ -17,9 +17,9 @@ class PharmacySeeder extends Seeder
         // First, check the localization table for content
         if (DB::table('pharmacies')->get()->count() != 0) {
 
-            // Reset the id counting and clears the table
             // Remove and re add the foreign key checks to clear the table id incerment
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            // Reset the id counting and clears the table
             DB::table('pharmacies')->truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
