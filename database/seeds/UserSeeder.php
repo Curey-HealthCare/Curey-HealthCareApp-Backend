@@ -3,6 +3,9 @@
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 use App\User;
+use App\UserRole;
+use App\Gender;
+use App\City;
 
 class UserSeeder extends Seeder
 {
@@ -16,16 +19,34 @@ class UserSeeder extends Seeder
         // First, check the localization table for content
         if (DB::table('users')->get()->count() != 0) {
 
-            // Reset the id counting and clears the table
             // Remove and re add the foreign key checks to clear the table id incerment
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            // Reset the id counting and clears the table
             DB::table('users')->truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
 
-        // Number of rows to be added
-        $count = 100;
-        factory(User::class, $count)->create();
+        // Get IDs available in database
+        $roles = UserRole::select('id')->get()->toArray();
+        $genders = Gender::select('id')->get()->toArray();
+        $cities = City::select('id')->get()->toArray();
+
+        // Remove the foreign key checks to change the IDs
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Change the second number to change number of users created
+        foreach(range(1,100) as $index) {
+            factory(User::class)->create([
+
+                // Assign random IDs in every iteration
+                'role_id' => array_rand($roles),
+                'gender_id' => array_rand($genders),
+                'city_id' => array_rand($cities)
+            ]);
+        }
+        
+        // Re add the foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->command->info('    ---------------------------------------');
         $this->command->info('         User table updated ¯\_(ツ)_/¯');
