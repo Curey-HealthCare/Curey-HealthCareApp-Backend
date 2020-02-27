@@ -16,7 +16,7 @@ class DoctorSeeder extends Seeder
 
     public function run()
     {
-        // First, check the localization table for content
+        // First, check the doctors table for content
         if (DB::table('doctors')->get()->count() != 0) {
 
             // Reset the id counting and clears the table

@@ -13,7 +13,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        // First, check the localization table for content
+        // First, check the products table for content
         if (DB::table('products')->get()->count() != 0) {
 
             // Reset the id counting and clears the table

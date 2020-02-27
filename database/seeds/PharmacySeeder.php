@@ -14,7 +14,7 @@ class PharmacySeeder extends Seeder
      */
     public function run()
     {
-        // First, check the localization table for content
+        // First, check the pharmacies table for content
         if (DB::table('pharmacies')->get()->count() != 0) {
 
             // Remove and re add the foreign key checks to clear the table id incerment

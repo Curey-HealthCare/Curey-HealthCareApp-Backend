@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // First, check the localization table for content
+        // First, check the users table for content
         if (DB::table('users')->get()->count() != 0) {
 
             // Remove and re add the foreign key checks to clear the table id incerment
