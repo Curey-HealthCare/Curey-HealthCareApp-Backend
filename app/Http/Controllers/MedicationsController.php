@@ -27,6 +27,9 @@ class MedicationsController extends Controller
         $user = null;
         $user = User::where('api_token', $api_token)->first();
 
+        $keywords_response = [];
+        $products_response = [];
+
         if ($user == null){
             $isFailed = true;
             $errors += [
@@ -36,7 +39,7 @@ class MedicationsController extends Controller
 
         if($isFailed == false){
             $city_id = $user -> city_id;
-            $pharmacies = User::where('city_id', $city_id)->get();
+            $pharmacies = User::where('city_id', $city_id)->where('role_id', '2')->get();
 
             if($pharmacies != []){
                 foreach($pharmacies as $pharmacy){
@@ -67,37 +70,27 @@ class MedicationsController extends Controller
                                     'price' => $product -> price
                                 ];
 
-                                $data[] = $final_product;
+                                $products_response[] = $final_product;
                             }
                         }
                     }
                 }
             }
-/*
-            $all_products = Product::all();
-            $product = [];
-            foreach($all_products as $pro){
 
-                $image_id = $pro -> image_id;
-                $image = Image::where('id', $image_id)->first();
-                if($image != null){
-                    $image_path = $image -> path;
-                }
-                else{
-                    $image_path = null;
-                }
+            // get keywords for filters
+            $keywords = Keyword::all();
 
-                // Build Response
-                $product = [
-                    'id' => $pro -> id,
-                    'name' => $pro -> name,
-                    'image' => $image_path,
-                    'price' => $pro -> price
+            foreach($keywords as $key){
+                $keywords_response[] = [
+                    'id' => $key -> id,
+                    'name' => $key -> name,
                 ];
-
-                $data[] = $product;
             }
-*/
+
+            $data = [
+                'products' => $products_response,
+                'keywords' => $keywords_response,
+            ];
         }
 
 
