@@ -51,6 +51,7 @@ class DoctorsController extends Controller
             }
             else{
                 $doctor = [];
+                $doctors_response = [];
                 foreach ($doctors as $doc){
 
                     $id = $doc -> id;
@@ -110,10 +111,22 @@ class DoctorsController extends Controller
                         'fees' => $doc2 -> fees,
                         'overall_rating' => $ratings
                     ];
-                    $data[] = $doctor;
+                    $doctors_response[] = $doctor;
                 }
 
             }
+            $specialities = Speciality::all();
+            $specs = [];
+            foreach($specialities as $spec){
+                $specs[] = [
+                    'id' => $spec -> id,
+                    'name' => $spec -> name,
+                ];
+            }
+            $data = [
+                'doctors' => $doctors_response,
+                'specialities' => $specs,
+            ];
         }
 
         $response = [
