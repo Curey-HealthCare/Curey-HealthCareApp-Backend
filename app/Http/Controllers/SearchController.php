@@ -29,7 +29,7 @@ class SearchController extends Controller
         $errors =  [];
 
         $doctors = User::where('full_name', 'LIKE', '%'. $name .'%')->where('role_id', '3')->get();
-        if($doctors == []){
+        if($doctors->isEmpty()){
             $isFailed = true;
             $errors[] = [
                 'error' => 'no results'
@@ -93,6 +93,51 @@ class SearchController extends Controller
                     'overall_rating' => $ratings
                 ];
                 $data[] = $doctor;
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
+    public function mobileSearchProducts($name){
+
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $products = Product::where('name', 'LIKE', '%'. $name .'%')->get();
+        if($products->isEmpty()){
+            $isFailed = true;
+            $errors[] = [
+                'error' => 'no results'
+            ];
+        }
+        else{
+            foreach($products as $pro){
+            
+                $image_id = $pro -> image_id;
+                $image = Image::where('id', $image_id)->first();
+
+                if($image != null){
+                    $image_path = $image -> path;
+                }
+                else{
+                    $image_path = null;
+                }
+                $final_product = [
+                    'id' => $pro -> id,
+                    'name' => $pro -> name,
+                    'image' => $image_path,
+                    'price' => $pro -> price
+                ];
+
+                $data[] = $final_product;
             }
         }
 
