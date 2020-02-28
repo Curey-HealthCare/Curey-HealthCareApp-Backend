@@ -34,7 +34,7 @@ Route::post('login', 'LoginController@login');
 // mobile routes
 Route::group(['prefix' => '/mobile'], function(){
     // Localizaiton
-    Route::get('/{lang}', 'LocalController@mobileUserLocal');
+    Route::get('/{lang}/{app}', 'LocalController@mobileUserLocal');
 
     // Sign up
     Route::post('/signup', 'SignupController@mobileSignUp');
