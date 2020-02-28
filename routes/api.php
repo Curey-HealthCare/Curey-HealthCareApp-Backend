@@ -50,14 +50,14 @@ Route::group(['prefix' => '/mobile'], function(){
     // Doctor page
     Route::post('/doctor', 'DoctorsController@mobileShowOne');
     // Search Products
-    Route::post('/search_doctors', 'SearchController@mobileSearchDoctors');
+    Route::get('/doctors/{name}', 'SearchController@mobileSearchDoctors');
 
     // Medications Page
     Route::post('/medications', 'MedicationsController@mobileShowAll');
     // product page
-    Route::post('/product', 'MedicationsController@mobileShowOne');
+    Route::post('/medication', 'MedicationsController@mobileShowOne');
     // Search Products
-    Route::get('/searchProducts', 'MedicationsController@mobileSearchProducts');
+    Route::get('/medications/{name}', 'MedicationsController@mobileSearchProducts');
 
 
     //show order page
