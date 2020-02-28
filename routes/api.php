@@ -57,7 +57,7 @@ Route::group(['prefix' => '/mobile'], function(){
     // product page
     Route::post('/medication', 'MedicationsController@mobileShowOne');
     // Search Products
-    Route::get('/medications/{name}', 'MedicationsController@mobileSearchProducts');
+    Route::get('/medications/{name}', 'SearchController@mobileSearchProducts');
 
 
     //show order page
