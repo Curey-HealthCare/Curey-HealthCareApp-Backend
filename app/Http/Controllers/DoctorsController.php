@@ -25,6 +25,8 @@ class DoctorsController extends Controller
         $data = [];
         $errors =  [];
 
+        // $headers = $request ->header()->all();
+
         $api_token = $request -> api_token;
         $user = null;
         $user = User::where('api_token', $api_token)->first();
