@@ -49,11 +49,15 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/doctors', 'DoctorsController@mobileShowAll');
     // Doctor page
     Route::post('/doctor', 'DoctorsController@mobileShowOne');
+    // Search Products
+    Route::get('/searchDoctors', 'DoctorsController@mobileSearchDoctors');
 
     // Medications Page
     Route::post('/medications', 'MedicationsController@mobileShowAll');
     // product page
     Route::post('/product', 'MedicationsController@mobileShowOne');
+    // Search Products
+    Route::get('/searchProducts', 'MedicationsController@mobileSearchProducts');
 
 
     //show order page

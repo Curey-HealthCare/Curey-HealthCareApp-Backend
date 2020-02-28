@@ -244,4 +244,21 @@ class DoctorsController extends Controller
 
         return response()->json($response);
     }
+
+    public function searchDoctors(Request $request){
+
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $name = $request -> name;
+
+        $doctors = User::where('full_name', 'LIKE', '%'. $name .'%')->get();
+        if($doctors == []){
+            $isFailed = true;
+            $errors[] = [
+                ''
+            ];
+        }
+    }
 }
