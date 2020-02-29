@@ -46,24 +46,24 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/', 'HomeController@mobileIndex');
 
     // Doctors Page
-    Route::post('/doctors', 'DoctorsController@mobileShowAll');
+    Route::get('/doctors', 'DoctorsController@mobileShowAll');
     // Doctor page
-    Route::post('/doctor', 'DoctorsController@mobileShowOne');
+    Route::get('/doctor', 'DoctorsController@mobileShowOne');
     // Search Products
-    Route::get('/doctors/{name}', 'SearchController@mobileSearchDoctors');
+    Route::get('/doctors_search', 'SearchController@mobileSearchDoctors');
 
     // Medications Page
-    Route::post('/medications', 'MedicationsController@mobileShowAll');
+    Route::get('/medications', 'MedicationsController@mobileShowAll');
     // product page
-    Route::post('/medication', 'MedicationsController@mobileShowOne');
+    Route::get('/medication', 'MedicationsController@mobileShowOne');
     // Search Products
-    Route::get('/medications/{name}', 'SearchController@mobileSearchProducts');
+    Route::get('/medications_search', 'SearchController@mobileSearchProducts');
 
 
     //show order page
     Route::post('/orders', 'OrderController@mobileShowOrder');
     //show appointment page
-    Route::post('/appointments', 'AppointmentsController@mobileAppShowAll');
+    Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
 
 });
 

@@ -22,8 +22,8 @@ use App\Order;
 class SearchController extends Controller
 {
 
-    public function mobileSearchDoctors($name){
-
+    public function mobileSearchDoctors(Request $request){
+        $name = $request -> name;
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -105,8 +105,8 @@ class SearchController extends Controller
         return response()->json($response);
     }
 
-    public function mobileSearchProducts($name){
-
+    public function mobileSearchProducts(Request $request){
+        $name = $request -> name;
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -120,7 +120,7 @@ class SearchController extends Controller
         }
         else{
             foreach($products as $pro){
-            
+
                 $image_id = $pro -> image_id;
                 $image = Image::where('id', $image_id)->first();
 

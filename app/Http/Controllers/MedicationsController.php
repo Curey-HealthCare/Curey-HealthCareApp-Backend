@@ -120,7 +120,7 @@ class MedicationsController extends Controller
         }
 
         if($isFailed == false){
-            $product_id = $request -> product_id;
+            $product_id = $request -> id;
             $pro = Product::where('id', $product_id)->first();
             if($pro == null){
                 $isFailed = true;
