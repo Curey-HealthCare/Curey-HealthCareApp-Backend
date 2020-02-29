@@ -14,7 +14,7 @@ use App\Appointment;
 class AppointmentsController extends Controller
 {
     public function mobileAppShowAll(Request $request)
-    { 
+    {
         //authenticated user
         $isFailed = false;
         $data = [];
@@ -29,11 +29,15 @@ class AppointmentsController extends Controller
             $errors []  = [ 'auth' => 'authentication failed'];
         }
         if ($isFailed == false){
-            //userid 
+            //userid
             $appointments = Appointment::where('user_id',$user -> id )->get();
             $appointment = [];
-          
-         if($appointment->isempty()){
+
+        if($appointments->isEmpty()){
+            $isFailed = true;
+            $errors[] = ['error' => 'no appointments yet'];
+        }
+        else{
             foreach($appointments as $app)
             {
                 //get id of the appointment
@@ -43,26 +47,26 @@ class AppointmentsController extends Controller
                 $doc = Doctor::where('id',$doc_id)->first();
                 //diplay doctor address
                 $add = $doc->address;
-                //check if the doctor has callup or not 
+                //check if the doctor has callup or not
                 $isCallUp = $app ->is_callup;
-                 if($isCallUp == 1)
-                 {
-                     //callup fees 
+                if($isCallUp == 1)
+                {
+                     //callup fees
                     $fees = $doc ->callup_fees;
 
-                 }
-                 else {
+                }
+                else {
 
-                    //fees 
+                    //fees
                     $fees = $doc ->fees;
 
-                 }
-                 //check if there is re-examin or not 
-                 $reExamine = $app ->re_examination;
-                 if($reExamine==1)
-                 {
-                    $checkup = $app->last_checkup;
-                 }
+                }
+                //check if there is re-examin or not
+                $reExamine = $app ->re_examination;
+                if($reExamine==1)
+                {
+                $checkup = $app->last_checkup;
+                }
                  //display doctor speciality
                 $spec_id = $doc ->speciality_id;
                 $spec= Speciality::find($spec_id);
@@ -94,7 +98,7 @@ class AppointmentsController extends Controller
                 $data []=$appointment;
 
             }
-         }
+        }
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,
