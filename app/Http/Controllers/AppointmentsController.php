@@ -26,21 +26,21 @@ class AppointmentsController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors += [
-                'auth' => 'authentication failed'
-            ];
+            $errors []  = [ 'auth' => 'authentication failed'];
         }
         if ($isFailed == false){
+            //userid 
+            $appointments = Appointment::where('user_id',$user -> id )->get();
             $appointment = [];
+          
+         if($appointment->isempty()){
             foreach($appointments as $app)
             {
                 //get id of the appointment
                 $id = $app->id;
                 //get the doctor_id column from app table
                 $doc_id = $app->doctor_id;
-                //get doctor id belongs to this appointment
-                $docId = Appointment::where('app_id',$id)->first();
-                $doc = Doctor::where('doctor_id',$docId)->first();
+                $doc = Doctor::where('id',$doc_id)->first();
                 //diplay doctor address
                 $add = $doc->address;
                 //check if the doctor has callup or not 
@@ -68,11 +68,16 @@ class AppointmentsController extends Controller
                 $spec= Speciality::find($spec_id);
                 //to get name of the doctor
                 $Uid = $doc ->user_id;
-                $user = User::find($user_id);
+                $user = User::find($Uid);
                 //display doctor image
                 $img_id = $user->image_id;
-                $image = Image::where('image_id',$img_id)->first();
-                $image_path = $image -> path;
+                $image = Image::where('id',$img_id)->first();
+                if($image != null){
+                    $image_path = $image -> path;
+                }
+                else{
+                    $image_path = null;
+                }
                 //response
                 $appointment=[
                     'id' => $id ,
@@ -86,13 +91,10 @@ class AppointmentsController extends Controller
                     'last_checkup' =>$checkup
 
                 ];
-                $data += [
-                    $appointment,
-                ];
+                $data []=$appointment;
 
             }
-
-        }
+         }
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,
@@ -101,4 +103,5 @@ class AppointmentsController extends Controller
 
         return response()->json($response);
     }
+}
 }
