@@ -67,4 +67,5 @@
 
 
 
-->
+->	In Heroku, to make faker work
+	In composer.json change faker from require-dev to require
