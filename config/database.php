@@ -18,8 +18,8 @@ return [
     */
     
     // Uncomment one, and use the other, mysql for OFFLINE, pgsql for ONLINE
-    'default' => env('DB_CONNECTION', 'mysql'),
-    //'default' => env('DB_CONNECTION', 'pgsql'),
+    //'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
