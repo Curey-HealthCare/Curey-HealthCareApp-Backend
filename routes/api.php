@@ -34,7 +34,7 @@ Route::post('login', 'LoginController@login');
 // mobile routes
 Route::group(['prefix' => '/mobile'], function(){
     // Localizaiton
-    Route::get('/{lang}/{app}', 'LocalController@mobileUserLocal');
+    Route::get('/locale/{lang}/{app}', 'LocalController@mobileUserLocal');
 
     // Sign up
     Route::post('/signup', 'SignupController@mobileSignUp');
@@ -51,14 +51,14 @@ Route::group(['prefix' => '/mobile'], function(){
     // Doctor page
     Route::get('/doctor', 'DoctorsController@mobileShowOne');
     // Search Products
-    Route::get('/doctors_search', 'SearchController@mobileSearchDoctors');
+    Route::get('/doctors/search', 'SearchController@mobileSearchDoctors');
 
     // Medications Page
     Route::get('/medications', 'MedicationsController@mobileShowAll');
     // product page
     Route::get('/medication', 'MedicationsController@mobileShowOne');
     // Search Products
-    Route::get('/medications_search', 'SearchController@mobileSearchProducts');
+    Route::get('/medications/search', 'SearchController@mobileSearchProducts');
 
 
     //show order page
