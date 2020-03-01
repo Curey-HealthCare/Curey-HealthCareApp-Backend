@@ -22,8 +22,17 @@ class LocalController extends Controller
         }
 
         if($isFailed == false){
-            $data += [
-                'language' => $language
+            // $data += [
+            //     'language' => $language
+            // ];
+            $local = [];
+            foreach($language as $key){
+                $local += [
+                    $key -> key => $key -> $lang
+                ];
+            }
+            $data = [
+                'local' => $local
             ];
         }
 
