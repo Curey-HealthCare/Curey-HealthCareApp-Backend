@@ -69,3 +69,10 @@
 
 ->	In Heroku, to make faker work
 	In composer.json change faker from require-dev to require
+   Then run composer update
+
+-> To make the app work on the server
+   Before pushing to the server, open config\database.php
+   uncomment the line "'default' => env('DB_CONNECTION', 'pgsql'),"
+   and comment the line "'default' => env('DB_CONNECTION', 'mysql'),"
+   and if you want to go back to work offline, vice versa ..
