@@ -16,7 +16,6 @@ class HomeController extends Controller
         $data = [];
         $errors =  [];
 
-        $user = null;
         $user = User::where('api_token', $api_token)->first();
 
         if ($user == null){
