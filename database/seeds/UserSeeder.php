@@ -6,6 +6,7 @@ use App\User;
 use App\UserRole;
 use App\Gender;
 use App\City;
+use Illuminate\Database\QueryException;
 
 class UserSeeder extends Seeder
 {
@@ -18,35 +19,38 @@ class UserSeeder extends Seeder
     {
         // First, check the users table for content
         if (DB::table('users')->get()->count() != 0) {
-
             // Remove and re add the foreign key checks to clear the table id incerment
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            // Reset the id counting and clears the table
-            DB::table('users')->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            if (DB::connection()->getDatabaseName() == 'curey_db'){
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                // Reset the id counting and clears the table
+                DB::table('users')->truncate();
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            }
+            else {
+                DB::statement('TRUNCATE users RESTART IDENTITY CASCADE;');
+            }
         }
 
-        // Get IDs available in database
-        $roles = UserRole::get()->toArray();
-        $genders = Gender::get()->toArray();
-        $cities = City::get()->toArray();
-
         // Remove the foreign key checks to change the IDs
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        if (DB::connection()->getDatabaseName() == 'curey_db'){
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        }
 
         // Change the second i to change number of users created
         for ($i = 0; $i < 100; $i++) {
             factory(User::class)->create([
 
                 // Assign random IDs in every iteration
-                'role_id' => $roles[array_rand($roles)]['id'],
-                'gender_id' => $genders[array_rand($genders)]['id'],
-                'city_id' => $cities[array_rand($cities)]['id']
+                'role_id' => DB::table('user_roles')->inRandomOrder()->first() -> id,
+                'gender_id' => DB::table('genders')->inRandomOrder()->first() -> id,
+                'city_id' => DB::table('cities')->inRandomOrder()->first() -> id
             ]);
         }
         
         // Re add the foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        if (DB::connection()->getDatabaseName() == 'curey_db'){
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        }
 
         $this->command->info('    ---------------------------------------');
         $this->command->info('        Users table updated ¯\_(ツ)_/¯');
