@@ -101,23 +101,23 @@ class SearchController extends Controller
                     ];
                     $doctors_response[] = $doctor;
                 }
-                // $specialities = Speciality::all();
-                // $specs = [];
-                // if($specialities -> isEmpty()){
-                //     $specs = [];
-                // }
-                // else{
-                //     foreach($specialities as $spec){
-                //         $specs[] = [
-                //             'id' => $spec -> id,
-                //             'name' => $spec -> name,
-                //         ];
-                //     }
-                // }
+                $specialities = Speciality::all();
+                $specs = [];
+                if($specialities -> isEmpty()){
+                    $specs = [];
+                }
+                else{
+                    foreach($specialities as $spec){
+                        $specs[] = [
+                            'id' => $spec -> id,
+                            'name' => $spec -> name,
+                        ];
+                    }
+                }
             }
             $data = [
                 'doctors' => $doctors_response,
-                // 'specialities' => $specs,
+                'specialities' => $specs,
             ];
         }
 
