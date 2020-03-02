@@ -31,7 +31,8 @@ class SearchController extends Controller
         $api_token = $request -> api_token;
         // $user = null;
         $user = User::where('api_token', $api_token)->first();
-
+        $doctors_response = [];
+        $specs = [];
         if ($user == null){
             $isFailed = true;
             $errors []  = [ 'auth' => 'authentication failed'];
@@ -45,7 +46,6 @@ class SearchController extends Controller
                 ];
             }
             else{
-                $doctors_response = [];
                 $max = $doctors_count / 5;
                 for ($i=0; $i<= $max; $i++){
                     $doctors = User::where('role_id', '3')
@@ -113,18 +113,17 @@ class SearchController extends Controller
                         $doctors_response[] = $doctor;
                     }
                 }
-                $specialities = Speciality::all();
+            }
+            $specialities = Speciality::all();
+            if($specialities -> isEmpty()){
                 $specs = [];
-                if($specialities -> isEmpty()){
-                    $specs = [];
-                }
-                else{
-                    foreach($specialities as $spec){
-                        $specs[] = [
-                            'id' => $spec -> id,
-                            'name' => $spec -> name,
-                        ];
-                    }
+            }
+            else{
+                foreach($specialities as $spec){
+                    $specs[] = [
+                        'id' => $spec -> id,
+                        'name' => $spec -> name,
+                    ];
                 }
             }
             $data = [
