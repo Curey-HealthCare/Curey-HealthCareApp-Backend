@@ -112,7 +112,6 @@ class SearchController extends Controller
                         ];
                         $doctors_response[] = $doctor;
                     }
-                
                 }
                 $specialities = Speciality::all();
                 $specs = [];
@@ -129,7 +128,10 @@ class SearchController extends Controller
                 }
             }
             $data = [
-                'doctors' => $doctors_response,
+
+                // This is temporary, till we move to paid hosting :)
+                'doctors' => array_slice($doctors_response, 0, 10),
+                //'doctors' => $doctors_response,
                 'specialities' => $specs,
             ];
         }
