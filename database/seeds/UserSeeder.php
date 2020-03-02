@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
         }
 
         // Change the second i to change number of users created
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             factory(User::class)->create([
 
                 // Assign random IDs in every iteration
