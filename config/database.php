@@ -16,9 +16,9 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-    
+
     // Uncomment one, and use the other, mysql for OFFLINE, pgsql for ONLINE
-    //'default' => env('DB_CONNECTION', 'mysql'),
+    // 'default' => env('DB_CONNECTION', 'mysql'),
     'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
