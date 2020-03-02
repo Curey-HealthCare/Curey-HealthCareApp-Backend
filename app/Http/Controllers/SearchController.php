@@ -47,13 +47,11 @@ class SearchController extends Controller
             else{
                 $doctors_response = [];
                 $max = $doctors_count / 5;
-
-                // We should be using $max instead of 5
-                for ($i=0; $i< 5; $i++){
+                for ($i=0; $i<= $max; $i++){
                     $doctors = User::where('role_id', '3')
                     ->where('full_name', 'LIKE', '%'. $name .'%')
-                    ->skip($i*1)
-                    ->take(1)
+                    ->skip($i*5)
+                    ->take(5)
                     ->get();
                     foreach ($doctors as $doctor_user){
                         $id = $doctor_user -> id;
