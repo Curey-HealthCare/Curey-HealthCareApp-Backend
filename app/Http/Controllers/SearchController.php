@@ -65,7 +65,7 @@ class SearchController extends Controller
                     // show overall rating
                     $doc_id = $doc -> id;
                     $appointments = Appointment::where('doctor_id', $doc_id)->get();
-                    $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
+                    $appointments_count = $appointments->count();
                     $ratings = 0;
                     $overall_rating = 0;
                     if($appointments != null && $appointments_count != 0){
