@@ -68,7 +68,7 @@ class SearchController extends Controller
                     $appointments_count = $appointments->count();
                     $ratings = 0;
                     $overall_rating = 0;
-                    if(!($appointments->isEmpty()) || $appointments_count != 0){
+                    if(!($appointments->isEmpty())){
                         $overall_rate = 0;
                         foreach($appointments as $appointment){
                             $appointment_id = $appointment -> id;
