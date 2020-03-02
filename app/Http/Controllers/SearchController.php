@@ -130,7 +130,7 @@ class SearchController extends Controller
             $data = [
 
                 // This is temporary, till we move to paid hosting :)
-                'doctors' => array_slice($doctors_response, 0, 10),
+                'doctors' => array_slice($doctors_response, 0, 5),
                 //'doctors' => $doctors_response,
                 'specialities' => $specs,
             ];
