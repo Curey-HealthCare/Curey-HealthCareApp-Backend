@@ -47,11 +47,13 @@ class SearchController extends Controller
             else{
                 $doctors_response = [];
                 $max = $doctors_count / 5;
-                for ($i=0; $i<= $max; $i++){
+
+                // We should be using $max instead of 5
+                for ($i=0; $i< 5; $i++){
                     $doctors = User::where('role_id', '3')
                     ->where('full_name', 'LIKE', '%'. $name .'%')
-                    ->skip($i*5)
-                    ->take(5)
+                    ->skip($i*1)
+                    ->take(1)
                     ->get();
                     foreach ($doctors as $doctor_user){
                         $id = $doctor_user -> id;
@@ -128,10 +130,7 @@ class SearchController extends Controller
                 }
             }
             $data = [
-
-                // This is temporary, till we move to paid hosting :)
-                'doctors' => array_slice($doctors_response, 0, 5),
-                //'doctors' => $doctors_response,
+                'doctors' => $doctors_response,
                 'specialities' => $specs,
             ];
         }
