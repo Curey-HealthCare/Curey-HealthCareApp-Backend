@@ -46,6 +46,7 @@ class SearchController extends Controller
                 ];
             }
             else{
+                $doctors_response = [];
                 foreach ($doctors as $doctor_user){
                     $id = $doctor_user -> id;
                     $doc = Doctor::where('user_id', $id)->first();
@@ -84,14 +85,10 @@ class SearchController extends Controller
                             }
                         }
                         $overall_rating = $overall_rate / $appointments_count;
-                        $ratings = [
-                            'rating' => $overall_rating
-                        ];
+                        $ratings = $overall_rating;
                     }
                     else{
-                        $ratings = [
-                            'error' => 'no available ratings yet'
-                        ];
+                        $ratings = null;
                     }
 
                     $doctor = [
@@ -102,9 +99,21 @@ class SearchController extends Controller
                         'fees' => $doc -> fees,
                         'overall_rating' => $ratings
                     ];
-                    $data[] = $doctor;
+                    $doctors_response[] = $doctor;
                 }
             }
+            $specialities = Speciality::all();
+            $specs = [];
+            foreach($specialities as $spec){
+                $specs[] = [
+                    'id' => $spec -> id,
+                    'name' => $spec -> name,
+                ];
+            }
+            $data = [
+                'doctors' => $doctors_response,
+                'specialities' => $specs,
+            ];
         }
 
         $response = [
