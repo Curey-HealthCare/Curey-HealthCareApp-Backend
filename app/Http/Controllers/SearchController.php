@@ -50,7 +50,7 @@ class SearchController extends Controller
                     $id = $doctor_user -> id;
                     $doc = Doctor::where('user_id', $id)->first();
                     $spec_id = $doc -> speciality_id;
-                    $speciality = Speciality::find($spec_id);
+                    $speciality = Speciality::where('id', $spec_id)->first();
 
                     // Get the doctor's photo
                     $image_id = $doctor_user -> image_id;
@@ -66,7 +66,7 @@ class SearchController extends Controller
                     $doc_id = $doc -> id;
                     $appointments = Appointment::where('doctor_id', $doc_id)->get();
                     $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
-                    $ratings = [];
+                    $ratings = 0;
                     $overall_rating = 0;
                     if($appointments != null && $appointments_count != 0){
                         $overall_rate = 0;
@@ -87,7 +87,7 @@ class SearchController extends Controller
                         $ratings = $overall_rating;
                     }
                     else{
-                        $ratings = null;
+                        $ratings = 0;
                     }
 
                     $doctor = [
