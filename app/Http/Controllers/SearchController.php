@@ -29,7 +29,7 @@ class SearchController extends Controller
         $errors =  [];
 
         $api_token = $request -> api_token;
-        $user = null;
+        // $user = null;
         $user = User::where('api_token', $api_token)->first();
 
         if ($user == null){
@@ -98,26 +98,26 @@ class SearchController extends Controller
                         'fees' => $doc -> fees,
                         'overall_rating' => $ratings
                     ];
-                    $doctors_response[] = $doctor;
+                    $data[] = $doctor;
                 }
-                $specialities = Speciality::all();
-                $specs = [];
-                if($specialities -> isEmpty()){
-                    $specs = [];
-                }
-                else{
-                    foreach($specialities as $spec){
-                        $specs[] = [
-                            'id' => $spec -> id,
-                            'name' => $spec -> name,
-                        ];
-                    }
-                }
+                // $specialities = Speciality::all();
+                // $specs = [];
+                // if($specialities -> isEmpty()){
+                //     $specs = [];
+                // }
+                // else{
+                //     foreach($specialities as $spec){
+                //         $specs[] = [
+                //             'id' => $spec -> id,
+                //             'name' => $spec -> name,
+                //         ];
+                //     }
+                // }
             }
-            $data = [
-                'doctors' => $doctors_response,
-                'specialities' => $specs,
-            ];
+            // $data = [
+            //     'doctors' => $doctors_response,
+            //     'specialities' => $specs,
+            // ];
         }
 
         $response = [
