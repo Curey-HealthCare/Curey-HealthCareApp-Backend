@@ -104,11 +104,16 @@ class SearchController extends Controller
             }
             $specialities = Speciality::all();
             $specs = [];
-            foreach($specialities as $spec){
-                $specs[] = [
-                    'id' => $spec -> id,
-                    'name' => $spec -> name,
-                ];
+            if($specialities -> isEmpty()){
+                $specs = [];
+            }
+            else{
+                foreach($specialities as $spec){
+                    $specs[] = [
+                        'id' => $spec -> id,
+                        'name' => $spec -> name,
+                    ];
+                }
             }
             $data = [
                 'doctors' => $doctors_response,
