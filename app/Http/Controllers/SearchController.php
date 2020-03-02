@@ -36,8 +36,7 @@ class SearchController extends Controller
             $isFailed = true;
             $errors []  = [ 'auth' => 'authentication failed'];
         }
-
-        if($isFailed == false){
+        else{
             $doctors = User::where('full_name', 'LIKE', '%'. $name .'%')->where('role_id', '3')->get();
             if($doctors->isEmpty()){
                 $isFailed = true;
