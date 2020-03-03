@@ -71,7 +71,7 @@ class SignupController extends Controller
 
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|min:6|max:50',
-            'email' => 'required|max:50',
+            'email' => 'required|email|max:50',
             'password' => 'required|min:8|max:50',
         ]);
 
