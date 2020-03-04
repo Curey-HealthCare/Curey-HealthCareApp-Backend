@@ -16,11 +16,16 @@ class ProductSeeder extends Seeder
         // First, check the products table for content
         if (DB::table('products')->get()->count() != 0) {
 
-            // Reset the id counting and clears the table
             // Remove and re add the foreign key checks to clear the table id incerment
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            DB::table('products')->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            if (DB::connection()->getDatabaseName() == 'curey_db'){
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                // Reset the id counting and clears the table
+                DB::table('products')->truncate();
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            }
+            else {
+                DB::statement('TRUNCATE products RESTART IDENTITY CASCADE;');
+            }
         }
 
         for ($i = 0; $i < 100; $i++) {

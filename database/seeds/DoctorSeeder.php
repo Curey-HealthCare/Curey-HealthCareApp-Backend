@@ -19,32 +19,38 @@ class DoctorSeeder extends Seeder
         // First, check the doctors table for content
         if (DB::table('doctors')->get()->count() != 0) {
 
-            // Reset the id counting and clears the table
             // Remove and re add the foreign key checks to clear the table id incerment
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            DB::table('doctors')->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            if (DB::connection()->getDatabaseName() == 'curey_db'){
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                // Reset the id counting and clears the table
+                DB::table('doctors')->truncate();
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            }
+            else {
+                DB::statement('TRUNCATE doctors RESTART IDENTITY CASCADE;');
+            }
         }
 
         // Check for doctors in users
         $doctors = User::where('role_id', '3')->get();
 
-        // Get IDs available in database
-        $specialities = Speciality::get()->toArray();
-
         // Remove the foreign key checks to change the IDs
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        if (DB::connection()->getDatabaseName() == 'curey_db'){
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        }
 
         // Then passes the IDs of them to the create factory, the rest is added through it
         foreach ($doctors as $doctor){
             factory(Doctor::class)->create([
                 'user_id' => $doctor -> id,
-                'speciality_id' => $specialities[array_rand($specialities)]['id']
+                'speciality_id' => DB::table('specialities')->inRandomOrder()->first() -> id
             ]);
         }
         
         // Re add the foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        if (DB::connection()->getDatabaseName() == 'curey_db'){
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        }
 
         $this->command->info('    ---------------------------------------');
         $this->command->info('       Doctors table updated ¯\_(ツ)_/¯');

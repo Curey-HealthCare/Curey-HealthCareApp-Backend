@@ -17,7 +17,7 @@ use App\Day;
 use App\Pharmacy;
 
 
-class PrescribtionController extends Controller
+class PrescriptionController extends Controller
 {
     public function mobileAppShowAll(Request $request)
     {

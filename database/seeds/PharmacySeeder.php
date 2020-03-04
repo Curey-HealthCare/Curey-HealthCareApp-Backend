@@ -18,10 +18,15 @@ class PharmacySeeder extends Seeder
         if (DB::table('pharmacies')->get()->count() != 0) {
 
             // Remove and re add the foreign key checks to clear the table id incerment
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            // Reset the id counting and clears the table
-            DB::table('pharmacies')->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            if (DB::connection()->getDatabaseName() == 'curey_db'){
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                // Reset the id counting and clears the table
+                DB::table('pharmacies')->truncate();
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            }
+            else {
+                DB::statement('TRUNCATE pharmacies RESTART IDENTITY CASCADE;');
+            }
         }
 
         // Check for pharmacies in users

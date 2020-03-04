@@ -157,7 +157,7 @@ class DoctorsController extends Controller
         if($isFailed == false){
             $id = $request -> id;
             // get basic information of doctor
-            $doc_user = User::find($id);
+            $doc_user = User::where('id', $id)->where('role_id', '3')->first();
             if($doc_user == null){
                 $isFailed = true;
                 $errors += [

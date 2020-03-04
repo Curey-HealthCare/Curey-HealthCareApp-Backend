@@ -22,13 +22,38 @@ class SignupController extends Controller
     public function show(){
         $cities = City::all();
 
-        $data = [
-            'cities' => $cities
-        ];
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
 
-        $response = ['isFailed' => false,
+        // $data = [
+        //     'cities' => $cities
+        // ];
+
+        if($cities->isEmpty()){
+            $isFailed = true;
+            $errors = [
+                'error' => 'error can not connect to server',
+            ];
+        }
+        else{
+            $cities_response = [];
+            foreach($cities as $city){
+                $cities_response[] = [
+                    'id' => $city -> id,
+                    'name' => $city -> name,
+                ];
+            }
+            $data = [
+                'cities' => $cities_response,
+            ];
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
             'data' => $data,
-            'errors' => null];
+            'errors' => $errors,
+        ];
 
         return response()->json($response, 200);
     }
@@ -46,7 +71,7 @@ class SignupController extends Controller
 
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|min:6|max:50',
-            'email' => 'required|max:50',
+            'email' => 'required|email|max:50',
             'password' => 'required|min:8|max:50',
         ]);
 
