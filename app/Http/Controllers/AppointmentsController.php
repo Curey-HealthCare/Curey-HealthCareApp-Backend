@@ -10,6 +10,7 @@ use App\Image;
 use App\Speciality;
 use App\UserRole;
 use App\Appointment;
+use App\TimeTable;
 
 class AppointmentsController extends Controller
 {
@@ -42,7 +43,7 @@ class AppointmentsController extends Controller
             {
                 //get id of the appointment
                 $id = $app->id;
-                //get the doctor_id column from app table
+                //get the doctor_id 
                 $doc_id = $app->doctor_id;
                 $doc = Doctor::where('id',$doc_id)->first();
                 //diplay doctor address
@@ -95,7 +96,7 @@ class AppointmentsController extends Controller
                     'last_checkup' =>$checkup
 
                 ];
-                $data []=$appointment;
+                $data []+=$appointment;
 
             }
         }
