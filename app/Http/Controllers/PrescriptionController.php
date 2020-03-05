@@ -19,7 +19,7 @@ use App\Pharmacy;
 
 class PrescriptionController extends Controller
 {
-    public function mobileAppShowAll(Request $request)
+    public function mobilePresShowAll(Request $request)
     {
          //authenticated user
          $isFailed = false;
@@ -41,7 +41,7 @@ class PrescriptionController extends Controller
          
          if($prescriptions->isEmpty()){
             $isFailed = true;
-            $errors[] = ['error' => 'no $prescriptions yet'];
+            $errors[] = ['error' => 'no prescriptions yet'];
          }
         else {
 
