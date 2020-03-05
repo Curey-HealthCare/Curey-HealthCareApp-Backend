@@ -66,7 +66,9 @@ Route::group(['prefix' => '/mobile'], function(){
     //show appointment page
     Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
     //prescription
-    Route::get('/prescriptions ', 'PrescriptionController@mobilePresShowAll');
+    Route::get('/prescriptions', 'PrescriptionController@mobilePresShowAll');
+    // Create Prescription
+    Route::post('/prescription', 'PrescriptionController@mobileCreatePrescription');
 
 });
 

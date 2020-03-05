@@ -68,13 +68,49 @@ class PrescriptionController extends Controller
                     $data []=$prescription;
                 }
             }
+        }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+        return response()->json($response);
+    }
 
-            $response = [
-                'isFailed' => $isFailed,
-                'data' => $data,
-                'errors' => $errors
+    public function mobileCreatePrescription(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors []  = [ 'auth' => 'authentication failed'];
+        }
+        else{
+            $prescription = new Prescription;
+            $prescription -> medicine_name = $request -> medicine_name;
+            $prescription -> dosage = $request -> dosage;
+            $prescription -> days_interval = $request -> days_interval;
+            $prescription -> hours_interval = $request -> hours_interval;
+            $prescription -> start_hour = $request -> start_hour;
+            $prescription -> user_id = $user -> id;
+
+            $prescription -> save();
+
+            $data += [
+                'success' => 'prescription registered successfully'
             ];
         }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
         return response()->json($response);
     }
 }
