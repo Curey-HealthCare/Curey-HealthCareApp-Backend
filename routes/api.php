@@ -62,11 +62,11 @@ Route::group(['prefix' => '/mobile'], function(){
 
 
     //show order page
-    Route::post('/orders', 'OrdersController@mobileShowOrders');
+    Route::get('/orders', 'OrdersController@mobileShowOrders');
     //show appointment page
-    Route::get('/appointments', 'AppointmentsController@mobileAppShowAll'); 
-    //prescription 
-    Route::post('/prescriptions ', 'PrescriptionController@mobilePresShowAll');
+    Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
+    //prescription
+    Route::get('/prescriptions ', 'PrescriptionController@mobilePresShowAll');
 
 });
 
