@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 
 $DATABASE_URL = parse_url('postgres://yfnzgkhuwizgpa:a41b7e51657aaeeee53597f8d19903f35b7e8b0f4e49cc1bbdc0b16db93ef8eb@ec2-54-195-247-108.eu-west-1.compute.amazonaws.com:5432/d3ul2vg71gl4u0');
 
+
 return [
 
     /*
@@ -18,8 +19,8 @@ return [
     */
 
     // Uncomment one, and use the other, mysql for OFFLINE, pgsql for ONLINE
-    // 'default' => env('DB_CONNECTION', 'mysql'),
-    'default' => env('DB_CONNECTION', 'pgsql'),
+     //'default' => env('DB_CONNECTION', 'mysql'),
+      'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------

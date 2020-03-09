@@ -15,6 +15,7 @@ use App\DrPrescription;
 use App\TimeTable;
 use App\Day;
 use App\Pharmacy;
+use App\Dosage;
 
 
 class PrescriptionController extends Controller
@@ -50,20 +51,30 @@ class PrescriptionController extends Controller
                     //medicine_name
                     $medicine = $pres -> medicine_name;
                     //dosage
-                    $dosage = $pres -> dosage ;
+                    //$dosage = $pres -> dosage ;
                     //start hour
-                    $str_hour = $pres -> start_hour;
-                    //days_interval
-                    $dayInterval= $pres -> days_interval;
-                    //hours_interval
-                    $hourInterval = $pres -> hours_interval ;
+                    //$str_hour = $pres -> start_hour;
+                    //frequency 
+                    $freq = $pres -> frequency;
+                    //end date 
+                    //$eDate = $pre -> end_date;
+                    //days in week 
+                    $days = Day::where('id',$day -> id )->get();
+                    //dosage time 
+                    $id = $pres -> id ;
+                    $dosage_time = Dosage::where('id' , $id)->get();
+
+
+
+                
 
                     $prescription=[
                         'medicine' =>$medicine,
-                        'dosage' => $dosage,
-                        'start_hour' =>  $str_hour,
-                        'days_interval' => $dayInterval,
-                        'hours_interval'=> $hourInterval
+                        //'dosage' => $dosage,
+                        //'start_hour' =>  $str_hour,
+                        'frequency' =>  $freq,
+                        'Days'=> $days,
+                        'dosage_time' =>  $dosage_time
                     ];
                     $data []=$prescription;
                 }
