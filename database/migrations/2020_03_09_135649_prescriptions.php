@@ -14,7 +14,7 @@ class Prescriptions extends Migration
     public function up()
     {
         Schema::create('prescriptions', function (Blueprint $table) {
-            $table->Integer('id');
+            $table->Increments('id');
             $table->unsignedInteger('user_id');
             $table->string('medicine_name', 50)->nullable(false);
             $table->string('dosage', 50);
