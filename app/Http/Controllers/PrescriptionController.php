@@ -16,6 +16,7 @@ use App\TimeTable;
 use App\Day;
 use App\Pharmacy;
 use App\Dosage;
+use App\PresDay;
 
 
 class PrescriptionController extends Controller
@@ -59,10 +60,18 @@ class PrescriptionController extends Controller
                     //end date 
                     //$eDate = $pre -> end_date;
                     //days in week 
-                    $days = Day::where('id',$day -> id )->get();
+                    $days=[];
+                    foreach($pre_days as $pre_day)
+                    {
+                        $day_id =  $pre_day -> id ;
+                        $day = Day::where('id',$day_id )->first();
+                        $days [] = [
+                          'name' => $day ,
+                        ];
+                    }
                     //dosage time 
                     $id = $pres -> id ;
-                    $dosage_time = Dosage::where('id' , $id)->get();
+                    $dosage_time = Dosage::where('prescription_id' , $id)->get();
 
 
 
@@ -105,11 +114,21 @@ class PrescriptionController extends Controller
             $prescription = new Prescription;
             $prescription -> medicine_name = $request -> medicine_name;
             $prescription -> dosage = $request -> dosage;
-            $prescription -> days_interval = $request -> days_interval;
-            $prescription -> hours_interval = $request -> hours_interval;
             $prescription -> start_hour = $request -> start_hour;
+            $prescription -> end_date = $request -> end_date;
             $prescription -> user_id = $user -> id;
+            $prescription -> frequency= $request -> frequency;
+            //$days = new Day ; 
+            /*foreach($days as $day)
+            {
+              $day -> id = $request -> id ;
 
+              if( )
+              {
+                 
+              }
+
+            }*/
             $prescription -> save();
 
             $data += [

@@ -16,7 +16,7 @@ class Dosages extends Migration
         Schema::create('dosages', function (Blueprint $table) {
             $table->Increments('id');
             $table->unsignedInteger('prescription_id');
-            $table->time('dosage_time');
+            $table->time('dosage_time')->nullable();
             $table->timestamps();
 //            Constraints
             $table->foreign('prescription_id')->references('id')->on('prescriptions');
