@@ -13,7 +13,7 @@ class Degrees extends Migration
      */
     public function up()
     {
-        Schema::create('favourites', function (Blueprint $table) {
+        Schema::create('degrees', function (Blueprint $table) {
             $table->Increments('id');
             $table->unsignedInteger('doctor_id');
             $table->string('degree');
