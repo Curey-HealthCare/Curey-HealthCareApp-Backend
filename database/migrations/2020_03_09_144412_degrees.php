@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Favourites extends Migration
+class Degrees extends Migration
 {
     /**
      * Run the migrations.
@@ -15,12 +15,12 @@ class Favourites extends Migration
     {
         Schema::create('favourites', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('doctor_id');
+            $table->string('degree');
             $table->timestamps();
-            //Constraints
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('product_id')->references('id')->on('products');
+            // Constraints
+            $table->foreign('doctor_id')->references('id')->on('doctors');
+           
         });
     }
 
@@ -31,6 +31,6 @@ class Favourites extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('favourites');
+        Schema::dropIfExists('degrees');
     }
 }

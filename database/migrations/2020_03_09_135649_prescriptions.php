@@ -23,7 +23,7 @@ class Prescriptions extends Migration
             $table->unsignedInteger('frequency')->default('1');
             $table->boolean('closed')->nullable()->default(false);
             $table->timestamps();
-//            Constraints
+            // Constraints
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
