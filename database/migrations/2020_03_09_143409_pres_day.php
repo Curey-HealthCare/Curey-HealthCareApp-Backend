@@ -13,7 +13,7 @@ class PresDay extends Migration
      */
     public function up()
     {
-        Schema::create('dosages', function (Blueprint $table) {
+        Schema::create('pres_day', function (Blueprint $table) {
             $table->Increments('id');
             $table->unsignedInteger('prescription_id');
             $table->unsignedInteger('day_id');
