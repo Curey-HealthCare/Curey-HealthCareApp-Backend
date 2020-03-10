@@ -191,6 +191,14 @@ class AppointmentsController extends Controller
                 else{
                     $current_day = $current_day + 2;
                 }
+                // now we have days starting with 1 to 7 (Saturday to Friday)
+                foreach($doctor_timetable as $work_day){
+                    $available_appointments = [];
+                    if($work_day -> day_id == $current_day){
+                        $start_time = $work_day -> from;
+                        $end_time = $work_day -> to;
+                    }
+                }
 
             }
         }
