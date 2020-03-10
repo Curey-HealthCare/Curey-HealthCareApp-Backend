@@ -70,5 +70,12 @@ Route::group(['prefix' => '/mobile'], function(){
     // Create Prescription
     Route::post('/prescription', 'PrescriptionController@mobileCreatePrescription');
 
+    // Favourites
+    // Show All Favourites
+    Route::get('/favourites', 'FavouritesController@mobileShowFavourites');
+    // Add to favourites
+    Route::post('/add_favourites', 'FavouritesController@mobileAddFavourite');
+    // Remove from favourites
+    Route::post('/add_favourites', 'FavouritesController@mobileDeleteFavourite');
 });
 
