@@ -152,4 +152,8 @@ class AppointmentsController extends Controller
 
         return response()->json($response);
     }
+
+    public function mobileShowAvailable(Request $request){
+
+    }
 }

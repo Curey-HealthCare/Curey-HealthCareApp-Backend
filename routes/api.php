@@ -63,8 +63,14 @@ Route::group(['prefix' => '/mobile'], function(){
 
     //show order page
     Route::get('/orders', 'OrdersController@mobileShowOrders');
+
+    // Appointments
     //show appointment page
     Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
+    // book and appointment
+    Route::get('/book_appointment', 'AppointmentsController@mobileShowAvailable');
+    Route::post('/book_appointment', 'AppointmentsController@mobileCreateAppointment');
+
     //prescription
     Route::get('/prescriptions', 'PrescriptionController@mobilePresShowAll');
     // Create Prescription
