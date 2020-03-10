@@ -182,8 +182,16 @@ class AppointmentsController extends Controller
             }
             else{
                 $current_date = Carbon::now();
-                $current_day = ($current_date -> dayOfWeek) + 2;
+                // this day is in an array starts with 0 and the week starts with sunday
+                $current_day = $current_date -> dayOfWeek;
                 // check to show only two days, today & tomorrow || the next 2 days
+                if($current_day == 6){
+                    $current_day = 1;
+                }
+                else{
+                    $current_day = $current_day + 2;
+                }
+
             }
         }
 

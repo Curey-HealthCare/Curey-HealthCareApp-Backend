@@ -119,8 +119,7 @@ class PrescriptionController extends Controller
             $prescription -> user_id = $user -> id;
             $prescription -> day_id = $request -> day_id;
             $prescription -> frequency= $request -> frequency;
-<<<<<<< HEAD
-            $days = new Day ; 
+            $days = new Day ;
             if($days->isEmpty())
             {
                 $isFailed = true;
@@ -129,28 +128,17 @@ class PrescriptionController extends Controller
             else {
             foreach($days as $day)
             {
-              $day -> id = $request -> id ;
-              $day = Day::where('id', $prescription -> day_id)->first();
-              $dosages = new Dosage ; 
-              foreach($frequencies as $frequency)
-              {
-                 $dosage -> id = $request -> id;
-                 $dosage -> dosage_time =$request -> dosage_time;
-                 $dosage -> save();
-=======
-            //$days = new Day ;
-            /*foreach($days as $day)
-            {
                 $day -> id = $request -> id ;
-
-                if( )
+                $day = Day::where('id', $prescription -> day_id)->first();
+                $dosages = new Dosage ;
+                foreach($frequencies as $frequency)
                 {
+                    $dosage -> id = $request -> id;
+                    $dosage -> dosage_time =$request -> dosage_time;
+                    $dosage -> save();
 
                 }
->>>>>>> d29734b8f986a7b80720876be63a83b63a1834fd
-
-              }
-              $day -> save();
+                $day -> save();
             }
             $prescription -> save();
 
