@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use App\User;
@@ -154,6 +155,42 @@ class AppointmentsController extends Controller
     }
 
     public function mobileShowAvailable(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
 
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors []  = [ 'auth' => 'authentication failed'];
+        }
+        else{
+            // Get the doctor's ID
+            $doctor_id = $request -> doctor_id;
+            $doctor_data = Doctor::find($doctor_id);
+            $doctor_user_id = User::select('id')->where('id', $doctor_data -> user_id)->first();
+            // Get the doctor's timetable
+            $doctor_timetable = TimeTable::where('user_id', $doctor_user_id)->get();
+            if($doctor_timetable -> isEmpty()){
+                $isFailed = true;
+                $errors += [
+                    'message' => 'this doctor do not have available appointments',
+                ];
+            }
+            else{
+                $current_date = Carbon::now();
+                $current_day = ($current_date -> dayOfWeek) + 2;
+                // check to show only two days, today & tomorrow || the next 2 days
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
     }
 }
