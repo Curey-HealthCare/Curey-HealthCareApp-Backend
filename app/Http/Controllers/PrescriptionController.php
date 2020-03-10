@@ -55,27 +55,27 @@ class PrescriptionController extends Controller
                     //$dosage = $pres -> dosage ;
                     //start hour
                     //$str_hour = $pres -> start_hour;
-                    //frequency
+                    //frequency 
                     $freq = $pres -> frequency;
-                    //end date
+                    //end date 
                     //$eDate = $pre -> end_date;
-                    //days in week
+                    //days in week 
                     $days=[];
                     foreach($pre_days as $pre_day)
                     {
                         $day_id =  $pre_day -> id ;
                         $day = Day::where('id',$day_id )->first();
                         $days [] = [
-                            'name' => $day ,
+                          'name' => $day ,
                         ];
                     }
-                    //dosage time
+                    //dosage time 
                     $id = $pres -> id ;
                     $dosage_time = Dosage::where('prescription_id' , $id)->get();
 
 
 
-
+                
 
                     $prescription=[
                         'medicine' =>$medicine,
@@ -119,7 +119,7 @@ class PrescriptionController extends Controller
             $prescription -> user_id = $user -> id;
             $prescription -> day_id = $request -> day_id;
             $prescription -> frequency= $request -> frequency;
-            $days = new Day ;
+            $days = new Day ; 
             if($days->isEmpty())
             {
                 $isFailed = true;
@@ -128,17 +128,16 @@ class PrescriptionController extends Controller
             else {
             foreach($days as $day)
             {
-                $day -> id = $request -> id ;
-                $day = Day::where('id', $prescription -> day_id)->first();
-                $dosages = new Dosage ;
-                foreach($frequencies as $frequency)
-                {
-                    $dosage -> id = $request -> id;
-                    $dosage -> dosage_time =$request -> dosage_time;
-                    $dosage -> save();
-
-                }
-                $day -> save();
+              $day -> id = $request -> id ;
+              $day = Day::where('id', $prescription -> day_id)->first();
+              $dosages = new Dosage ; 
+              foreach($frequencies as $frequency)
+              {
+                 $dosage -> id = $request -> id;
+                 $dosage -> dosage_time =$request -> dosage_time;
+                 $dosage -> save();
+              }
+              $day -> save();
             }
             $prescription -> save();
 
@@ -146,41 +145,7 @@ class PrescriptionController extends Controller
                 'success' => 'prescription registered successfully'
             ];
         }
-    }
-
-        $response = [
-            'isFailed' => $isFailed,
-            'data' => $data,
-            'errors' => $errors
-        ];
-        return response()->json($response);
-    }
-
-    public function mobileDeletePrescription(Request $request){
-        $isFailed = false;
-        $data = [];
-        $errors =  [];
-
-        $api_token = $request -> api_token;
-        $user = null;
-        $user = User::where('api_token', $api_token)->first();
-
-        if ($user == null){
-            $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
-        }
-        else{
-            $prescription_id = $request -> prescription_id;
-            Dosage::where('prescription_id', $prescription_id)->delete();
-            PresDay::where('prescription_id', $prescription_id)->delete();
-            Prescription::where('id', $prescription_id)->delete();
-
-            $data += [
-                'message' => 'deleted',
-            ];
-        }
-
-        $response = [
+    }        $response = [
             'isFailed' => $isFailed,
             'data' => $data,
             'errors' => $errors
