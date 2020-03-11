@@ -81,7 +81,7 @@ class DoctorsController extends Controller
                         foreach($appointments as $appointment){
                             $appointment_id = $appointment -> id;
                             $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
-                            $appointment_rating = 0;
+                            // $appointment_rating = 0;
 
                             if($rating != null){
                                 $behavior = $rating -> behavior;
@@ -205,8 +205,11 @@ class DoctorsController extends Controller
                     foreach($appointments as $appointment){
                         $appointment_id = $appointment -> id;
                         $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
-                        $appointment_rating = 0;
-                        if($rating != null){
+                        // $appointment_rating = 0;
+                        if($rating == null){
+
+                        }
+                        else{
                             $behavior = $rating -> behavior;
                             $price = $rating -> price;
                             $efficiency = $rating -> efficiency;
