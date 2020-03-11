@@ -207,7 +207,7 @@ class DoctorsController extends Controller
                         $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
                         // $appointment_rating = 0;
                         if($rating == null){
-
+                            continue;
                         }
                         else{
                             $behavior = $rating -> behavior;
