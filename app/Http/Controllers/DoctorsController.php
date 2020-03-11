@@ -169,7 +169,7 @@ class DoctorsController extends Controller
             $id = $request -> id;
             // get basic information of doctor
             $doc = Doctor::where('id', $id)->first();
-            if($doc_user == null){
+            if($doc == null){
                 $isFailed = true;
                 $errors += [
                     'null' => 'can not find this doctor'
