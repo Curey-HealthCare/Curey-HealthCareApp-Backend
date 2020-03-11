@@ -26,25 +26,25 @@ class LocalizationSeeder extends Seeder
                 'app' => 'c',
                 'key' => 'onboard1_main',
                 'en' => 'The Best Doctors',
-                'ar' => ''
+                'ar' => 'افضل الأطباء'
             ],
             [
                 'app' => 'c',
                 'key' => 'onboard1_para',
                 'en' => 'Whether it’s booking doctor appointments, ordering medications, scheduling diagnostic tests or having an online consultation with your doctor',
-                'ar' => ''
+                'ar' => 'سواء كان حجز مواعيد الطبيب, أو طلب أدوية, أو جدولة الاختبارات التشخيصية, أو إجراء استشارة عبر الإنترنت مع طبيبك'
             ],
             [
                 'app' => 'c',
                 'key' => 'next',
                 'en' => 'Next',
-                'ar' => ''
+                'ar' => 'التالي'
             ],
             [
                 'app' => 'c',
                 'key' => 'skip',
                 'en' => 'Skip',
-                'ar' => ''
+                'ar' => 'تخطي'
             ],
 
             // LANDING 2
@@ -52,13 +52,13 @@ class LocalizationSeeder extends Seeder
                 'app' => 'c',
                 'key' => 'onboard2_main',
                 'en' => 'Find your Medicine',
-                'ar' => ''
+                'ar' => 'ابحث عن دوائك'
             ],
             [
                 'app' => 'c',
                 'key' => 'onboard2_para',
                 'en' => 'Whether it’s booking doctor appointments, ordering medications, scheduling diagnostic tests or having an online consultation with your doctor',
-                'ar' => ''
+                'ar' => 'سواء كان حجز مواعيد الطبيب, أو طلب أدوية, أو جدولة الاختبارات التشخيصية, أو إجراء استشارة عبر الإنترنت مع طبيبك'
             ],
 
             // LANDING 3
@@ -66,25 +66,25 @@ class LocalizationSeeder extends Seeder
                 'app' => 'c',
                 'key' => 'onboard3_main',
                 'en' => 'All-in-one-App',
-                'ar' => ''
+                'ar' => 'الكل في تطبيق واحد'
             ],
             [
                 'app' => 'c',
                 'key' => 'onboard3_para',
                 'en' => 'Whether it’s booking doctor appointments, ordering medications, scheduling diagnostic tests or having an online consultation with your doctor',
-                'ar' => ''
+                'ar' => 'سواء كان حجز مواعيد الطبيب, أو طلب أدوية, أو جدولة الاختبارات التشخيصية, أو إجراء استشارة عبر الإنترنت مع طبيبك'
             ],
             [
                 'app' => 'c',
                 'key' => 'signup',
                 'en' => 'Sign Up',
-                'ar' => ''
+                'ar' => 'انشاء حساب'
             ],
             [
                 'app' => 'c',
                 'key' => 'signin',
                 'en' => 'Sign In',
-                'ar' => ''
+                'ar' => 'تسجيل دخول'
             ],
 
             // LOGIN
@@ -92,49 +92,49 @@ class LocalizationSeeder extends Seeder
                 'app' => 'c',
                 'key' => 'wel',
                 'en' => 'Welcome Back!',
-                'ar' => ''
+                'ar' => 'مرحباََ بعودتك'
             ],
             [
                 'app' => 'c',
                 'key' => 'sign_account',
                 'en' => 'Sign in to your account',
-                'ar' => ''
+                'ar' => 'سجل الدخول الى حسابك'
             ],
             [
                 'app' => 'c',
                 'key' => 'email_phone',
                 'en' => 'Email Address or Phone Number',
-                'ar' => ''
+                'ar' => 'البريد الإلكتروني أو رقم الموبايل'
             ],
             [
                 'app' => 'c',
                 'key' => 'e_email_phone',
                 'en' => 'enter your email or phone number',
-                'ar' => ''
+                'ar' => 'ادخل بريدك الإلكتروني أو رقم الموبايل'
             ],
             [
                 'app' => 'c',
                 'key' => 'u_pass',
                 'en' => 'Your Password',
-                'ar' => ''
+                'ar' => 'كلمة السر الخاصة بك'
             ],
             [
                 'app' => 'c',
                 'key' => 'e_pass',
                 'en' => 'Enter your password',
-                'ar' => ''
+                'ar' => 'ادخل كلمة السر الخاصة بك'
             ],
             [
                 'app' => 'c',
                 'key' => 'f_pass',
                 'en' => 'Forgot Password?',
-                'ar' => ''
+                'ar' => 'نسيت كلمة السر'
             ],
             [
                 'app' => 'c',
                 'key' => 'dont_have',
                 'en' => 'Don’t have an account?',
-                'ar' => ''
+                'ar' => 'ليس لديك حساب؟'
             ],
 
             // SIGN UP
@@ -142,55 +142,55 @@ class LocalizationSeeder extends Seeder
                 'app' => 'c',
                 'key' => 'full_name',
                 'en' => 'Full Name',
-                'ar' => ''
+                'ar' => 'الإسم بالكامل'
             ],
             [
                 'app' => 'c',
                 'key' => 'u_name',
                 'en' => 'Your name',
-                'ar' => ''
+                'ar' => 'إسمك'
             ],
             [
                 'app' => 'c',
                 'key' => 'email',
                 'en' => 'Email',
-                'ar' => ''
+                'ar' => 'البريد الإلكتروني'
             ],
             [
                 'app' => 'c',
                 'key' => 'u_email',
                 'en' => 'Your email',
-                'ar' => ''
+                'ar' => 'بريدك الإلكتروني'
             ],
             [
                 'app' => 'c',
                 'key' => 'city',
                 'en' => 'City',
-                'ar' => ''
+                'ar' => 'المدينة'
             ],
             [
                 'app' => 'c',
                 'key' => 'pass',
                 'en' => 'Password',
-                'ar' => ''
+                'ar' => 'كلمة السر'
             ],
             [
                 'app' => 'c',
                 'key' => 'w_pass',
                 'en' => 'Write Your password',
-                'ar' => ''
+                'ar' => 'اكتب كلمة السر الخاصة بك'
             ],
             [
                 'app' => 'c',
                 'key' => 'c_pass',
                 'en' => 'Confirm Password',
-                'ar' => ''
+                'ar' => 'تأكيد كلمة السر'
             ],
             [
                 'app' => 'c',
                 'key' => 'have_acc',
                 'en' => 'Already have an account?',
-                'ar' => ''
+                'ar' => 'لديك حساب بالفعل؟'
             ],
 
             // HOME
@@ -198,61 +198,61 @@ class LocalizationSeeder extends Seeder
                 'app' => 'c',
                 'key' => 'home',
                 'en' => 'Home',
-                'ar' => ''
+                'ar' => 'الرئيسية'
             ],
             [
                 'app' => '1',
                 'key' => 'need_help',
                 'en' => 'Do You Need Help?',
-                'ar' => ''
+                'ar' => 'بحاجة الى مساعدة؟'
             ],
             [
                 'app' => '1',
                 'key' => 'find_dm',
                 'en' => 'Find your Doctor & Medicine?',
-                'ar' => ''
+                'ar' => 'ابحث عن طبيبك وعلاجك'
             ],
             [
                 'app' => '1',
                 'key' => 'search_dm',
                 'en' => 'Search doctor/medication',
-                'ar' => ''
+                'ar' => 'ابحث عن الطبيب/الدواء'
             ],
             [
                 'app' => '1',
                 'key' => 'medicine',
                 'en' => 'MEDICATIONS',
-                'ar' => ''
+                'ar' => 'الأدوية'
             ],
             [
                 'app' => '1',
                 'key' => 'doctor',
                 'en' => 'DOCTORS',
-                'ar' => ''
+                'ar' => 'الأطباء'
             ],
             [
                 'app' => '1',
                 'key' => 'appointments',
                 'en' => 'Appointments',
-                'ar' => ''
+                'ar' => 'المواعيد'
             ],
             [
                 'app' => '1',
                 'key' => 'prescription',
                 'en' => 'Prescription',
-                'ar' => ''
+                'ar' => 'الروشتات'
             ],
             [
                 'app' => '1',
                 'key' => 'orders',
                 'en' => 'Orders',
-                'ar' => ''
+                'ar' => 'الطلبات'
             ],
             [
                 'app' => '1',
                 'key' => 'notifications',
                 'en' => 'Notifications',
-                'ar' => ''
+                'ar' => 'الإشعارات'
             ],
 
             // DOCTOR PROFILE
@@ -260,49 +260,49 @@ class LocalizationSeeder extends Seeder
                 'app' => '1',
                 'key' => 'reviews',
                 'en' => 'Reviews',
-                'ar' => ''
+                'ar' => 'التعليقات'
             ],
             [
                 'app' => '1',
                 'key' => 'book_now',
                 'en' => 'Book now',
-                'ar' => ''
+                'ar' => 'احجز الآن'
             ],
             [
                 'app' => '1',
                 'key' => 'home_visit',
                 'en' => 'Home Visit',
-                'ar' => ''
+                'ar' => 'زيارة منزلية'
             ],
             [
                 'app' => '1',
                 'key' => 'booking',
                 'en' => 'Booking',
-                'ar' => ''
+                'ar' => 'حجز'
             ],
             [
                 'app' => '1',
                 'key' => 'biography',
                 'en' => 'Biography',
-                'ar' => ''
+                'ar' => 'السيرة الشخصية'
             ],
             [
                 'app' => '1',
                 'key' => 'degrees',
                 'en' => 'Degrees',
-                'ar' => ''
+                'ar' => 'الدرجات'
             ],
             [
                 'app' => '1',
                 'key' => 'profile',
                 'en' => 'Profile',
-                'ar' => ''
+                'ar' => 'الملف الشخصي'
             ],
             [
                 'app' => '1',
                 'key' => 'contact_info',
                 'en' => 'Contact info',
-                'ar' => ''
+                'ar' => 'بيانات التواصل'
             ],
 
             // DOCTORS
@@ -310,19 +310,19 @@ class LocalizationSeeder extends Seeder
                 'app' => '1',
                 'key' => 'doctors',
                 'en' => 'Doctors',
-                'ar' => ''
+                'ar' => 'الأطباء'
             ],
             [
                 'app' => '1',
                 'key' => 'search_doctors',
                 'en' => 'Search Doctors',
-                'ar' => ''
+                'ar' => 'البحث عن الأطباء'
             ],
             [
                 'app' => '1',
                 'key' => 'book',
                 'en' => 'Book',
-                'ar' => ''
+                'ar' => 'احجز'
             ],
             
             // MEDICATIONS
@@ -330,19 +330,19 @@ class LocalizationSeeder extends Seeder
                 'app' => '1',
                 'key' => 'medications',
                 'en' => 'Medications',
-                'ar' => ''
+                'ar' => 'الأدوية'
             ],
             [
                 'app' => '1',
                 'key' => 'search_medications',
                 'en' => 'Search Medications',
-                'ar' => ''
+                'ar' => 'البحث عن الأدوية'
             ],
             [
                 'app' => '1',
                 'key' => 'buy_now',
                 'en' => 'Buy now',
-                'ar' => ''
+                'ar' => 'اشتري الآن'
             ],
 
             // MEDICATION PAGE
@@ -350,49 +350,49 @@ class LocalizationSeeder extends Seeder
                 'app' => '1',
                 'key' => 'delivery_cost',
                 'en' => 'Delivery Cost',
-                'ar' => ''
+                'ar' => 'تكلفة التوصيل'
             ],
             [
                 'app' => '1',
                 'key' => 'based_address',
                 'en' => 'Based on your address',
-                'ar' => ''
+                'ar' => 'بناء على عنوانك'
             ],
             [
                 'app' => '1',
                 'key' => 'change_address',
                 'en' => 'Change Address',
-                'ar' => ''
+                'ar' => 'تغيير العنوان'
             ],
             [
                 'app' => '1',
                 'key' => 'pharmacies_list',
                 'en' => 'Pharmacies list',
-                'ar' => ''
+                'ar' => 'قائمة الصيدليات'
             ],
             [
                 'app' => '1',
                 'key' => 'order',
                 'en' => 'Order',
-                'ar' => ''
+                'ar' => 'طلب'
             ],
             [
                 'app' => '1',
                 'key' => 'add_cart',
                 'en' => 'Add to cart',
-                'ar' => ''
+                'ar' => 'اضف إلى العربة'
             ],
             [
                 'app' => '1',
                 'key' => 'reviews',
                 'en' => 'Reviews',
-                'ar' => ''
+                'ar' => 'التعليقات'
             ],
             [
                 'app' => '1',
                 'key' => 'le',
                 'en' => 'LE',
-                'ar' => ''
+                'ar' => 'ج.م.'
             ],
 
             // APPOINTMENTS
@@ -400,31 +400,31 @@ class LocalizationSeeder extends Seeder
                 'app' => '1',
                 'key' => 'all',
                 'en' => 'All',
-                'ar' => ''
+                'ar' => 'الكل'
             ],
             [
                 'app' => '1',
                 'key' => 'booking',
                 'en' => 'Booking',
-                'ar' => ''
+                'ar' => 'الحجز'
             ],
             [
                 'app' => '1',
                 'key' => 'call_up',
                 'en' => 'Call up',
-                'ar' => ''
+                'ar' => 'الإستدعاء'
             ],
             [
                 'app' => '1',
                 'key' => 're_exam',
                 'en' => 'Re-Examination',
-                'ar' => ''
+                'ar' => 'اعادة الكشف'
             ],
             [
                 'app' => '1',
                 'key' => 'booking',
                 'en' => 'Booking',
-                'ar' => ''
+                'ar' => 'الحجز'
             ],
 
             // NOTIFICATIONS
@@ -432,13 +432,13 @@ class LocalizationSeeder extends Seeder
                 'app' => '1',
                 'key' => 'sent_you',
                 'en' => 'sent you a',
-                'ar' => ''
+                'ar' => 'ارسل اليك'
             ],
             [
                 'app' => '1',
                 'key' => 'prescription',
                 'en' => 'prescription',
-                'ar' => ''
+                'ar' => 'روشتة'
             ]
 
             // END OF LOCALIZATION
