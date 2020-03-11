@@ -108,7 +108,7 @@ class SearchController extends Controller
                             'speciality' => $s_name,
                             'image' => $image_path,
                             'fees' => $doc -> fees,
-                            'offers_callup' => $doc2 -> offers_callup,
+                            'offers_callup' => $doc -> offers_callup,
                             'overall_rating' => $ratings
                         ];
                         $doctors_response[] = $doctor;
