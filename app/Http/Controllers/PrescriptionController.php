@@ -52,7 +52,7 @@ class PrescriptionController extends Controller
                     //medicine_name
                     $medicine = $pres -> medicine_name;
                     //dosage
-                    //$dosage = $pres -> dosage ;
+                    $dosage = $pres -> dosage ;
                     //start hour
                     //$str_hour = $pres -> start_hour;
                     //frequency
@@ -60,27 +60,48 @@ class PrescriptionController extends Controller
                     //end date
                     //$eDate = $pre -> end_date;
                     //days in week
-                    $days=[];
-                    foreach($pre_days as $pre_day)
-                    {
-                        $day_id =  $pre_day -> id ;
-                        $day = Day::where('id', $day_id)->first();
-                        $days [] = [
-                            'name' => $day ,
+                    $pre_days = PresDay::where('prescription_id', $pres -> id)->get();
+                    if($pre_days -> isEmpty()){
+                        $errors += [
+                            'message' => 'can not retrieve prescription days',
                         ];
                     }
+                    else{
+                        $days=[];
+                        foreach($pre_days as $pre_day)
+                        {
+                            $day_id =  $pre_day -> id ;
+                            $day = Day::where('id', $day_id)->first();
+                            $days [] = [
+                                'name' => $day,
+                            ];
+                        }
+                    }
+
                     //dosage time
                     $id = $pres -> id ;
                     $dosage_time = Dosage::where('prescription_id' , $id)->get();
-                    $prescription=[
-                        'medicine' =>$medicine,
-                        //'dosage' => $dosage,
-                        //'start_hour' =>  $str_hour,
-                        'frequency' =>  $freq,
+                    if($dosage_time -> isEmpty()){
+                        $errors += [
+                            'message' => 'can not retrieve prescription times',
+                        ];
+                    }
+                    else{
+                        $dosage_hours = [];
+                        foreach($dosage_time as $hour){
+                            $dosage_hours[] = [
+                                'hour' => $hour -> dosage_time,
+                            ];
+                        }
+                    }
+                    $prescription = [
+                        'medicine' => $medicine,
+                        'dosage' => $dosage,
+                        'frequency' => $freq,
                         'Days'=> $days,
-                        'dosage_time' =>  $dosage_time
+                        'dosage_time' => $dosage_hours,
                     ];
-                    $data []+=$prescription;
+                    $data[] = $prescription;
                 }
             }
         }
@@ -132,14 +153,26 @@ class PrescriptionController extends Controller
                     $prescription_day -> save();
                 }
 
-                $interval = 24 / ($request -> frequency);
-                $hour = $request -> start_hour;
-                for($i = 0; $i < ($request -> frequency); $i++){
-                    $dosages = new Dosage;
-                    $dosage -> prescription_id = $prescription -> id;
-                    $dosage -> dosage_time = $hour;
-                    $dosage -> save();
-                    $hour += $interval;
+                $process = $request -> auto;
+                if($process == '0'){
+                    $hours = $request -> hours;
+                    foreach($hours as $hour){
+                        $dosages = new Dosage;
+                        $dosage -> prescription_id = $prescription -> id;
+                        $dosage -> dosage_time = $hour;
+                        $dosage -> save();
+                    }
+                }
+                elseif($process == '1'){
+                    $interval = 24 / ($request -> frequency);
+                    $hour = $request -> start_hour;
+                    for($i = 0; $i < ($request -> frequency); $i++){
+                        $dosages = new Dosage;
+                        $dosage -> prescription_id = $prescription -> id;
+                        $dosage -> dosage_time = $hour;
+                        $dosage -> save();
+                        $hour += $interval;
+                    }
                 }
 
                 $data += [
