@@ -41,7 +41,7 @@ class DoctorsController extends Controller
 
         if ($isFailed == false){
             $city = $user -> city_id;
-            $doctors = User::where('role_id', '3')->where('city_id', $city)->get();
+            $doctors = User::where('role_id', '3')->get();
 
             if($doctors == null){
                 $isFailed = true;
@@ -108,6 +108,7 @@ class DoctorsController extends Controller
                         'full_name' => $doc -> full_name,
                         'speciality' => $speciality -> name,
                         'image' => $image_path,
+                        'city_id' => $doc -> city_id,
                         'offers_callup' => $doc2 -> offers_callup,
                         'fees' => $doc2 -> fees,
                         'overall_rating' => $ratings
@@ -124,9 +125,18 @@ class DoctorsController extends Controller
                     'name' => $spec -> name,
                 ];
             }
+            $cities_data = City::all();
+            $cities = [];
+            foreach($cities_data as $city){
+                $cities[] = [
+                    'id' => $city -> id,
+                    'name' => $city -> name,
+                ];
+            }
             $data = [
                 'doctors' => $doctors_response,
                 'specialities' => $specs,
+                'cities' => $cities,
             ];
         }
 
