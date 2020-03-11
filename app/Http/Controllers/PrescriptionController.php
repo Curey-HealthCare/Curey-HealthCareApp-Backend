@@ -106,35 +106,41 @@ class PrescriptionController extends Controller
             $errors []  = [ 'auth' => 'authentication failed'];
         }
         else{
-            $prescription = new Prescription;
-            $prescription -> medicine_name = $request -> medicine_name;
-            $prescription -> dosage = $request -> dosage;
-            $prescription -> start_hour = $request -> start_hour;
-            $prescription -> end_date = $request -> end_date;
-            $prescription -> user_id = $user -> id;
-            $prescription -> day_id = $request -> day_id;
-            $prescription -> frequency= $request -> frequency;
-            $days = new Day ;
+            $days = $request -> days;
             if($days->isEmpty())
             {
                 $isFailed = true;
                 $errors[] = ['error' => 'no days choosen'];
             }
             else {
+                $prescription = new Prescription;
+                $prescription -> medicine_name = $request -> medicine_name;
+                $prescription -> dosage = $request -> dosage;
+                $prescription -> start_hour = $request -> start_hour;
+                $prescription -> end_date = $request -> end_date;
+                $prescription -> user_id = $user -> id;
+                $prescription -> frequency = $request -> frequency;
+                $prescription -> save();
+
                 foreach($days as $day)
                 {
-                    $day -> id = $request -> id ;
-                    $day = Day::where('id', $prescription -> day_id)->first();
-                    $dosages = new Dosage ;
-                    foreach($frequencies as $frequency)
-                    {
-                        $dosage -> id = $request -> id;
-                        $dosage -> dosage_time =$request -> dosage_time;
-                        $dosage -> save();
-                    }
-                    $day -> save();
+
+                    $prescription_id = $prescription -> id;
+                    $prescription_day = new PresDay;
+                    $prescription_day -> prescription_id = $prescription_id;
+                    $prescription_day -> day_id = $day;
+                    $prescription_day -> save();
                 }
-                $prescription -> save();
+
+                $interval = 24 / ($request -> frequency);
+                $hour = $request -> start_hour;
+                for($i = 0; $i < ($request -> frequency); $i++){
+                    $dosages = new Dosage;
+                    $dosage -> prescription_id = $prescription -> id;
+                    $dosage -> dosage_time = $hour;
+                    $dosage -> save();
+                    $hour += $interval;
+                }
 
                 $data += [
                     'success' => 'prescription registered successfully'
