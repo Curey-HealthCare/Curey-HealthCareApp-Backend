@@ -108,6 +108,7 @@ class DoctorsController extends Controller
                         'full_name' => $doc -> full_name,
                         'speciality' => $speciality -> name,
                         'image' => $image_path,
+                        'offers_callup' => $doc2 -> offers_callup,
                         'fees' => $doc2 -> fees,
                         'overall_rating' => $ratings
                     ];
