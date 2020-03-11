@@ -14,6 +14,7 @@ class CreateProductsKeywordsTable extends Migration
     public function up()
     {
         Schema::create('products_keywords', function (Blueprint $table) {
+            $table->Increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('keyword_id');
             $table->timestamps();

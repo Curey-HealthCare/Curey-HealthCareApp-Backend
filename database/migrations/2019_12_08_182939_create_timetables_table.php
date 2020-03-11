@@ -14,6 +14,7 @@ class CreateTimetablesTable extends Migration
     public function up()
     {
         Schema::create('timetables', function (Blueprint $table) {
+            $table->Increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('day_id');
             $table->time('from');

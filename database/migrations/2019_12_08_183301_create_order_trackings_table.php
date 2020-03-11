@@ -14,6 +14,7 @@ class CreateOrderTrackingsTable extends Migration
     public function up()
     {
         Schema::create('order_trackings', function (Blueprint $table) {
+            $table->Increments('id');
             $table->unsignedInteger('order_id');
             $table->unsignedInteger('user_id');
             $table->boolean('is_accepted');

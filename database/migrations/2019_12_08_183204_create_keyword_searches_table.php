@@ -14,6 +14,7 @@ class CreateKeywordSearchesTable extends Migration
     public function up()
     {
         Schema::create('keyword_searches', function (Blueprint $table) {
+            $table->Increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('keyword_id');
             $table->text('search_query');

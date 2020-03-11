@@ -14,6 +14,7 @@ class CreatePharmacyRatingsTable extends Migration
     public function up()
     {
         Schema::create('pharmacy_ratings', function (Blueprint $table) {
+            $table->Increments('id');
             $table->unsignedInteger('order_id');
             $table->text('review')->nullable(true);
             $table->unsignedInteger('rating');

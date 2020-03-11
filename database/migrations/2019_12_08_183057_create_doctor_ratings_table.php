@@ -14,6 +14,7 @@ class CreateDoctorRatingsTable extends Migration
     public function up()
     {
         Schema::create('doctor_ratings', function (Blueprint $table) {
+            $table->Increments('id');
             $table->unsignedInteger('appointment_id');
             $table->text('review')->nullable(true);
             $table->unsignedInteger('behavior');
