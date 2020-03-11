@@ -66,7 +66,7 @@ class PrescriptionController extends Controller
                         $day_id =  $pre_day -> id ;
                         $day = Day::where('id',$day_id )->first();
                         $days [] = [
-                            'name' => $day ,
+                          'name' => $day ,
                         ];
                     }
                     //dosage time
@@ -126,21 +126,20 @@ class PrescriptionController extends Controller
                 $errors[] = ['error' => 'no days choosen'];
             }
             else {
-                foreach($days as $day)
-                {
-                    $day -> id = $request -> id ;
-                    $day = Day::where('id', $prescription -> day_id)->first();
-                    $dosages = new Dosage ;
-                    foreach($frequencies as $frequency)
-                    {
-                        $dosage -> id = $request -> id;
-                        $dosage -> dosage_time =$request -> dosage_time;
-                        $dosage -> save();
-
-                    }
-                    $day -> save();
-                }
-                $prescription -> save();
+            foreach($days as $day)
+            {
+              $day -> id = $request -> id ;
+              $day = Day::where('id', $prescription -> day_id)->first();
+              $dosages = new Dosage ;
+              foreach($frequencies as $frequency)
+              {
+                 $dosage -> id = $request -> id;
+                 $dosage -> dosage_time =$request -> dosage_time;
+                 $dosage -> save();
+              }
+              $day -> save();
+            }
+            $prescription -> save();
 
                 $data += [
                     'success' => 'prescription registered successfully'
