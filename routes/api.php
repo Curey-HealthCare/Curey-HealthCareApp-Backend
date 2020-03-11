@@ -82,6 +82,6 @@ Route::group(['prefix' => '/mobile'], function(){
     // Add to favourites
     Route::post('/add_favourites', 'FavouritesController@mobileAddFavourite');
     // Remove from favourites
-    Route::post('/add_favourites', 'FavouritesController@mobileDeleteFavourite');
+    Route::post('/delete_favourites', 'FavouritesController@mobileDeleteFavourite');
 });
 

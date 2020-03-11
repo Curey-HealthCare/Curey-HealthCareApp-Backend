@@ -94,10 +94,10 @@ class AppointmentsController extends Controller
                         'app_time' =>$app -> appointment_time,
                         'duration' =>$app -> duration,
                         'fees' => $fees ,
-                        'last_checkup' =>$checkup
+                        'last_checkup' =>$app -> last_checkup
 
                     ];
-                    $data []+=$appointment;
+                    $data [] = $appointment;
 
                 }
             }

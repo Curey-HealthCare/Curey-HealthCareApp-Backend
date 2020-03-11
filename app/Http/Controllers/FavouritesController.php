@@ -88,7 +88,7 @@ class FavouritesController extends Controller
             $errors []  = [ 'auth' => 'authentication failed'];
         }
         else{
-            $user_favourites = Favourites::where('user_id', $user -> id)->get();
+            $user_favourites = Favourite::where('user_id', $user -> id)->get();
             if($user_favourites -> isEmpty()){
                 $errors += [
                     'message' => 'you do not have favourites',
