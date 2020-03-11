@@ -43,28 +43,15 @@ class ProductPharmacySeeder extends Seeder
             $product = DB::table('products')->inRandomOrder()->first() -> id;
             $pharmacy = DB::table('pharmacies')->inRandomOrder()->first() -> id;
 
-            //  Check if the product ID exists in the database, if not, adds the record
-            if (ProductPharmacy::where('product_id', $product)->count() == 0){
+            //  Check if the product ID exists in the database alongside with the pharmacy ID, if not, adds the record
+            if (ProductPharmacy::where(['product_id' => $product, 'pharmacy_id' => $pharmacy])->count() == 0){
                 factory(ProductPharmacy::class)->create([
                     'product_id' => $product,
                     'pharmacy_id' => $pharmacy
                 ]);
             }
-
-            /*  If the product exists, checks for the current pharmacy if it's associated with the current product, 
-            preventing duplications.
-                And if it exists, we minus 1 from the counter and continue through the loop. */
-            else {
-                if (ProductPharmacy::where('pharmacy_id', $pharmacy)->count() == 0){
-                    factory(ProductPharmacy::class)->create([
-                        'product_id' => $product,
-                        'pharmacy_id' => $pharmacy
-                    ]);
-                }
-                else {
-                    $i--;
-                }
-            }
+            // If exists, minus 1 from the counter - restart this iteration -
+            else { $i--; }
         }
 
         // Re add the foreign key checks
