@@ -168,7 +168,7 @@ class DoctorsController extends Controller
         if($isFailed == false){
             $id = $request -> id;
             // get basic information of doctor
-            $doc_user = User::where('id', $id)->where('role_id', '3')->first();
+            $doc = Doctor::where('id', $id)->first();
             if($doc_user == null){
                 $isFailed = true;
                 $errors += [
@@ -177,9 +177,9 @@ class DoctorsController extends Controller
             }
             else{
                 // get all informatiom about the doctor
-                $doc2 = Doctor::where('user_id', $id)->first();
+                $doc_user = User::where('id', $doc -> user_id)->first();
                 // get doctor speciality name
-                $spec_id = $doc2 -> speciality_id;
+                $spec_id = $doc -> speciality_id;
                 $spec = Speciality::find($spec_id);
                 // Get the doctor's photo
                 $image_id = $doc_user -> image_id;
@@ -192,9 +192,8 @@ class DoctorsController extends Controller
                 }
 
                 // Get Reviews
-                $doc_id = $doc2 -> id;
-                $appointments = Appointment::where('doctor_id', $doc_id)->get();
-                $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
+                $appointments = Appointment::where('doctor_id', $id)->get();
+                $appointments_count = Appointment::where('doctor_id', $id)->count();
                 $ratings = [];
                 if($appointments == null || $appointments_count == 0){
                     $ratings = [
@@ -242,15 +241,16 @@ class DoctorsController extends Controller
 
                 // Basic doctor data
                 $doctor = [
-                    'id' => $doc2 -> id,
+                    'id' => $id,
                     'full_name' => $doc_user -> full_name,
                     'speciality' => $spec -> name,
                     'image' => $image_path,
-                    'qualifications' => $doc2 -> qualifications,
-                    'fees' => $doc2 -> fees,
-                    'offers_callup' => $doc2 -> offers_callup,
-                    'callup_fees' => $doc2 -> callup_fees,
-                    'address' => $doc2 -> address,
+                    'qualifications' => $doc -> qualifications,
+                    'fees' => $doc -> fees,
+                    'offers_callup' => $doc -> offers_callup,
+                    'callup_fees' => $doc -> callup_fees,
+                    'address' => $doc -> address,
+                    'degrees' => null // remember to send degrees
                 ];
 
 
