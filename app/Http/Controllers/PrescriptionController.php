@@ -128,16 +128,16 @@ class PrescriptionController extends Controller
             else {
             foreach($days as $day)
             {
-              $day -> id = $request -> id ;
-              $day = Day::where('id', $prescription -> day_id)->first();
-              $dosages = new Dosage ;
-              foreach($frequencies as $frequency)
-              {
-                 $dosage -> id = $request -> id;
-                 $dosage -> dosage_time =$request -> dosage_time;
-                 $dosage -> save();
-              }
-              $day -> save();
+                $day -> id = $request -> id ;
+                $day = Day::where('id', $prescription -> day_id)->first();
+                $dosages = new Dosage ;
+                foreach($frequencies as $frequency)
+                {
+                    $dosage -> id = $request -> id;
+                    $dosage -> dosage_time =$request -> dosage_time;
+                    $dosage -> save();
+                }
+                $day -> save();
             }
             $prescription -> save();
 
