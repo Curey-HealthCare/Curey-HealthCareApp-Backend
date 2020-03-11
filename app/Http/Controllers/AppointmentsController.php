@@ -181,16 +181,9 @@ class AppointmentsController extends Controller
                 ];
             }
             else{
-                $current_date = Carbon::now();
-                // this day is in an array starts with 0 and the week starts with sunday
-                $current_day = $current_date -> dayOfWeek;
+                $current_date = (Carbon::now()->setWeekStartsAt(Carbon::SATURDAY)->setWeekEndsAt(Carbon::FRIDAY));
+                $current_day = ($current_date -> dayOfWeek)  + 1;
                 // check to show only two days, today & tomorrow || the next 2 days
-                if($current_day == 6){
-                    $current_day = 1;
-                }
-                else{
-                    $current_day = $current_day + 2;
-                }
                 // now we have days starting with 1 to 7 (Saturday to Friday)
                 foreach($doctor_timetable as $work_day){
                     $available_appointments = [];
