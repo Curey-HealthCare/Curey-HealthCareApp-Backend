@@ -73,7 +73,7 @@ class SearchController extends Controller
                         else{
                             $image_path = null;
                         }
-    
+
                         // show overall rating
                         $doc_id = $doc -> id;
                         $appointments = Appointment::where('doctor_id', $doc_id)->get();
@@ -86,7 +86,7 @@ class SearchController extends Controller
                                 $appointment_id = $appointment -> id;
                                 $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
                                 $appointment_rating = 0;
-    
+
                                 if($rating != null){
                                     $behavior = $rating -> behavior;
                                     $price = $rating -> price;
@@ -101,13 +101,14 @@ class SearchController extends Controller
                         else{
                             $ratings = 0;
                         }
-    
+
                         $doctor = [
                             'id' => $doc -> id,
                             'full_name' => $doctor_user -> full_name,
                             'speciality' => $s_name,
                             'image' => $image_path,
                             'fees' => $doc -> fees,
+                            'offers_callup' => $doc2 -> offers_callup,
                             'overall_rating' => $ratings
                         ];
                         $doctors_response[] = $doctor;

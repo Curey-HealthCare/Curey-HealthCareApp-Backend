@@ -104,7 +104,7 @@ class DoctorsController extends Controller
 
                     // build response
                     $doctor = [
-                        'id' => $doc -> id,
+                        'id' => $doc2 -> id,
                         'full_name' => $doc -> full_name,
                         'speciality' => $speciality -> name,
                         'image' => $image_path,
@@ -242,14 +242,15 @@ class DoctorsController extends Controller
 
                 // Basic doctor data
                 $doctor = [
-                    'id' => $id,
+                    'id' => $doc2 -> id,
                     'full_name' => $doc_user -> full_name,
                     'speciality' => $spec -> name,
                     'image' => $image_path,
                     'qualifications' => $doc2 -> qualifications,
                     'fees' => $doc2 -> fees,
                     'offers_callup' => $doc2 -> offers_callup,
-                    'callup_fees' => $doc2 -> callup_fees
+                    'callup_fees' => $doc2 -> callup_fees,
+                    'address' => $doc2 -> address,
                 ];
 
 
