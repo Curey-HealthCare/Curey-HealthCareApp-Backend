@@ -64,19 +64,14 @@ class PrescriptionController extends Controller
                     foreach($pre_days as $pre_day)
                     {
                         $day_id =  $pre_day -> id ;
-                        $day = Day::where('id',$day_id )->first();
+                        $day = Day::where('id', $day_id)->first();
                         $days [] = [
-                          'name' => $day ,
+                            'name' => $day ,
                         ];
                     }
                     //dosage time
                     $id = $pres -> id ;
                     $dosage_time = Dosage::where('prescription_id' , $id)->get();
-
-
-
-
-
                     $prescription=[
                         'medicine' =>$medicine,
                         //'dosage' => $dosage,
