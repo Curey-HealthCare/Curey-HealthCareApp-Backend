@@ -149,6 +149,12 @@ class MedicationsController extends Controller
 
                 $delivery_fees = $city -> delivery_fees;
 
+                $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product_id)->first();
+                $isFav = false;
+                if($favourite != null){
+                    $isFav = true;
+                }
+
                 $product = [
                     'id' => $product_id,
                     'name' => $pro -> name,
@@ -156,6 +162,7 @@ class MedicationsController extends Controller
                     'description' => $pro -> description,
                     'price' => $pro -> price,
                     'delivery_fees' => $delivery_fees,
+                    'is_favourite' => $isFav,
                 ];
 
                 // get the pharmacies that has this product and exist in my city
