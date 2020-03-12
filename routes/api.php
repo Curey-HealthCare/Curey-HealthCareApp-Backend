@@ -87,7 +87,7 @@ Route::group(['prefix' => '/mobile'], function(){
 
 Route::group(['prefix' => '/web'], function(){
     // Signup
-    Route::post('/signup', 'SignupController@webUserSignup');
+    Route::post('/signup', 'SignupController@webSignup');
     Route::get('/signup', 'SignupController@show');
 
     // User Login
