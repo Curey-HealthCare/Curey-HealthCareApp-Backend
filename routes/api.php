@@ -45,6 +45,7 @@ Route::group(['prefix' => '/mobile'], function(){
 
     // Home Route
     Route::get('/home', 'HomeController@mobileIndex');
+
                    //Doctor in mobile 
     // Doctors Page
     Route::get('/doctors', 'DoctorsController@mobileShowAll');
@@ -52,14 +53,8 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::get('/doctor', 'DoctorsController@mobileShowOne');
     // Search Doctors 
     Route::get('/doctors/search', 'SearchController@mobileSearchDoctors');
-                  //Doctor in web 
-    // Doctors Page
-    Route::get('/doctors', 'DoctorsController@webShowAll');
-    // Doctor page
-    Route::get('/doctor', 'DoctorsController@webShowOne');
-    // Search Doctors
-    Route::get('/doctors/search', 'SearchController@webSearchDoctors');
-
+                 
+                     //Medications in mobile
     // Medications Page
     Route::get('/medications', 'MedicationsController@mobileShowAll');
     // product page
@@ -78,35 +73,20 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::get('/book_appointment', 'AppointmentsController@mobileShowAvailable');
     Route::post('/book_appointment', 'AppointmentsController@mobileCreateAppointment');
 
-                      //Appointments in web
-    //show appointment page 
-    Route::get('/appointments', 'AppointmentsController@webShowAll');
-     // book and appointment
-    Route::get('/book_appointment', 'AppointmentsController@webShowAvailable');
-    Route::post('/book_appointment', 'AppointmentsController@webCreateAppointment');
-
-
-    //prescription
+                     //prescription for mobile
     Route::get('/prescriptions', 'PrescriptionController@mobilePresShowAll');
     // Create Prescription
     Route::post('/add_prescription', 'PrescriptionController@mobileCreatePrescription');
-
-                         // Favourites in mobile 
+    //delete prescription 
+    Route::post('/delete_prescriptions', 'FavouritesController@mobileDeletePrescription');
+                   
+                        // Favourites for mobile 
     // Show All Favourites
     Route::get('/favourites', 'FavouritesController@mobileShowFavourites');
     // Add to favourites
     Route::post('/add_favourites', 'FavouritesController@mobileAddFavourite');
     // Remove from favourites
     Route::post('/delete_favourites', 'FavouritesController@mobileDeleteFavourite');
-
-                        // Favourites in mobile 
-    // Show All Favourites
-    Route::get('/favourites', 'FavouritesController@webShowFavourites');
-    // Add to favourites
-    Route::post('/add_favourites', 'FavouritesController@webAddFavourite');
-    // Remove from favourites
-    Route::post('/delete_favourites', 'FavouritesController@webDeleteFavourite');
-    
     
 });
 
@@ -118,6 +98,45 @@ Route::group(['prefix' => '/web'], function(){
     // User Login
     Route::post('/userLogin', 'LoginController@webUserLogin');
 
-    // Home Page
+     // Home Page
     Route::get('/home', 'HomeController@webHome');
+
+                      // Favourites for web
+     // Show All Favourites
+    Route::get('/favourites', 'FavouritesController@webShowFavourites');
+     // Add to favourites
+    Route::post('/add_favourites', 'FavouritesController@webAddFavourite');
+     // Remove from favourites
+    Route::post('/delete_favourites', 'FavouritesController@webDeleteFavourite');
+
+                      //prescription for web 
+    Route::get('/prescriptions', 'PrescriptionController@webPresShowAll');
+     // Create Prescription
+    Route::post('/add_prescription', 'PrescriptionController@webCreatePrescription');
+     //delete prescription 
+    Route::post('/delete_prescriptions', 'FavouritesController@webDeletePrescription');
+
+                       //Appointments in web
+     //show appointment page 
+    Route::get('/appointments', 'AppointmentsController@webShowAll');
+     // book and appointment
+    Route::get('/book_appointment', 'AppointmentsController@webShowAvailable');
+    Route::post('/book_appointment', 'AppointmentsController@webCreateAppointment');
+
+                        //Doctor in web 
+     // Doctors Page
+    Route::get('/doctors', 'DoctorsController@webShowAll');
+     // Doctor page
+    Route::get('/doctor', 'DoctorsController@webShowOne');
+     // Search Doctors
+    Route::get('/doctors/search', 'SearchController@webSearchDoctors');
+
+                        //Medications in web
+     // Medications Page
+    Route::get('/medications', 'MedicationsController@webShowAll');
+     // product page
+    Route::get('/medication', 'MedicationsController@webShowOne');
+     // Search Products
+    Route::get('/medications/search', 'SearchController@webSearchProducts');
+
 });
