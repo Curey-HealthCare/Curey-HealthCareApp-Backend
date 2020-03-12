@@ -82,7 +82,7 @@ Route::group(['prefix' => '/mobile'], function(){
     //prescription
     Route::get('/prescriptions', 'PrescriptionController@mobilePresShowAll');
     // Create Prescription
-    Route::post('/prescription', 'PrescriptionController@mobileCreatePrescription');
+    Route::post('/add_prescription', 'PrescriptionController@mobileCreatePrescription');
 
     // Favourites
     // Show All Favourites
@@ -95,3 +95,14 @@ Route::group(['prefix' => '/mobile'], function(){
     
 });
 
+Route::group(['prefix' => '/web'], function(){
+    // Signup
+    Route::post('/signup', 'SignupController@webSignup');
+    Route::get('/signup', 'SignupController@show');
+
+    // User Login
+    Route::post('/userLogin', 'LoginController@webUserLogin');
+
+    // Home Page
+    Route::get('/home', 'HomeController@webHome');
+});
