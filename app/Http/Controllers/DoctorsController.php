@@ -111,7 +111,7 @@ class DoctorsController extends Controller
                         'city_id' => $doc -> city_id,
                         'offers_callup' => $doc2 -> offers_callup,
                         'fees' => $doc2 -> fees,
-                        'overall_rating' => $ratings
+                        'overall_rating' => $overall_rating
                     ];
                     $doctors_response[] = $doctor;
                 }
