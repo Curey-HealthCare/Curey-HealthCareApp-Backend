@@ -350,7 +350,7 @@ class SearchController extends Controller
             }
             else{
                 foreach($products as $pro){
-
+                   
                     $image_id = $pro -> image_id;
                     $image = Image::where('id', $image_id)->first();
 
@@ -372,6 +372,7 @@ class SearchController extends Controller
                         'image' => $image_path,
                         'price' => $pro -> price,
                         'is_favourite' => $isFav,
+                        'description' => $pro -> description
                     ];
 
                     $data[] = $final_product;
