@@ -85,3 +85,6 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/delete_favourites', 'FavouritesController@mobileDeleteFavourite');
 });
 
+Route::group(['prefix' => '/web'], function(){
+
+});
