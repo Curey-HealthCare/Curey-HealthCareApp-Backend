@@ -15,6 +15,7 @@ use App\Pharmacy;
 use App\ProductPharmacy;
 use App\PharmacyRating;
 use App\Order;
+use App\Favourite;
 
 class MedicationsController extends Controller
 {
@@ -63,11 +64,18 @@ class MedicationsController extends Controller
                                 else{
                                     $image_path = null;
                                 }
+                                // check if the user have the product in favourites
+                                $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product -> id)->first();
+                                $isFav = false;
+                                if($favourite != null){
+                                    $isFav = true;
+                                }
                                 $final_product = [
                                     'id' => $product -> id,
                                     'name' => $product -> name,
                                     'image' => $image_path,
-                                    'price' => $product -> price
+                                    'price' => $product -> price,
+                                    'is_favourite' => $isFav,
                                 ];
 
                                 $products_response[] = $final_product;
