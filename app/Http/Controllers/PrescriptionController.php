@@ -70,11 +70,13 @@ class PrescriptionController extends Controller
                         $days=[];
                         foreach($pre_days as $pre_day)
                         {
-                            $day_id =  $pre_day -> id ;
+                            $day_id =  $pre_day -> day_id ;
                             $day = Day::where('id', $day_id)->first();
-                            $days[] = [
-                                'day_name' => $day -> name
-                            ];
+                            if($day != null){
+                                $days[] = [
+                                    'day_name' => $day -> name
+                                ];
+                            }
                         }
                     }
 
