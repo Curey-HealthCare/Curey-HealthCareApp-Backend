@@ -466,10 +466,22 @@ class DoctorsController extends Controller
                     $image_path = null;
                 }
                 
-
+                 
                 // Get Reviews
                 $appointments = Appointment::where('doctor_id', $id)->get();
                 $appointments_count = Appointment::where('doctor_id', $id)->count();
+                $isCallup = $appointments -> is_callup;
+               
+                 //no of callup
+                 if($isCallup == '1')
+                 {
+                   $noOfCallup =  $isCallup->count(); 
+                   $noOfBooking = $appointments_count - $noOfCallup ;         
+                 }
+                 else
+                 {
+                   $noOfBooking = $appointments_count;
+                 }
                 $ratings = [];
                 if($appointments == null || $appointments_count == 0){
                     $ratings = [
@@ -491,8 +503,10 @@ class DoctorsController extends Controller
                             $efficiency = $rating -> efficiency;
                             $appointment_rating = ($behavior + $price + $efficiency) / 3;
                             $overall_rate += $appointment_rating;
-
                             $review = $rating -> review;
+                            //no of reviews 
+                            $review_count = DoctorRating::where('appointment_id', $appointment_id)->count();
+                            
 
                             // Get the user who wrote the review
                             $user_id = $appointment -> user_id;
@@ -547,7 +561,10 @@ class DoctorsController extends Controller
                     'mobile' => $doc_user -> phone,
                     'email' => $doc_user -> email,
                     'overall_rating' => $overall_rating,
-                    'degrees' => $degrees_response // remember to send degrees
+                    'degrees' => $degrees_response, // remember to send degrees
+                    'review_count' => $review_count,
+                    'number of callup' => $noOfCallup,
+                    'number of booking' => $noOfBooking
                 ];
 
 
