@@ -465,6 +465,7 @@ class DoctorsController extends Controller
                 else{
                     $image_path = null;
                 }
+                
 
                 // Get Reviews
                 $appointments = Appointment::where('doctor_id', $id)->get();
