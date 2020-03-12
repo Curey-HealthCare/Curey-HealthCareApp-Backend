@@ -472,16 +472,7 @@ class DoctorsController extends Controller
                 $appointments_count = Appointment::where('doctor_id', $id)->count();
                 $isCallup = $appointments -> is_callup;
                
-                 //no of callup
-                 if($isCallup == '1')
-                 {
-                   $noOfCallup =  $isCallup->count(); 
-                   $noOfBooking = $appointments_count - $noOfCallup ;         
-                 }
-                 else
-                 {
-                   $noOfBooking = $appointments_count;
-                 }
+                 
                 $ratings = [];
                 if($appointments == null || $appointments_count == 0){
                     $ratings = [
@@ -492,6 +483,16 @@ class DoctorsController extends Controller
                     $overall_rate = 0;
                     foreach($appointments as $appointment){
                         $appointment_id = $appointment -> id;
+                        //no of callup
+                     if($isCallup == '1')
+                     {
+                        $noOfCallup =  $isCallup->count(); 
+                           
+                     }
+                     else
+                     {
+                         $noOfBooking = $appointments_count - $noOfCallup ; 
+                     }
                         $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
                         // $appointment_rating = 0;
                         if($rating == null){
@@ -564,7 +565,7 @@ class DoctorsController extends Controller
                     'degrees' => $degrees_response, // remember to send degrees
                     'review_count' => $review_count,
                     'number of callup' => $noOfCallup,
-                    'number of booking' => $noOfBooking
+                    'number of booking'=> $noOfBooking
                 ];
 
 
