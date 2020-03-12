@@ -145,6 +145,9 @@ class MedicationsController extends Controller
                 else{
                     $image_path = null;
                 }
+                $city = City::find($user -> city_id);
+
+                $delivery_fees = $city -> delivery_fees;
 
                 $product = [
                     'id' => $product_id,
@@ -152,6 +155,7 @@ class MedicationsController extends Controller
                     'image' => $image_path,
                     'description' => $pro -> description,
                     'price' => $pro -> price,
+                    'delivery_fees' => $delivery_fees,
                 ];
 
                 // get the pharmacies that has this product and exist in my city
@@ -179,15 +183,13 @@ class MedicationsController extends Controller
                             else{
                                 $image_path = null;
                             }
-                            $city = City::find($user -> city_id);
 
-                            $delivery_fees = $city -> delivery_fees;
                             // buid response for each pharmacy
                             $pharma = [
                                 'name' => $pharmacy -> full_name,
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
-                                'delivery_fees' => $delivery_fees
+                                // 'delivery_fees' => $delivery_fees
                             ];
                             $pharmacies_response[] = $pharma;
                         }
