@@ -93,6 +93,7 @@ class PrescriptionController extends Controller
                         }
                     }
                     $prescription = [
+                        'id' => $pres -> id,
                         'medicine' => $medicine,
                         'dosage' => $dosage,
                         'frequency' => $freq,
