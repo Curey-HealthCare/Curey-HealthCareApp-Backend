@@ -177,11 +177,18 @@ class SearchController extends Controller
                     else{
                         $image_path = null;
                     }
+
+                    $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
+                    $isFav = false;
+                    if($favourite != null){
+                        $isFav = true;
+                    }
                     $final_product = [
                         'id' => $pro -> id,
                         'name' => $pro -> name,
                         'image' => $image_path,
-                        'price' => $pro -> price
+                        'price' => $pro -> price,
+                        'is_favourite' => $isFav,
                     ];
 
                     $data[] = $final_product;
