@@ -93,4 +93,6 @@ Route::group(['prefix' => '/web'], function(){
     // User Login
     Route::post('/userLogin', 'LoginController@webUserLogin');
 
+    // Home Page
+    Route::get('/home', 'HomeController@webHome');
 });
