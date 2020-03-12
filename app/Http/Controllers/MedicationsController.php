@@ -373,6 +373,7 @@ class MedicationsController extends Controller
                     'description' => $pro -> description,
                     'price' => $pro -> price,
                     'delivery_fees' => $delivery_fees,
+                    'user_address' => $city,
                     'is_favourite' => $isFav,
                 ];
 
