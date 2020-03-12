@@ -232,7 +232,7 @@ class DoctorsController extends Controller
                                 $image_path = null;
                             }
                             $rate = [
-                                'rating' => $overall_rate,
+                                'rating' => $appointment_rating,
                                 'full_name' => $full_name,
                                 'review' => $review,
                                 'image' => $image_path
@@ -240,6 +240,7 @@ class DoctorsController extends Controller
                             $ratings[] = $rate;
                         }
                     }
+                    $overall_rating = $overall_rate / $appointments_count;
                 }
 
                 // Get doctor degrees
@@ -270,6 +271,7 @@ class DoctorsController extends Controller
                     'address' => $doc -> address,
                     'mobile' => $doc_user -> phone,
                     'email' => $doc_user -> email,
+                    'overall_rating' => $overall_rating,
                     'degrees' => $degrees_response // remember to send degrees
                 ];
 
