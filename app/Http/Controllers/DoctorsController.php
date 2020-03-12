@@ -483,7 +483,7 @@ class DoctorsController extends Controller
                     $overall_rate = 0;
                     foreach($appointments as $appointment){
                         $appointment_id = $appointment -> id;
-                        //no of callup
+                     //no of callup & booking 
                      if($isCallup == '1')
                      {
                         $noOfCallup =  $isCallup->count(); 

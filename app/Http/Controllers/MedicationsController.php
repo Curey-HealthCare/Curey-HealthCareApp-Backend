@@ -263,6 +263,8 @@ class MedicationsController extends Controller
                                 $product_id = $pro -> product_id;
 
                                 $product = Product::find($product_id);
+                                //description
+                                $descrption = $product -> description ;
                                 $image_id = $product -> image_id;
                                 $image = Image::where('id', $image_id)->first();
 
@@ -284,6 +286,7 @@ class MedicationsController extends Controller
                                     'image' => $image_path,
                                     'price' => $product -> price,
                                     'is_favourite' => $isFav,
+                                    'description'  => $descrption
                                 ];
 
                                 $products_response[] = $final_product;
