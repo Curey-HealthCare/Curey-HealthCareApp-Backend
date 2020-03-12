@@ -73,9 +73,7 @@ class PrescriptionController extends Controller
                             $day_id =  $pre_day -> day_id ;
                             $day = Day::where('id', $day_id)->first();
                             if($day != null){
-                                $days[] = [
-                                    'day_name' => $day -> name
-                                ];
+                                $days[] = $day -> name;
                             }
                         }
                     }
@@ -91,9 +89,7 @@ class PrescriptionController extends Controller
                     else{
                         $dosage_hours = [];
                         foreach($dosage_time as $hour){
-                            $dosage_hours[] = [
-                                'hour' => $hour -> dosage_time,
-                            ];
+                            $dosage_hours[] =$hour -> dosage_time;
                         }
                     }
                     $prescription = [
