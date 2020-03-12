@@ -90,6 +90,7 @@ class FavouritesController extends Controller
         else{
             $user_favourites = Favourite::where('user_id', $user -> id)->get();
             if($user_favourites -> isEmpty()){
+                $isFailed = true;
                 $errors += [
                     'message' => 'you do not have favourites',
                 ];
