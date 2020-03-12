@@ -13,6 +13,7 @@ use App\Speciality;
 use App\UserRole;
 use App\DoctorRating;
 use App\Appointment;
+use App\Degree;
 
 class DoctorsController extends Controller
 {
@@ -240,6 +241,20 @@ class DoctorsController extends Controller
                         }
                     }
                 }
+
+                // Get doctor degrees
+                $degrees = Degree::where('doctor_id', $doc -> id)->get();
+                $degrees_response = [];
+                if($degrees -> isEmpty()){
+                    $degrees_response = [];
+                }
+                else{
+                    foreach($degrees as $degree){
+                        $degrees_response[] = [
+                            'name' => $degree -> name,
+                        ];
+                    }
+                }
                 // Build Response
 
                 // Basic doctor data
@@ -253,7 +268,9 @@ class DoctorsController extends Controller
                     'offers_callup' => $doc -> offers_callup,
                     'callup_fees' => $doc -> callup_fees,
                     'address' => $doc -> address,
-                    'degrees' => null // remember to send degrees
+                    'mobile' => $doc_user -> phone,
+                    'email' => $doc_user -> email,
+                    'degrees' => $degrees_response // remember to send degrees
                 ];
 
 
