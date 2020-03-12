@@ -91,13 +91,21 @@ Route::group(['prefix' => '/mobile'], function(){
     // Create Prescription
     Route::post('/add_prescription', 'PrescriptionController@mobileCreatePrescription');
 
-    // Favourites
+                         // Favourites in mobile 
     // Show All Favourites
     Route::get('/favourites', 'FavouritesController@mobileShowFavourites');
     // Add to favourites
     Route::post('/add_favourites', 'FavouritesController@mobileAddFavourite');
     // Remove from favourites
     Route::post('/delete_favourites', 'FavouritesController@mobileDeleteFavourite');
+
+                        // Favourites in mobile 
+    // Show All Favourites
+    Route::get('/favourites', 'FavouritesController@webShowFavourites');
+    // Add to favourites
+    Route::post('/add_favourites', 'FavouritesController@webAddFavourite');
+    // Remove from favourites
+    Route::post('/delete_favourites', 'FavouritesController@webDeleteFavourite');
     
     
 });
