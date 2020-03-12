@@ -127,7 +127,7 @@ class SignupController extends Controller
                 $new_ph -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_ph -> password = $hashed;
-                $new_ph -> city_id = $request -> city_id;
+                // $new_ph -> city_id = $request -> city_id;
                 $new_ph -> save();
 
                 $pharmacy = new Pharmacy;
@@ -147,7 +147,7 @@ class SignupController extends Controller
                 $new_dr -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_dr -> password = $hashed;
-                $new_dr -> city_id = $request -> city_id;
+                // $new_dr -> city_id = $request -> city_id;
                 $new_dr -> save();
 
                 $doctor = new Doctor;
@@ -324,6 +324,117 @@ class SignupController extends Controller
             $errors = [
                 'api_token' => 'failed to authorize token'
             ];
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
+
+        return response()->json($response);
+    }
+
+    public function webSignup(Request $request){
+        $role = $request -> role_id;
+        $email = $request -> email;
+        $full_name = $request -> full_name;
+        $city_id = $request -> city_id;
+
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|min:6|max:50',
+            'email' => 'required|email|max:50',
+            'password' => 'required|min:8|max:50',
+        ]);
+
+        if ($validator->fails()){
+            $isFailed = true;
+            $validator_errors = $validator -> errors();
+            $errors += [
+                'validator' => $validator_errors
+            ];
+        }
+
+
+//        Check existing records in database for conflicts
+        $all_users = User::all();
+
+        foreach ($all_users as $user){
+            if ($user -> email == $email and $user -> role_id == $role){
+//                Add error that this email is already in database with same user role
+                $errors += [
+                    'email' => 'This email address is already in use'
+                ];
+                $isFailed = true;
+            }
+        }
+
+        if($isFailed == false){
+//            Generate api_token
+            $api_token = Str::random(80);
+
+
+            if($role == '1'){
+//                sign up as customer
+                $new_user = new User;
+                $new_user -> full_name = $full_name;
+                $new_user -> email = $request -> email;
+                $new_user -> role_id = $request -> role_id;
+                $new_user -> api_token = $api_token;
+                $hashed = Hash::make($request -> password);
+                $new_user -> password = $hashed;
+                $new_user -> city_id = $request -> city_id;
+                $new_user -> save();
+
+                $data = [
+                    'success' => 'Registeration successful'
+                ];
+            }
+            elseif ($role == '2'){
+//                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
+                $new_ph = new User;
+                $new_ph -> full_name = $request -> full_name;
+                $new_ph -> email = $request -> email;
+                $new_ph -> role_id = $request -> role_id;
+                $new_ph -> api_token = $api_token;
+                $hashed = Hash::make($request -> password);
+                $new_ph -> password = $hashed;
+                // $new_ph -> city_id = $request -> city_id;
+                $new_ph -> save();
+
+                $pharmacy = new Pharmacy;
+                $pharmacy -> user_id = $new_ph -> id;
+                $pharmacy -> save();
+
+                $data = [
+                    'success' => 'Registeration successful'
+                ];
+            }
+            elseif ($role == '3'){
+//             sign up as doctor, need to make the user first then get the user id for doctors table
+                $new_dr = new User;
+                $new_dr -> full_name = $request -> full_name;
+                $new_dr -> email = $request -> email;
+                $new_dr -> role_id = $request -> role_id;
+                $new_dr -> api_token = $api_token;
+                $hashed = Hash::make($request -> password);
+                $new_dr -> password = $hashed;
+                // $new_dr -> city_id = $request -> city_id;
+                $new_dr -> save();
+
+                $doctor = new Doctor;
+                $doctor -> user_id = $new_dr -> id;
+                $doctor -> save();
+
+                $data = [
+                    'success' => 'Registeration successful'
+                ];
+            }
+
         }
 
         $response = [
