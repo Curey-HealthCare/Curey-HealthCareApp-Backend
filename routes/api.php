@@ -54,7 +54,7 @@ Route::group(['prefix' => '/mobile'], function(){
     // Search Doctors 
     Route::get('/doctors/search', 'SearchController@mobileSearchDoctors');
                  
-                     //Medications in mobile
+                     //Medications for mobile
     // Medications Page
     Route::get('/medications', 'MedicationsController@mobileShowAll');
     // product page
@@ -62,11 +62,11 @@ Route::group(['prefix' => '/mobile'], function(){
     // Search Products
     Route::get('/medications/search', 'SearchController@mobileSearchProducts');
 
-
+                       //order for mobile 
     //show order page
     Route::get('/orders', 'OrdersController@mobileShowOrders');
 
-                     // Appointments in mobile 
+                     // Appointments for mobile 
     //show appointment page 
     Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
     // book and appointment
@@ -116,14 +116,14 @@ Route::group(['prefix' => '/web'], function(){
      //delete prescription 
     Route::post('/delete_prescriptions', 'FavouritesController@webDeletePrescription');
 
-                       //Appointments in web
+                       //Appointments for web
      //show appointment page 
     Route::get('/appointments', 'AppointmentsController@webShowAll');
      // book and appointment
     Route::get('/book_appointment', 'AppointmentsController@webShowAvailable');
     Route::post('/book_appointment', 'AppointmentsController@webCreateAppointment');
 
-                        //Doctor in web 
+                        //Doctor for web 
      // Doctors Page
     Route::get('/doctors', 'DoctorsController@webShowAll');
      // Doctor page
@@ -131,12 +131,16 @@ Route::group(['prefix' => '/web'], function(){
      // Search Doctors
     Route::get('/doctors/search', 'SearchController@webSearchDoctors');
 
-                        //Medications in web
+                        //Medications for web
      // Medications Page
     Route::get('/medications', 'MedicationsController@webShowAll');
      // product page
     Route::get('/medication', 'MedicationsController@webShowOne');
      // Search Products
     Route::get('/medications/search', 'SearchController@webSearchProducts');
+                 
+                           //order for mobile 
+    //show order page
+    Route::get('/orders', 'OrdersController@webShowOrders');
 
 });
