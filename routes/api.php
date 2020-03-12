@@ -64,12 +64,20 @@ Route::group(['prefix' => '/mobile'], function(){
     //show order page
     Route::get('/orders', 'OrdersController@mobileShowOrders');
 
-    // Appointments
-    //show appointment page
+                     // Appointments in mobile 
+    //show appointment page 
     Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
     // book and appointment
     Route::get('/book_appointment', 'AppointmentsController@mobileShowAvailable');
     Route::post('/book_appointment', 'AppointmentsController@mobileCreateAppointment');
+
+                      //Appointments in web
+    //show appointment page 
+    Route::get('/appointments', 'AppointmentsController@webShowAll');
+     // book and appointment
+    Route::get('/book_appointment', 'AppointmentsController@webShowAvailable');
+    Route::post('/book_appointment', 'AppointmentsController@webCreateAppointment');
+
 
     //prescription
     Route::get('/prescriptions', 'PrescriptionController@mobilePresShowAll');
@@ -83,5 +91,7 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/add_favourites', 'FavouritesController@mobileAddFavourite');
     // Remove from favourites
     Route::post('/delete_favourites', 'FavouritesController@mobileDeleteFavourite');
+    
+    
 });
 
