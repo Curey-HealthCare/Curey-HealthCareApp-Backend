@@ -17,7 +17,7 @@ use App\Day;
 use App\Pharmacy;
 use App\Dosage;
 use App\PresDay;
-
+use Carbon\Carbon;
 
 class PrescriptionController extends Controller
 {
@@ -128,7 +128,7 @@ class PrescriptionController extends Controller
         }
         else{
             $days = $request -> days;
-            if($days->isEmpty())
+            if($days == [])
             {
                 $isFailed = true;
                 $errors[] = ['error' => 'no days choosen'];
@@ -157,21 +157,24 @@ class PrescriptionController extends Controller
                 if($process == '0'){
                     $hours = $request -> hours;
                     foreach($hours as $hour){
-                        $dosages = new Dosage;
-                        $dosage -> prescription_id = $prescription -> id;
+                        $prescription_id = $prescription -> id;
+                        $dosage = new Dosage;
+                        $dosage -> prescription_id = $prescription_id;
                         $dosage -> dosage_time = $hour;
                         $dosage -> save();
                     }
                 }
                 elseif($process == '1'){
                     $interval = 24 / ($request -> frequency);
-                    $hour = $request -> start_hour;
+                    $h = $request -> start_hour;
+                    $hour = Carbon::parse($h);
                     for($i = 0; $i < ($request -> frequency); $i++){
-                        $dosages = new Dosage;
+
+                        $dosage = new Dosage;
                         $dosage -> prescription_id = $prescription -> id;
                         $dosage -> dosage_time = $hour;
                         $dosage -> save();
-                        $hour += $interval;
+                        $hour -> addHour($interval);
                     }
                 }
 
