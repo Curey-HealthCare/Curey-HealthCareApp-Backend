@@ -45,13 +45,20 @@ Route::group(['prefix' => '/mobile'], function(){
 
     // Home Route
     Route::get('/home', 'HomeController@mobileIndex');
-
+                   //Doctor in mobile 
     // Doctors Page
     Route::get('/doctors', 'DoctorsController@mobileShowAll');
     // Doctor page
     Route::get('/doctor', 'DoctorsController@mobileShowOne');
-    // Search Products
+    // Search Doctors 
     Route::get('/doctors/search', 'SearchController@mobileSearchDoctors');
+                  //Doctor in web 
+    // Doctors Page
+    Route::get('/doctors', 'DoctorsController@webShowAll');
+    // Doctor page
+    Route::get('/doctor', 'DoctorsController@webShowOne');
+    // Search Doctors
+    Route::get('/doctors/search', 'SearchController@webSearchDoctors');
 
     // Medications Page
     Route::get('/medications', 'MedicationsController@mobileShowAll');
