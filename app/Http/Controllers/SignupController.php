@@ -366,9 +366,21 @@ class SignupController extends Controller
         if ($validator->fails()){
             $isFailed = true;
             $validator_errors = $validator -> errors();
-            $errors += [
-                'validator' => $validator_errors
-            ];
+            if($validator -> errors() -> first('email') != []){
+                $errors += [
+                    'user' => 'please type a valid email',
+                ];
+            }
+            if($validator_errors -> first('password') != []){
+                $errors += [
+                    'password' => 'the password field must be at least 8 characters'
+                ];
+            }
+            if($validator_errors -> first('full_name') != []){
+                $errors += [
+                    'full_name' => 'the name field must be at least 8 characters'
+                ];
+            }
         }
 
 
