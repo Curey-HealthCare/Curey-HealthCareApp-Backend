@@ -46,14 +46,14 @@ Route::group(['prefix' => '/mobile'], function(){
     // Home Route
     Route::get('/home', 'HomeController@mobileIndex');
 
-                   //Doctor in mobile 
+                   //Doctor in mobile
     // Doctors Page
     Route::get('/doctors', 'DoctorsController@mobileShowAll');
     // Doctor page
     Route::get('/doctor', 'DoctorsController@mobileShowOne');
-    // Search Doctors 
+    // Search Doctors
     Route::get('/doctors/search', 'SearchController@mobileSearchDoctors');
-                 
+
                      //Medications for mobile
     // Medications Page
     Route::get('/medications', 'MedicationsController@mobileShowAll');
@@ -62,12 +62,12 @@ Route::group(['prefix' => '/mobile'], function(){
     // Search Products
     Route::get('/medications/search', 'SearchController@mobileSearchProducts');
 
-                       //order for mobile 
+                       //order for mobile
     //show order page
     Route::get('/orders', 'OrdersController@mobileShowOrders');
 
-                     // Appointments for mobile 
-    //show appointment page 
+                     // Appointments for mobile
+    //show appointment page
     Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
     // book and appointment
     Route::get('/book_appointment', 'AppointmentsController@mobileShowAvailable');
@@ -77,17 +77,17 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::get('/prescriptions', 'PrescriptionController@mobilePresShowAll');
     // Create Prescription
     Route::post('/add_prescription', 'PrescriptionController@mobileCreatePrescription');
-    //delete prescription 
+    //delete prescription
     Route::post('/delete_prescriptions', 'FavouritesController@mobileDeletePrescription');
-                   
-                        // Favourites for mobile 
+
+                        // Favourites for mobile
     // Show All Favourites
     Route::get('/favourites', 'FavouritesController@mobileShowFavourites');
     // Add to favourites
     Route::post('/add_favourites', 'FavouritesController@mobileAddFavourite');
     // Remove from favourites
     Route::post('/delete_favourites', 'FavouritesController@mobileDeleteFavourite');
-    
+
 });
 
 Route::group(['prefix' => '/web'], function(){
@@ -109,21 +109,21 @@ Route::group(['prefix' => '/web'], function(){
      // Remove from favourites
     Route::post('/delete_favourites', 'FavouritesController@webDeleteFavourite');
 
-                      //prescription for web 
+                      //prescription for web
     Route::get('/prescriptions', 'PrescriptionController@webPresShowAll');
      // Create Prescription
     Route::post('/add_prescription', 'PrescriptionController@webCreatePrescription');
-     //delete prescription 
+     //delete prescription
     Route::post('/delete_prescriptions', 'FavouritesController@webDeletePrescription');
 
                        //Appointments for web
-     //show appointment page 
+     //show appointment page
     Route::get('/appointments', 'AppointmentsController@webShowAll');
      // book and appointment
     Route::get('/book_appointment', 'AppointmentsController@webShowAvailable');
     Route::post('/book_appointment', 'AppointmentsController@webCreateAppointment');
 
-                        //Doctor for web 
+                        //Doctor for web
      // Doctors Page
     Route::get('/doctors', 'DoctorsController@webShowAll');
      // Doctor page
@@ -138,8 +138,7 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/medication', 'MedicationsController@webShowOne');
      // Search Products
     Route::get('/medications/search', 'SearchController@webSearchProducts');
-                 
-                           //order for mobile 
+                           //order for mobile
     //show order page
     Route::get('/orders', 'OrdersController@webShowOrders');
 
