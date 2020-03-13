@@ -95,7 +95,7 @@ class ForgetPasswordController extends Controller
 
         $email = $request -> email;
         $code = $request -> code;
-        $user = ForgetPassword::where('email', $email)->where('code', $code)->first();
+        $user = ForgetPassword::where(['email' => $email, 'code' => $code])->first();
         if($user == null){
             $isFailed = true;
             $errors += [
