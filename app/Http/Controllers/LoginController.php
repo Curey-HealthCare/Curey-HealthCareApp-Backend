@@ -250,15 +250,15 @@ class LoginController extends Controller
 
         $user = User::where('api_token', $request -> api_token)->first();
 
-        if ($user == null){
+        if ($user === NULL){
             $isFailed = true;
             $errors += [
                 'api_token' => 'this token does not match'
             ];
         }
         else{
-            $user -> where('id', $user -> id)
-                        -> update(['api_token' => '0']);
+            User::where('id', $user -> id)
+                        -> update(['api_token' => NULL]);
         }
 
         $response = [
