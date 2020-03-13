@@ -248,7 +248,7 @@ class LoginController extends Controller
         $data = [];
         $errors =  [];
 
-        $user = User::where('api_token', $api_token)->first();
+        $user = User::where('api_token', $request -> api_token)->first();
 
         if ($user == null){
             $isFailed = true;
