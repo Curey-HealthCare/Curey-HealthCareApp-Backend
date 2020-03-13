@@ -87,14 +87,16 @@ class AppointmentsController extends Controller
                     //response
                     $appointment=[
                         'id' => $id ,
-                        'full_name'=>$user -> full_name,
-                        'address' =>$add,
+                        'full_name'=> $user -> full_name,
+                        'address' => $add,
                         'image' => $image_path,
                         'speciality'=> $spec -> name,
-                        'app_time' =>$app -> appointment_time,
-                        'duration' =>$app -> duration,
-                        'fees' => $fees ,
-                        'last_checkup' =>$app -> last_checkup
+                        'app_time' => $app -> appointment_time,
+                        'duration' => $app -> duration,
+                        'fees' => $fees,
+                        'last_checkup' => $app -> last_checkup,
+                        'is_callup' => $app -> is_callup,
+                        're_exam' => $app -> re_examination,
 
                     ];
                     $data [] = $appointment;
@@ -202,7 +204,7 @@ class AppointmentsController extends Controller
             'errors' => $errors
         ];
     }
-    //for web 
+    //for web
     public function webShowAll(Request $request)
     {
         //authenticated user
@@ -275,14 +277,16 @@ class AppointmentsController extends Controller
                     //response
                     $appointment=[
                         'id' => $id ,
-                        'full_name'=>$user -> full_name,
-                        'address' =>$add,
+                        'full_name'=> $user -> full_name,
+                        'address' => $add,
                         'image' => $image_path,
                         'speciality'=> $spec -> name,
-                        'app_time' =>$app -> appointment_time,
-                        'duration' =>$app -> duration,
-                        'fees' => $fees ,
-                        'last_checkup' =>$app -> last_checkup
+                        'app_time' => $app -> appointment_time,
+                        'duration' => $app -> duration,
+                        'fees' => $fees,
+                        'last_checkup' => $app -> last_checkup,
+                        'is_callup' => $app -> is_callup,
+                        're_exam' => $app -> re_examination,
 
                     ];
                     $data [] = $appointment;
@@ -340,7 +344,7 @@ class AppointmentsController extends Controller
 
         return response()->json($response);
     }
-    
+
     public function webShowAvailable(Request $request){
         $isFailed = false;
         $data = [];
