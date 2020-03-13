@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+
 use App\User;
 use App\ForgetPassword;
-use Carbon\Carbon;
+
 
 class ForgetPasswordController extends Controller
 {
@@ -72,6 +75,60 @@ class ForgetPasswordController extends Controller
                         'success' => 'check your email for the code',
                     ];
                 }
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
+
+        return response()->json($response);
+    }
+
+
+    public function updatePassword(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $email = $request -> email;
+        $code = $request -> code;
+        $user = ForgetPassword::where('email', $email)->where('code', $code)->first();
+        if($user == null){
+            $isFailed = true;
+            $errors += [
+                'email' => 'how the f*ck did you get in here?'
+            ];
+        }
+        else{
+            if(($user -> updated_at) >= now()->subMinutes(30)->toDateTimeString()){
+                $password = $request -> password;
+                $existing_password = User::select('password')->where('email', $email)->first()-> password;
+                if (Hash::check($password, $existing_password)){
+                    $isFailed = true;
+                    $errors += [
+                        'password' => 'your new password can not be your old password',
+                    ];
+                }
+                else{
+                    $hashed = Hash::make($request -> password);
+                    User::where('email', $email)
+                        -> update(['password' => $hashed]);
+
+                    ForgetPassword::where('email', $email)->where('code', $code)->delete();
+
+                    $data += [
+                        'success' => 'password changed successfully'
+                    ];
+                }
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'timelimit' => 'your code expired, request a new code',
+                ];
             }
         }
 

@@ -104,6 +104,7 @@ Route::group(['prefix' => '/web'], function(){
 
     // Forget Password
     Route::post('/forget_password', 'ForgetPasswordController@getEmail');
+    Route::post('/update_password', 'ForgetPasswordController@updatePassword');
 
      // Home Page
     Route::get('/home', 'HomeController@webHome');
