@@ -26,15 +26,24 @@ class FavouritesController extends Controller
             $errors []  = [ 'auth' => 'authentication failed'];
         }
         else{
-            $product_id = $request -> product_id;
-            $favourite = new Favourite;
-            $favourite -> user_id = $user -> id;
-            $favourite -> product_id = $product_id;
-            $favourite -> save();
+            $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
+            if($favExist == null){
+                $product_id = $request -> product_id;
+                $favourite = new Favourite;
+                $favourite -> user_id = $user -> id;
+                $favourite -> product_id = $product_id;
+                $favourite -> save();
 
-            $data += [
-                'message' => 'added to favourites',
-            ];
+                $data += [
+                    'message' => 'added to favourites',
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'error' => 'already in favourites',
+                ];
+            }
         }
 
         $response = [
@@ -60,11 +69,22 @@ class FavouritesController extends Controller
         }
         else{
             $product_id = $request -> product_id;
-            Favourite::where('user_id', $user -> id)->where('product_id', $product_id)->delete();
 
-            $data += [
-                'message' => 'removed from favourites',
-            ];
+            $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
+            if($favExist == null){
+                Favourite::where('user_id', $user -> id)->where('product_id', $product_id)->delete();
+
+                $data += [
+                    'message' => 'removed from favourites',
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'error' => 'this item is not in your favourites',
+                ];
+            }
+
         }
 
         $response = [
@@ -131,7 +151,7 @@ class FavouritesController extends Controller
         ];
         return response()->json($response);
     }
-    //for web 
+    //for web
     public function webAddFavourite(Request $request){
         $isFailed = false;
         $data = [];
@@ -146,15 +166,24 @@ class FavouritesController extends Controller
             $errors []  = [ 'auth' => 'authentication failed'];
         }
         else{
-            $product_id = $request -> product_id;
-            $favourite = new Favourite;
-            $favourite -> user_id = $user -> id;
-            $favourite -> product_id = $product_id;
-            $favourite -> save();
+            $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
+            if($favExist == null){
+                $product_id = $request -> product_id;
+                $favourite = new Favourite;
+                $favourite -> user_id = $user -> id;
+                $favourite -> product_id = $product_id;
+                $favourite -> save();
 
-            $data += [
-                'message' => 'added to favourites',
-            ];
+                $data += [
+                    'message' => 'added to favourites',
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'error' => 'already in favourites',
+                ];
+            }
         }
 
         $response = [
@@ -180,11 +209,20 @@ class FavouritesController extends Controller
         }
         else{
             $product_id = $request -> product_id;
-            Favourite::where('user_id', $user -> id)->where('product_id', $product_id)->delete();
+            $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
+            if($favExist == null){
+                Favourite::where('user_id', $user -> id)->where('product_id', $product_id)->delete();
 
-            $data += [
-                'message' => 'removed from favourites',
-            ];
+                $data += [
+                    'message' => 'removed from favourites',
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'error' => 'this item is not in your favourites',
+                ];
+            }
         }
 
         $response = [

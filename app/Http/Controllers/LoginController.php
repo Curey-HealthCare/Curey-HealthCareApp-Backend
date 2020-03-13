@@ -198,7 +198,8 @@ class LoginController extends Controller
                     $data = [
                         'api_token' => $api_token,
                         'full_name' => $existing_data -> full_name,
-                        'image' => $image_path
+                        'image' => $image_path,
+                        'email' => $existing_data -> email,
                     ];
 
                     /*
