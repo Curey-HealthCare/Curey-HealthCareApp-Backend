@@ -18,6 +18,7 @@ use App\Pharmacy;
 use App\ProductPharmacy;
 use App\PharmacyRating;
 use App\Order;
+use App\Favourite;
 
 class SearchController extends Controller
 {
@@ -204,7 +205,7 @@ class SearchController extends Controller
 
         return response()->json($response);
     }
-    //for web 
+    //for web
     public function webSearchDoctors(Request $request){
         $name = $request -> name;
         $isFailed = false;
@@ -350,7 +351,7 @@ class SearchController extends Controller
             }
             else{
                 foreach($products as $pro){
-                   
+
                     $image_id = $pro -> image_id;
                     $image = Image::where('id', $image_id)->first();
 
