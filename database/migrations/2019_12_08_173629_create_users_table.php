@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('username',"125")
                 ->nullable(true);
             $table->string('email',"125")
-                ->nullable(false);
+                ->nullable(false)->unique();
             $table->timestamp('email_verified_at')
                 ->nullable(true);
             $table->string('phone',"15")
@@ -49,7 +49,7 @@ class CreateUsersTable extends Migration
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->foreign('city_id')->references('id')->on('cities')
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
-            $table->unique (['email', 'role_id']);
+            // $table->unique (['email', 'role_id']);
         });
 
         Schema::table('users', function ($table) {
