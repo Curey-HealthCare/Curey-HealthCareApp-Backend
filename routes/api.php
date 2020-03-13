@@ -42,6 +42,8 @@ Route::group(['prefix' => '/mobile'], function(){
 
     // Login
     Route::post('/userLogin', 'LoginController@mobileUserLogin');
+    // Logout
+    Route::post('/logout', 'LoginController@logout');
 
     // Home Route
     Route::get('/home', 'HomeController@mobileIndex');
@@ -97,6 +99,8 @@ Route::group(['prefix' => '/web'], function(){
 
     // User Login
     Route::post('/userLogin', 'LoginController@webUserLogin');
+    // Logout
+    Route::post('/logout', 'LoginController@logout');
 
      // Home Page
     Route::get('/home', 'HomeController@webHome');

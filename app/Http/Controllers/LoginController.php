@@ -241,4 +241,31 @@ class LoginController extends Controller
 
         return response()->json($response);
     }
+
+    public function logout(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'api_token' => 'this token does not match'
+            ];
+        }
+        else{
+            $user -> where('id', $user -> id)
+                        -> update(['api_token' => '0']);
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
+
+        return response()->json($response);
+    }
 }
