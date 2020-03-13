@@ -90,7 +90,7 @@ class SignupController extends Controller
             }
             if($validator_errors -> first('full_name') != []){
                 $errors += [
-                    'password' => 'the name field must be at least 8 characters'
+                    'full_name' => 'the name field must be at least 8 characters'
                 ];
             }
         }
