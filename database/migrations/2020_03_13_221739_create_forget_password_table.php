@@ -21,7 +21,7 @@ class CreateForgetPasswordTable extends Migration
             $table->timestamps();
 
             $table->foreign('email')->references('email')->on('users')
-                ->onDelete('SET NULL')->onUpdate('CASCADE');
+                ->onDelete('SET NULL')->onUpdate('CASCADE')->unique();
         });
     }
 
