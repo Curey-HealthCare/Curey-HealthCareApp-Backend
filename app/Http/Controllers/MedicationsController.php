@@ -163,6 +163,7 @@ class MedicationsController extends Controller
                     'description' => $pro -> description,
                     'price' => $pro -> price,
                     'delivery_fees' => $delivery_fees,
+                    'user_address' => $user -> address,
                     'is_favourite' => $isFav,
                 ];
 
@@ -191,12 +192,46 @@ class MedicationsController extends Controller
                             else{
                                 $image_path = null;
                             }
+                            //ratings
+                            $overall_rating = 0;
+                            $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
+                            $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
+                            $ratings = [];
+                            if($orders == null || $orders_count == 0){
+                                $ratings = [
+                                    'error' => 'no available ratings yet'
+                                ];
+                            }
+                            else{
+
+                                foreach($orders as $order)
+                                {
+                                    $order_id = $order -> id;
+                                    $rating = PharmacyRating::where('order_id', $order_id)->first();
+
+                                    if($rating == null){
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        $rate += $rating -> rating ;
+                                    //    $review = $rating -> review;
+
+                                    // $ratings =[
+                                    //     'rate'=> $rate,
+                                    //     // 'review' => $review
+                                    // ];
+                                    }
+                                }
+                                $overall_rating = $rate / $orders_count;
+                            }
 
                             // buid response for each pharmacy
                             $pharma = [
                                 'name' => $pharmacy -> full_name,
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
+                                'overall_rating' => $overall_rating,
                                 // 'delivery_fees' => $delivery_fees
                             ];
                             $pharmacies_response[] = $pharma;
@@ -373,7 +408,7 @@ class MedicationsController extends Controller
                     'description' => $pro -> description,
                     'price' => $pro -> price,
                     'delivery_fees' => $delivery_fees,
-                    'user_address' => $city,
+                    'user_address' => $user -> address,
                     'is_favourite' => $isFav,
                 ];
 
@@ -392,7 +427,7 @@ class MedicationsController extends Controller
                         $pharmacies = Pharmacy::find($pharmacy_id);
                         $pharmacy_userid = $pharmacies -> user_id;
                         $pharmacy = User::where('id',$pharmacy_userid)->where('city_id', $user -> city_id)->first();
-                        
+
                         if($pharmacy != null){
                             $image_id = $pharmacy -> image_id;
                             $image = Image::where('id', $image_id)->first();
@@ -403,7 +438,8 @@ class MedicationsController extends Controller
                                 $image_path = null;
                             }
                             //ratings
-                            $orders = Order::where('pharmacy_id' ,$pharmacy_id)-get();
+                            $overall_rating = 0;
+                            $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
                             $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                             $ratings = [];
                             if($orders == null || $orders_count == 0){
@@ -412,28 +448,28 @@ class MedicationsController extends Controller
                                 ];
                             }
                             else{
-                                $overall_rating = 0;
+
                                 foreach($orders as $order)
                                 {
                                     $order_id = $order -> id;
                                     $rating = PharmacyRating::where('order_id', $order_id)->first();
-                                    
+
                                     if($rating == null){
                                         continue;
                                     }
                                     else
                                     {
-                                       $rate += $rating ; 
-                                       $review = $rating -> review;
-                                    
-                                    $ratings =[
-                                        'rate'=> $rate,
-                                        'review' => $review 
-                                    ];
+                                        $rate += $rating -> rating ;
+                                    //    $review = $rating -> review;
+
+                                    // $ratings =[
+                                    //     'rate'=> $rate,
+                                    //     // 'review' => $review
+                                    // ];
                                     }
                                 }
                                 $overall_rating = $rate / $orders_count;
-
+                            }
                             // buid response for each pharmacy
                             $pharma = [
                                 'name' => $pharmacy -> full_name,
@@ -444,7 +480,6 @@ class MedicationsController extends Controller
                             ];
                             $pharmacies_response[] = $pharma;
                         }
-                    }
                         else{
                             $isFailed = true;
                             $errors[] = [
