@@ -102,6 +102,9 @@ Route::group(['prefix' => '/web'], function(){
     // Logout
     Route::post('/logout', 'LoginController@logout');
 
+    // Forget Password
+    Route::post('/forget_password', 'ForgetPasswordController@getEmail');
+
      // Home Page
     Route::get('/home', 'HomeController@webHome');
 
