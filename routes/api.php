@@ -45,6 +45,11 @@ Route::group(['prefix' => '/mobile'], function(){
     // Logout
     Route::post('/logout', 'LoginController@logout');
 
+    // Forget Password
+    Route::post('/forget_password', 'ForgetPasswordController@getEmail');
+    Route::post('/update_password', 'ForgetPasswordController@updatePassword');
+
+
     // Home Route
     Route::get('/home', 'HomeController@mobileIndex');
 
