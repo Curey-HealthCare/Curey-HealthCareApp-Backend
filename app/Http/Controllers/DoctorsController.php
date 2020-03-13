@@ -291,7 +291,7 @@ class DoctorsController extends Controller
 
         return response()->json($response);
     }
-    //for web 
+    //for web
     public function webShowAll(Request $request){
         // TO DO
         // Hash IDs
@@ -465,14 +465,13 @@ class DoctorsController extends Controller
                 else{
                     $image_path = null;
                 }
-                
-                 
+
                 // Get Reviews
                 $appointments = Appointment::where('doctor_id', $id)->get();
                 $appointments_count = Appointment::where('doctor_id', $id)->count();
-                $isCallup = $appointments -> is_callup;
-               
-                 
+
+                $clinic_count = Appointment::where('doctor_id', $id)->where('is_callup', '0')->count();
+                $callup_count = Appointment::where('doctor_id', $id)->where('is_callup', '1')->count();
                 $ratings = [];
                 if($appointments == null || $appointments_count == 0){
                     $ratings = [
@@ -485,20 +484,7 @@ class DoctorsController extends Controller
                     $noOfBooking  = 0;
                     foreach($appointments as $appointment){
                         $appointment_id = $appointment -> id;
-                     //no of callup
-                     
-                     if($isCallup == '1')
-                     {
-                        $noOfCallup =  $isCallup->count(); 
-                           
-                     }
-                     
-                     
-                          
-                     
-                     
                         $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
-                        // $appointment_rating = 0;
                         if($rating == null){
                             continue;
                         }
@@ -509,9 +495,9 @@ class DoctorsController extends Controller
                             $appointment_rating = ($behavior + $price + $efficiency) / 3;
                             $overall_rate += $appointment_rating;
                             $review = $rating -> review;
-                            //no of reviews 
+                            //no of reviews
                             $review_count = DoctorRating::where('appointment_id', $appointment_id)->count();
-                            
+
 
                             // Get the user who wrote the review
                             $user_id = $appointment -> user_id;
@@ -567,10 +553,10 @@ class DoctorsController extends Controller
                     'mobile' => $doc_user -> phone,
                     'email' => $doc_user -> email,
                     'overall_rating' => $overall_rating,
-                    'degrees' => $degrees_response, // remember to send degrees
+                    'degrees' => $degrees_response,
                     'review_count' => $review_count,
-                    'number of callup' => $noOfCallup,
-                    'number of booking'=> $noOfBooking
+                    'appointments_count' => $clinic_count,
+                    'callup_count'=> $callup_count,
                 ];
 
 
