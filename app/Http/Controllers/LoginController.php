@@ -38,9 +38,16 @@ class LoginController extends Controller
         if ($validator->fails()){
             $isFailed = true;
             $validator_errors = $validator -> errors();
-            $errors += [
-                'validator' => $validator_errors
-            ];
+            if($validator -> errors() -> first('user') != []){
+                $errors += [
+                    'user' => 'the user field must be at least 6 characters',
+                ];
+            }
+            if($validator_errors -> first('password') != []){
+                $errors += [
+                    'password' => 'the password field must be at least 8 characters'
+                ];
+            }
         }
 
 //        Check for username or email or phone in database
@@ -141,9 +148,17 @@ class LoginController extends Controller
         if ($validator->fails()){
             $isFailed = true;
             $validator_errors = $validator -> errors();
-            $errors += [
-                'validator' => $validator_errors
-            ];
+            if($validator -> errors() -> first('user') != []){
+                $errors += [
+                    'user' => 'the user field must be at least 6 characters',
+                ];
+            }
+            if($validator_errors -> first('password') != []){
+                $errors += [
+                    'password' => 'the password field must be at least 8 characters'
+                ];
+            }
+
         }
 
 //        Check for username or email or phone in database
