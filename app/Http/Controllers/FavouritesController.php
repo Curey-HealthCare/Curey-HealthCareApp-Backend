@@ -273,7 +273,8 @@ class FavouritesController extends Controller
                         'id' => $product -> id,
                         'name' => $product -> name,
                         'image' => $image_path,
-                        'price' => $product -> price
+                        'price' => $product -> price,
+                        'description'  => $product -> descrption
                     ];
 
                     $products_response[] = $final_product;
