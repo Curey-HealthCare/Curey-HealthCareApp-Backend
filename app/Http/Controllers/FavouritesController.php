@@ -71,7 +71,7 @@ class FavouritesController extends Controller
             $product_id = $request -> product_id;
 
             $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
-            if($favExist == null){
+            if($favExist != null){
                 Favourite::where('user_id', $user -> id)->where('product_id', $product_id)->delete();
 
                 $data += [
@@ -210,7 +210,7 @@ class FavouritesController extends Controller
         else{
             $product_id = $request -> product_id;
             $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
-            if($favExist == null){
+            if($favExist != null){
                 Favourite::where('user_id', $user -> id)->where('product_id', $product_id)->delete();
 
                 $data += [
