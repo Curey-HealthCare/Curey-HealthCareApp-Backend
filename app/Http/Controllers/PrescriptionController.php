@@ -178,7 +178,8 @@ class PrescriptionController extends Controller
                 }
 
                 $data += [
-                    'success' => 'prescription registered successfully'
+                    'success' => 'prescription registered successfully',
+                    'prescription_id' => $prescription -> id,
                 ];
             }
         }

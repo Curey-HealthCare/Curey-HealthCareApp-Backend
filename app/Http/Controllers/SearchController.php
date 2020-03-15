@@ -110,7 +110,8 @@ class SearchController extends Controller
                             'image' => $image_path,
                             'fees' => $doc -> fees,
                             'offers_callup' => $doc -> offers_callup,
-                            'overall_rating' => $ratings
+                            'overall_rating' => $ratings,
+                            'city_id' => $doctor_user -> city_id,
                         ];
                         $doctors_response[] = $doctor;
                     }
@@ -128,9 +129,18 @@ class SearchController extends Controller
                     ];
                 }
             }
+            $cities_data = City::all();
+            $cities = [];
+            foreach($cities_data as $city){
+                $cities[] = [
+                    'id' => $city -> id,
+                    'name' => $city -> name,
+                ];
+            }
             $data = [
                 'doctors' => $doctors_response,
                 'specialities' => $specs,
+                'cities' => $cities,
             ];
         }
 
@@ -293,7 +303,8 @@ class SearchController extends Controller
                             'image' => $image_path,
                             'fees' => $doc -> fees,
                             'offers_callup' => $doc -> offers_callup,
-                            'overall_rating' => $ratings
+                            'overall_rating' => $ratings,
+                            'city_id' => $doctor_user -> city_id,
                         ];
                         $doctors_response[] = $doctor;
                     }
@@ -311,9 +322,18 @@ class SearchController extends Controller
                     ];
                 }
             }
+            $cities_data = City::all();
+            $cities = [];
+            foreach($cities_data as $city){
+                $cities[] = [
+                    'id' => $city -> id,
+                    'name' => $city -> name,
+                ];
+            }
             $data = [
                 'doctors' => $doctors_response,
                 'specialities' => $specs,
+                'cities' => $cities,
             ];
         }
 
