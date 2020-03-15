@@ -80,7 +80,7 @@ class OrdersController extends Controller
                         $pharmacy = Pharmacy::find($pharmacy_id);
                         $pharmacy_user = User::find($pharmacy -> user_id);
                         $image_id = $pharmacy_user -> image_id;
-                        $image = Image::where('id',$img_id)->first();
+                        $image = Image::where('id',$image_id)->first();
                         if($image != null){
                             $image_path = $image -> path;
                         }
@@ -226,7 +226,7 @@ class OrdersController extends Controller
                         $pharmacy = Pharmacy::find($pharmacy_id);
                         $pharmacy_user = User::find($pharmacy -> user_id);
                         $image_id = $pharmacy_user -> image_id;
-                        $image = Image::where('id',$img_id)->first();
+                        $image = Image::where('id',$image_id)->first();
                         if($image != null){
                             $image_path = $image -> path;
                         }
