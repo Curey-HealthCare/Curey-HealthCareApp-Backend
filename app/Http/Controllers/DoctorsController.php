@@ -479,6 +479,7 @@ class DoctorsController extends Controller
                     ];
                 }
                 else{
+                    $review_count = 0;
                     $overall_rate = 0;
                     $noOfCallup = 0;
                     $noOfBooking  = 0;
@@ -496,7 +497,7 @@ class DoctorsController extends Controller
                             $overall_rate += $appointment_rating;
                             $review = $rating -> review;
                             //no of reviews
-                            $review_count = DoctorRating::where('appointment_id', $appointment_id)->count();
+                            $review_count += DoctorRating::where('appointment_id', $appointment_id)->count();
 
 
                             // Get the user who wrote the review
