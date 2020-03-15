@@ -70,9 +70,9 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::get('/medications/search', 'SearchController@mobileSearchProducts');
 
                        //order for mobile
-    //show order page
+    //show orders page
     Route::get('/orders', 'OrdersController@mobileShowOrders');
-
+    Route::post('/submit_order', 'OrdersController@mobileSubmit');
                      // Appointments for mobile
     //show appointment page
     Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
@@ -152,7 +152,9 @@ Route::group(['prefix' => '/web'], function(){
      // Search Products
     Route::get('/medications/search', 'SearchController@webSearchProducts');
                            //order for mobile
-    //show order page
+    //show orders page
     Route::get('/orders', 'OrdersController@webShowOrders');
+    // Submit order
+    Route::post('/submit_order', 'OrdersController@webSubmit');
 
 });

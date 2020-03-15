@@ -160,6 +160,94 @@ class OrdersController extends Controller
 
         return response()->json($response);
     }
+
+    public function mobileSubmit(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            $products_pharmacies = $request -> products;
+            if($products_pharmacies == []){
+                $isFailed = true;
+                $errors += [
+                    'error' => 'there are no products in the order',
+                ];
+            }
+            else{
+                $pharmacies = [];
+                foreach($products_pharmacies as $product_pharmacy){
+                    $pharmacy_id_request = $product_pharmacy['id'];
+                    $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
+                    // echo $pharmacy_id;
+                    if(in_array($pharmacy_id, $pharmacies)){
+                        continue;
+                    }
+                    else{
+                        $pharmacies[] = $pharmacy_id;
+                    }
+                }
+                // $data = $pharmacies;
+                for($i = 0; $i < count($pharmacies); $i++){
+                    $user_id = $user -> id;
+                    foreach ($products_pharmacies as $product_pharmacy) {
+                        $pharmacy_id_request = $product_pharmacy['id'];
+                        $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
+                        $products = [];
+                        if($pharmacy_id == $pharmacies[$i]){
+                            // echo "Tmam\n" . " " . $i;
+                            $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
+                            $amount = $product_pharmacy['amount'];
+                            $product = [
+                                'id' => $product_id,
+                                'amount' => $amount,
+                            ];
+                            $products[] = $product;
+                            // $data[] = $products;
+                            $order = new Order;
+                            $order -> pharmacy_id = $pharmacy_id;
+                            $order -> user_id = $user_id;
+                            $order -> delivery_type = 1;
+                            $order -> save();
+                            foreach($products as $pro){
+                                $order_detail = new OrderDetail;
+                                $order_detail -> order_id = $order -> id;
+                                $order_detail -> product_id = $pro['id'];
+                                $order_detail -> amount = $pro['amount'];
+                                $order_detail -> save();
+                            }
+
+                            $data += [
+                                'success' => 'your orders have been sent'
+                            ];
+                        }
+                        else{
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
     public function webShowOrders(Request $request)
     {
          //authenticated user
@@ -246,6 +334,93 @@ class OrdersController extends Controller
                 $data = [
                     'orders' => $orders_response
                 ];
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
+    public function webSubmit(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            $products_pharmacies = $request -> products;
+            if($products_pharmacies == []){
+                $isFailed = true;
+                $errors += [
+                    'error' => 'there are no products in the order',
+                ];
+            }
+            else{
+                $pharmacies = [];
+                foreach($products_pharmacies as $product_pharmacy){
+                    $pharmacy_id_request = $product_pharmacy['id'];
+                    $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
+                    // echo $pharmacy_id;
+                    if(in_array($pharmacy_id, $pharmacies)){
+                        continue;
+                    }
+                    else{
+                        $pharmacies[] = $pharmacy_id;
+                    }
+                }
+                // $data = $pharmacies;
+                for($i = 0; $i < count($pharmacies); $i++){
+                    $user_id = $user -> id;
+                    foreach ($products_pharmacies as $product_pharmacy) {
+                        $pharmacy_id_request = $product_pharmacy['id'];
+                        $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
+                        $products = [];
+                        if($pharmacy_id == $pharmacies[$i]){
+                            // echo "Tmam\n" . " " . $i;
+                            $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
+                            $amount = $product_pharmacy['amount'];
+                            $product = [
+                                'id' => $product_id,
+                                'amount' => $amount,
+                            ];
+                            $products[] = $product;
+                            // $data[] = $products;
+                            $order = new Order;
+                            $order -> pharmacy_id = $pharmacy_id;
+                            $order -> user_id = $user_id;
+                            $order -> delivery_type = 1;
+                            $order -> save();
+                            foreach($products as $pro){
+                                $order_detail = new OrderDetail;
+                                $order_detail -> order_id = $order -> id;
+                                $order_detail -> product_id = $pro['id'];
+                                $order_detail -> amount = $pro['amount'];
+                                $order_detail -> save();
+                            }
+
+                            $data += [
+                                'success' => 'your orders have been sent'
+                            ];
+                        }
+                        else{
+                            continue;
+                        }
+                    }
+                }
             }
         }
 

@@ -232,6 +232,7 @@ class MedicationsController extends Controller
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
                                 'overall_rating' => $overall_rating,
+                                'product_pharmacy_id' => $pharmacy_product -> id,
                                 // 'delivery_fees' => $delivery_fees
                             ];
                             $pharmacies_response[] = $pharma;
@@ -476,7 +477,8 @@ class MedicationsController extends Controller
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
                                 // 'delivery_fees' => $delivery_fees
-                                'overall_rating' => $overall_rating
+                                'overall_rating' => $overall_rating,
+                                'product_pharmacy_id' => $pharmacy_product -> id,
                             ];
                             $pharmacies_response[] = $pharma;
                         }
