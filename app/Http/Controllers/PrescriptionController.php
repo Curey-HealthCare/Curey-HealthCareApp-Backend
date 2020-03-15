@@ -207,13 +207,22 @@ class PrescriptionController extends Controller
         }
         else{
             $prescription_id = $request -> prescription_id;
-            Dosage::where('prescription_id', $prescription_id)->delete();
-            PresDay::where('prescription_id', $prescription_id)->delete();
-            Prescription::where('id', $prescription_id)->delete();
+            $prescription = Prescription::find($prescription_id);
+            if($prescription == null){
+                $isFailed = true;
+                $errors += [
+                    'error' => 'this prescription does not exist or have been deleted before'
+                ];
+            }
+            else{
+                Dosage::where('prescription_id', $prescription_id)->delete();
+                PresDay::where('prescription_id', $prescription_id)->delete();
+                Prescription::where('id', $prescription_id)->delete();
 
-            $data += [
-                'message' => 'deleted',
-            ];
+                $data += [
+                    'message' => 'deleted',
+                ];
+            }
         }
 
         $response = [
