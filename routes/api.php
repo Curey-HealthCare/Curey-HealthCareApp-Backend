@@ -85,7 +85,7 @@ Route::group(['prefix' => '/mobile'], function(){
     // Create Prescription
     Route::post('/add_prescription', 'PrescriptionController@mobileCreatePrescription');
     //delete prescription
-    Route::post('/delete_prescriptions', 'FavouritesController@mobileDeletePrescription');
+    Route::post('/delete_prescription', 'FavouritesController@mobileDeletePrescription');
 
                         // Favourites for mobile
     // Show All Favourites
@@ -127,7 +127,7 @@ Route::group(['prefix' => '/web'], function(){
      // Create Prescription
     Route::post('/add_prescription', 'PrescriptionController@webCreatePrescription');
      //delete prescription
-    Route::post('/delete_prescriptions', 'FavouritesController@webDeletePrescription');
+    Route::post('/delete_prescription', 'FavouritesController@webDeletePrescription');
 
                        //Appointments for web
      //show appointment page
