@@ -473,7 +473,7 @@ class DoctorsController extends Controller
                 $clinic_count = Appointment::where('doctor_id', $id)->where('is_callup', '0')->count();
                 $callup_count = Appointment::where('doctor_id', $id)->where('is_callup', '1')->count();
                 $ratings = [];
-                if($appointments == null || $appointments_count == 0){
+                if($appointments == null && $appointments_count == 0){
                     $ratings = [
                         'error' => 'no available ratings yet'
                     ];
