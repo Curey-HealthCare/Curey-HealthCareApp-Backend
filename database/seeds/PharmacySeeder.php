@@ -30,7 +30,7 @@ class PharmacySeeder extends Seeder
         }
 
         // Check for pharmacies in users
-        $pharmacies = User::where('role_id', '2')->get();
+        $pharmacies = User::where('role_id', 2)->get();
 
         // Then passes the IDs of them to the create factory, the rest is added through it
         foreach ($pharmacies as $pharmacy){
