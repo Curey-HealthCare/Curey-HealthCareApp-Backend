@@ -180,7 +180,7 @@ class MedicationsController extends Controller
                     echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
-                        $pharmacies = Pharmacy::find($pharmacy_id);
+                        $pharmacies = Pharmacy::where('id', $pharmacy_id)->first();
                         $pharmacy_userid = $pharmacies -> user_id;
                         $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id])->first();
 
