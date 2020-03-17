@@ -235,18 +235,18 @@ class MedicationsController extends Controller
                 //         'error' => 'can not find this product in a pharmacy'
                 //     ];
                 // }
-                if($pharmacies_response == null){
-                    $isFailed = true;
-                    $errors += [
-                        'error' => 'can not find this product near you',
-                    ];
-                }
-                if($isFailed == false){
-                    $data = [
-                        'product' => $product,
-                        'pharmacies' => $pharmacies_response,
-                    ];
-                }
+                // if($pharmacies_response == null){
+                //     $isFailed = true;
+                //     $errors += [
+                //         'error' => 'can not find this product near you',
+                //     ];
+                // }
+                // if($isFailed == false){
+                //     $data = [
+                //         'product' => $product,
+                //         'pharmacies' => $pharmacies_response,
+                //     ];
+                // }
             }
         }
 
