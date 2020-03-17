@@ -235,7 +235,7 @@ class MedicationsController extends Controller
                         'error' => 'can not find this product in a pharmacy'
                     ];
                 }
-                if($pharmacies_response == null){
+                if($pharmacies_response == null && $isFailed == false){
                     $isFailed = true;
                     $errors += [
                         'error' => 'can not find this product near you',
