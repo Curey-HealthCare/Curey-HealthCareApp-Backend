@@ -171,7 +171,7 @@ class MedicationsController extends Controller
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
                 if($pharmacies_product == []){
                     $isFailed = true;
-                    $errors[] = [
+                    $errors += [
                         'error' => 'can not find this product in a pharmacy'
                     ];
                 }
