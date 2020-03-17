@@ -32,7 +32,7 @@ class DoctorSeeder extends Seeder
         }
 
         // Check for doctors in users
-        $doctors = User::where('role_id', '3')->get();
+        $doctors = User::where('role_id', 3)->get();
 
         // Remove the foreign key checks to change the IDs
         if (DB::connection()->getDatabaseName() == 'curey_db'){

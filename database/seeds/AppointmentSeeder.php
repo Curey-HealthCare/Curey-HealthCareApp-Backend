@@ -39,7 +39,7 @@ class AppointmentSeeder extends Seeder
         for ($i = 0; $i < 100; $i++) {
             
             //  Assign random IDs in every iteration
-            $user = DB::table('users')->inRandomOrder()->where('role_id', '1')->first() -> id;
+            $user = DB::table('users')->inRandomOrder()->where('role_id', 1)->first() -> id;
             $doctor = DB::table('doctors')->inRandomOrder()->first() -> id;
 
             //  Check if the user ID exists in the database alongside with the doctor ID, if not, adds the record
