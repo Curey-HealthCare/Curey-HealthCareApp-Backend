@@ -177,7 +177,7 @@ class MedicationsController extends Controller
                 }
                 else{
                     $pharmacies_response = [];
-                    echo $pharmacies_product;
+                    // echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
                         $pharmacies = Pharmacy::where('id', $pharmacy_id)->first();
@@ -429,13 +429,17 @@ class MedicationsController extends Controller
                 }
                 else{
                     $pharmacies_response = [];
+                    // echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
-                        $pharmacies = Pharmacy::find($pharmacy_id);
+                        $pharmacies = Pharmacy::where('id', $pharmacy_id)->first();
                         $pharmacy_userid = $pharmacies -> user_id;
-                        $pharmacy = User::where('id',$pharmacy_userid)->where('city_id', $user -> city_id)->first();
+                        $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id])->first();
 
-                        if($pharmacy != null){
+                        if($pharmacy == null){
+
+                        }
+                        else{
                             $image_id = $pharmacy -> image_id;
                             $image = Image::where('id', $image_id)->first();
                             if($image != null){
@@ -470,10 +474,12 @@ class MedicationsController extends Controller
 
                             // buid response for each pharmacy
                             $pharma = [
+                                'id' => $pharmacy -> id,
                                 'name' => $pharmacy -> full_name,
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
                                 'overall_rating' => $overall_rating,
+                                'city_id' => $pharmacy -> city_id,
                                 'product_pharmacy_id' => $pharmacy_product -> id,
                             ];
                             $pharmacies_response[] = $pharma;
