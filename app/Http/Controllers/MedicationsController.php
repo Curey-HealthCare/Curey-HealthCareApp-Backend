@@ -169,8 +169,8 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                echo $pharmacies_product;
-                if(!($pharmacies_product == [])){
+                $pharmacies_count = ProductPharmacy::where('product_id', $product_id)->count();
+                if($pharmacies_count > 0){
                     $pharmacies_response = [];
                     // echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
