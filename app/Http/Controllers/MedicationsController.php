@@ -222,6 +222,7 @@ class MedicationsController extends Controller
 
                             // buid response for each pharmacy
                             $pharma = [
+                                'id' => $pharmacy -> id,
                                 'name' => $pharmacy -> full_name,
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
