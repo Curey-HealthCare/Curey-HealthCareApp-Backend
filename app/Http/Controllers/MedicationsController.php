@@ -169,7 +169,7 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                if($pharmacies_product == []){
+                if($pharmacies_product -> isEmpty()){
                     $isFailed = true;
                     $errors += [
                         'error' => 'can not find this product in a pharmacy'
