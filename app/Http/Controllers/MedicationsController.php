@@ -184,7 +184,10 @@ class MedicationsController extends Controller
                         $pharmacy_userid = $pharmacies -> user_id;
                         $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id])->first();
 
-                        if($pharmacy != null){
+                        if($pharmacy == null){
+
+                        }
+                        else{
                             $image_id = $pharmacy -> image_id;
                             $image = Image::where('id', $image_id)->first();
                             if($image != null){
