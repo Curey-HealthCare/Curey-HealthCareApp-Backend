@@ -169,10 +169,10 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                if($pharmacies_product == []){
+                if($pharmacies_product -> isEmpty()){
                     $isFailed = true;
                     $errors[] = [
-                        'error' => 'can not find this product near you'
+                        'error' => 'can not find this product in a pharmacy'
                     ];
                 }
                 else{
@@ -198,29 +198,19 @@ class MedicationsController extends Controller
                             $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                             $ratings = [];
                             if($orders == null || $orders_count == 0){
-                                $ratings = [
-                                    'error' => 'no available ratings yet'
-                                ];
+                                // continue
                             }
                             else{
-
                                 foreach($orders as $order)
                                 {
                                     $order_id = $order -> id;
                                     $rating = PharmacyRating::where('order_id', $order_id)->first();
-
                                     if($rating == null){
                                         continue;
                                     }
                                     else
                                     {
                                         $rate += $rating -> rating ;
-                                    //    $review = $rating -> review;
-
-                                    // $ratings =[
-                                    //     'rate'=> $rate,
-                                    //     // 'review' => $review
-                                    // ];
                                     }
                                 }
                                 $overall_rating = $rate / $orders_count;
@@ -233,24 +223,22 @@ class MedicationsController extends Controller
                                 'image' => $image_path,
                                 'overall_rating' => $overall_rating,
                                 'product_pharmacy_id' => $pharmacy_product -> id,
-                                // 'delivery_fees' => $delivery_fees
                             ];
                             $pharmacies_response[] = $pharma;
                         }
-                        else{
-                            $isFailed = true;
-                            $errors[] = [
-                                'error' => 'can not find this product near you'
-                            ];
-                        }
-
                     }
-                    if($isFailed == false){
-                        $data = [
-                            'product' => $product,
-                            'pharmacies' => $pharmacies_response,
-                        ];
-                    }
+                }
+                if($pharmacies_response == null){
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not find this product near you',
+                    ];
+                }
+                if($isFailed == false){
+                    $data = [
+                        'product' => $product,
+                        'pharmacies' => $pharmacies_response,
+                    ];
                 }
             }
         }
@@ -427,10 +415,10 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                if($pharmacies_product == []){
+                if($pharmacies_product -> isEmpty()){
                     $isFailed = true;
                     $errors[] = [
-                        'error' => 'can not find this product near you'
+                        'error' => 'can not find this product in a pharmacy'
                     ];
                 }
                 else{
@@ -456,9 +444,7 @@ class MedicationsController extends Controller
                             $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                             $ratings = [];
                             if($orders == null || $orders_count == 0){
-                                $ratings = [
-                                    'error' => 'no available ratings yet'
-                                ];
+                                // continue
                             }
                             else{
                                 foreach($orders as $order)
@@ -475,6 +461,7 @@ class MedicationsController extends Controller
                                 }
                                 $overall_rating = $rate / $orders_count;
                             }
+
                             // buid response for each pharmacy
                             $pharma = [
                                 'name' => $pharmacy -> full_name,
@@ -486,6 +473,12 @@ class MedicationsController extends Controller
                             $pharmacies_response[] = $pharma;
                         }
                     }
+                }
+                if($pharmacies_response == null){
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not find this product near you',
+                    ];
                 }
                 if($isFailed == false){
                     $data = [
