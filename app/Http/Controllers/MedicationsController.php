@@ -169,13 +169,7 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                if($pharmacies_product == NULL){
-                    $isFailed = true;
-                    $errors += [
-                        'error' => 'can not find this product in a pharmacy'
-                    ];
-                }
-                else{
+                if(!($pharmacies_product -> isEmpty())){
                     $pharmacies_response = [];
                     // echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
@@ -233,6 +227,12 @@ class MedicationsController extends Controller
                             $pharmacies_response[] = $pharma;
                         }
                     }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not find this product in a pharmacy'
+                    ];
                 }
                 if($pharmacies_response == null){
                     $isFailed = true;
