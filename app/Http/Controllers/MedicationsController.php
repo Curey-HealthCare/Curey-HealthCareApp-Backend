@@ -170,83 +170,83 @@ class MedicationsController extends Controller
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
                 echo $pharmacies_product;
-                // if($pharmacies_product->count()){
-                //     $pharmacies_response = [];
-                //     // echo $pharmacies_product;
-                //     foreach($pharmacies_product as $pharmacy_product){
-                //         $pharmacy_id = $pharmacy_product -> pharmacy_id;
-                //         $pharmacies = Pharmacy::where('id', $pharmacy_id)->first();
-                //         $pharmacy_userid = $pharmacies -> user_id;
-                //         $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id])->first();
+                if(!($pharmacies_product == [])){
+                    $pharmacies_response = [];
+                    // echo $pharmacies_product;
+                    foreach($pharmacies_product as $pharmacy_product){
+                        $pharmacy_id = $pharmacy_product -> pharmacy_id;
+                        $pharmacies = Pharmacy::where('id', $pharmacy_id)->first();
+                        $pharmacy_userid = $pharmacies -> user_id;
+                        $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id])->first();
 
-                //         if($pharmacy == null){
+                        if($pharmacy == null){
 
-                //         }
-                //         else{
-                //             $image_id = $pharmacy -> image_id;
-                //             $image = Image::where('id', $image_id)->first();
-                //             if($image != null){
-                //                 $image_path = $image -> path;
-                //             }
-                //             else{
-                //                 $image_path = null;
-                //             }
-                //             //ratings
-                //             $overall_rating = 0;
-                //             $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
-                //             $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
-                //             $ratings = [];
-                //             if($orders == null || $orders_count == 0){
-                //                 // continue
-                //             }
-                //             else{
-                //                 foreach($orders as $order)
-                //                 {
-                //                     $order_id = $order -> id;
-                //                     $rating = PharmacyRating::where('order_id', $order_id)->first();
-                //                     if($rating == null){
-                //                         continue;
-                //                     }
-                //                     else
-                //                     {
-                //                         $rate += $rating -> rating ;
-                //                     }
-                //                 }
-                //                 $overall_rating = $rate / $orders_count;
-                //             }
+                        }
+                        else{
+                            $image_id = $pharmacy -> image_id;
+                            $image = Image::where('id', $image_id)->first();
+                            if($image != null){
+                                $image_path = $image -> path;
+                            }
+                            else{
+                                $image_path = null;
+                            }
+                            //ratings
+                            $overall_rating = 0;
+                            $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
+                            $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
+                            $ratings = [];
+                            if($orders == null || $orders_count == 0){
+                                // continue
+                            }
+                            else{
+                                foreach($orders as $order)
+                                {
+                                    $order_id = $order -> id;
+                                    $rating = PharmacyRating::where('order_id', $order_id)->first();
+                                    if($rating == null){
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        $rate += $rating -> rating ;
+                                    }
+                                }
+                                $overall_rating = $rate / $orders_count;
+                            }
 
-                //             // buid response for each pharmacy
-                //             $pharma = [
-                //                 'id' => $pharmacy -> id,
-                //                 'name' => $pharmacy -> full_name,
-                //                 'address' => $pharmacies -> address,
-                //                 'image' => $image_path,
-                //                 'overall_rating' => $overall_rating,
-                //                 'city_id' => $pharmacy -> city_id,
-                //                 'product_pharmacy_id' => $pharmacy_product -> id,
-                //             ];
-                //             $pharmacies_response[] = $pharma;
-                //         }
-                //     }
-                // }
-                // else{
-                //     $isFailed = true;
-                //     $errors += [
-                //         'error' => 'can not find this product in a pharmacy'
-                //     ];
-                // }
-                // if($pharmacies_response == null){
-                //     $isFailed = true;
-                //     $errors += [
-                //         'error' => 'can not find this product near you',
-                //     ];
-                // }
-                // if($isFailed == false){
-                //     $data = [
-                //         'product' => $product,
-                //         'pharmacies' => $pharmacies_response,
-                //     ];
-                // }
+                            // buid response for each pharmacy
+                            $pharma = [
+                                'id' => $pharmacy -> id,
+                                'name' => $pharmacy -> full_name,
+                                'address' => $pharmacies -> address,
+                                'image' => $image_path,
+                                'overall_rating' => $overall_rating,
+                                'city_id' => $pharmacy -> city_id,
+                                'product_pharmacy_id' => $pharmacy_product -> id,
+                            ];
+                            $pharmacies_response[] = $pharma;
+                        }
+                    }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not find this product in a pharmacy'
+                    ];
+                }
+                if($pharmacies_response == null){
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not find this product near you',
+                    ];
+                }
+                if($isFailed == false){
+                    $data = [
+                        'product' => $product,
+                        'pharmacies' => $pharmacies_response,
+                    ];
+                }
             }
         }
 
