@@ -177,12 +177,12 @@ class MedicationsController extends Controller
                 }
                 else{
                     $pharmacies_response = [];
-                    echo $pharmacies_product;
+                    // echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
                         $pharmacies = Pharmacy::find($pharmacy_id);
                         $pharmacy_userid = $pharmacies -> user_id;
-                        $pharmacy = User::where('id',$pharmacy_userid)->where('city_id', $user -> city_id)->first();
+                        $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id])->first();
 
                         if($pharmacy != null){
                             $image_id = $pharmacy -> image_id;
