@@ -37,7 +37,7 @@ class ProductPharmacySeeder extends Seeder
         }
 
         //  Change the i for numbers of rows generated
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             
             //  Assign random IDs in every iteration
             $product = DB::table('products')->inRandomOrder()->first() -> id;
