@@ -116,6 +116,7 @@ class MedicationsController extends Controller
         $isFailed = false;
         $data = [];
         $errors =  [];
+        $pharmacies_response = [];
 
         $api_token = $request -> api_token;
         $user = null;
@@ -169,9 +170,7 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                $pharmacies_count = ProductPharmacy::where('product_id', $product_id)->count();
-                if($pharmacies_count > 0){
-                    $pharmacies_response = [];
+                if($pharmacies_product == []){
                     // echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
@@ -231,14 +230,12 @@ class MedicationsController extends Controller
                 }
                 else{
                     $isFailed = true;
-                    echo "Error no pharmacies";
                     $errors += [
                         'error' => 'can not find this product in a pharmacy'
                     ];
                 }
                 if($pharmacies_response == null){
                     $isFailed = true;
-                    echo "Error no pharmacies near you";
                     $errors += [
                         'error' => 'can not find this product near you',
                     ];
@@ -371,6 +368,7 @@ class MedicationsController extends Controller
         $isFailed = false;
         $data = [];
         $errors =  [];
+        $pharmacies_response = [];
 
         $api_token = $request -> api_token;
         $user = null;
@@ -424,14 +422,7 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                if($pharmacies_product -> isEmpty()){
-                    $isFailed = true;
-                    $errors[] = [
-                        'error' => 'can not find this product in a pharmacy'
-                    ];
-                }
-                else{
-                    $pharmacies_response = [];
+                if($pharmacies_product == []){
                     // echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
@@ -488,6 +479,12 @@ class MedicationsController extends Controller
                             $pharmacies_response[] = $pharma;
                         }
                     }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not find this product in a pharmacy'
+                    ];
                 }
                 if($pharmacies_response == null){
                     $isFailed = true;
