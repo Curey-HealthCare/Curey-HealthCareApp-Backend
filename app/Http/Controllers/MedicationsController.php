@@ -177,7 +177,7 @@ class MedicationsController extends Controller
                 }
                 else{
                     $pharmacies_response = [];
-                    // echo $pharmacies_product;
+                    echo $pharmacies_product;
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
                         $pharmacies = Pharmacy::find($pharmacy_id);
@@ -226,6 +226,7 @@ class MedicationsController extends Controller
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
                                 'overall_rating' => $overall_rating,
+                                'city_id' => $pharmacy -> city_id,
                                 'product_pharmacy_id' => $pharmacy_product -> id,
                             ];
                             $pharmacies_response[] = $pharma;
