@@ -170,8 +170,7 @@ class MedicationsController extends Controller
 
                 // get the pharmacies that has this product and exist in my city
                 $pharmacies_product = ProductPharmacy::where('product_id', $product_id)->get();
-                if($pharmacies_product != []){
-                    // echo $pharmacies_product;
+                if($pharmacies_product -> isNotEmpty()){
                     foreach($pharmacies_product as $pharmacy_product){
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
                         $pharmacies = Pharmacy::where('id', $pharmacy_id)->first();
