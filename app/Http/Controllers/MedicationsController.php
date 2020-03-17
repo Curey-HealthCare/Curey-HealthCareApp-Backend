@@ -449,24 +449,16 @@ class MedicationsController extends Controller
                                 ];
                             }
                             else{
-
                                 foreach($orders as $order)
                                 {
                                     $order_id = $order -> id;
                                     $rating = PharmacyRating::where('order_id', $order_id)->first();
-
                                     if($rating == null){
                                         continue;
                                     }
                                     else
                                     {
                                         $rate += $rating -> rating ;
-                                    //    $review = $rating -> review;
-
-                                    // $ratings =[
-                                    //     'rate'=> $rate,
-                                    //     // 'review' => $review
-                                    // ];
                                     }
                                 }
                                 $overall_rating = $rate / $orders_count;
@@ -476,26 +468,18 @@ class MedicationsController extends Controller
                                 'name' => $pharmacy -> full_name,
                                 'address' => $pharmacies -> address,
                                 'image' => $image_path,
-                                // 'delivery_fees' => $delivery_fees
                                 'overall_rating' => $overall_rating,
                                 'product_pharmacy_id' => $pharmacy_product -> id,
                             ];
                             $pharmacies_response[] = $pharma;
                         }
-                        else{
-                            $isFailed = true;
-                            $errors[] = [
-                                'error' => 'can not find this product near you'
-                            ];
-                        }
-
                     }
-                    if($isFailed == false){
-                        $data = [
-                            'product' => $product,
-                            'pharmacies' => $pharmacies_response,
-                        ];
-                    }
+                }
+                if($isFailed == false){
+                    $data = [
+                        'product' => $product,
+                        'pharmacies' => $pharmacies_response,
+                    ];
                 }
             }
         }
