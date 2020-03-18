@@ -100,5 +100,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductPharmacySeeder::class);
         $this->call(AppointmentSeeder::class);
         $this->call(DoctorRatingSeeder::class);
+        $this->call(ProductKeywordSeeder::class);
     }
 }
