@@ -197,6 +197,7 @@ class MedicationsController extends Controller
                             }
                             //ratings
                             $overall_rating = 0;
+                            $rate = 0;
                             $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
                             $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                             $ratings = [];
@@ -452,6 +453,7 @@ class MedicationsController extends Controller
                             }
                             //ratings
                             $overall_rating = 0;
+                            $rate = 0;
                             $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
                             $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                             $ratings = [];
