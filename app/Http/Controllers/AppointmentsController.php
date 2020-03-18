@@ -216,19 +216,28 @@ class AppointmentsController extends Controller
                     ->whereDate('appointment_time', Carbon::today())->count();
                 $skip = 0;
                 $first_day = null;
+                $first_doctor_day = null;
                 $appointments_first_day = [];
                 if($doctor_appointments_first_day -> isNotEmpty()){
                     $today_id = $today -> day_id;
                     $loops_first = 0;
-                    $first_doctor_day = null;
+
                     $first = $today_id;
                     while($first <= 7){
                         $first_day = new Carbon;
                         $first_day = Carbon::today();
+                        $skip++;
                         $first_day->addDays($loops_first);
+                        $this_day1 = $first_day -> dayOfWeek;
+                        if($this_day1 == 6){
+                            $this_day1 = 1;
+                        }
+                        else{
+                            $this_day1= $this_day1 + 2;
+                        }
                         // echo $first_day . "\n";
                         foreach($doctor_timetable as $doctor_day){
-                            if($first == $doctor_day -> day_id){
+                            if($this_day1 == $doctor_day -> day_id){
                                 $appointments_at_day = Appointment::where('doctor_id', $doctor_id)
                                     ->whereDate('appointment_time', $first_day)->get();
                                 $appointments_count = Appointment::where('doctor_id', $doctor_id)
@@ -253,29 +262,38 @@ class AppointmentsController extends Controller
                             }
                         }
                         // echo $first . "\n\n";
+                        $loops_first++;
                         if($first >= 7){
                             $first = 0;
                         }
                         $first++;
-                        $skip++;
-                        ++$loops_first;
                     }
                 }
-                echo $skip;
+
                 // Get available appointments for second day
                 $appointments_second_day = [];
                 $second_doctor_day = null;
-                $second = 0;
+
                 $second_day = null;
                 $skip_day = ($today -> id) + $skip;
+                if($skip_day > 7){
+                    $skip_day = $skip_day - 7;
+                }
+                $second = 0;
                 $loops_second = $skip;
                 while($second <= 7){
                     $second_day = new Carbon;
                     $second_day = Carbon::today();
                     $second_day->addDays($loops_second);
-
+                    $this_day2 = $second_day -> dayOfWeek;
+                    if($this_day2 == 6){
+                        $this_day2 = 1;
+                    }
+                    else{
+                        $this_day2 = $this_day2 + 2;
+                    }
                     foreach($doctor_timetable as $doctor_day2){
-                        if($second == $doctor_day2 -> day_id){
+                        if($this_day2 == $doctor_day2 -> day_id){
                             $appointments_at_day2= Appointment::where('doctor_id', $doctor_id)
                                 ->whereDate('appointment_time', $second_day)->get();
                             $appointments_count2 = Appointment::where('doctor_id', $doctor_id)
@@ -551,19 +569,28 @@ class AppointmentsController extends Controller
                     ->whereDate('appointment_time', Carbon::today())->count();
                 $skip = 0;
                 $first_day = null;
+                $first_doctor_day = null;
                 $appointments_first_day = [];
                 if($doctor_appointments_first_day -> isNotEmpty()){
                     $today_id = $today -> day_id;
                     $loops_first = 0;
-                    $first_doctor_day = null;
+
                     $first = $today_id;
                     while($first <= 7){
                         $first_day = new Carbon;
                         $first_day = Carbon::today();
+                        $skip++;
                         $first_day->addDays($loops_first);
+                        $this_day1 = $first_day -> dayOfWeek;
+                        if($this_day1 == 6){
+                            $this_day1 = 1;
+                        }
+                        else{
+                            $this_day1= $this_day1 + 2;
+                        }
                         // echo $first_day . "\n";
                         foreach($doctor_timetable as $doctor_day){
-                            if($first == $doctor_day -> day_id){
+                            if($this_day1 == $doctor_day -> day_id){
                                 $appointments_at_day = Appointment::where('doctor_id', $doctor_id)
                                     ->whereDate('appointment_time', $first_day)->get();
                                 $appointments_count = Appointment::where('doctor_id', $doctor_id)
@@ -588,29 +615,38 @@ class AppointmentsController extends Controller
                             }
                         }
                         // echo $first . "\n\n";
+                        $loops_first++;
                         if($first >= 7){
                             $first = 0;
                         }
                         $first++;
-                        $skip++;
-                        ++$loops_first;
                     }
                 }
-                echo $skip;
+
                 // Get available appointments for second day
                 $appointments_second_day = [];
                 $second_doctor_day = null;
-                $second = 0;
+
                 $second_day = null;
                 $skip_day = ($today -> id) + $skip;
+                if($skip_day > 7){
+                    $skip_day = $skip_day - 7;
+                }
+                $second = 0;
                 $loops_second = $skip;
                 while($second <= 7){
                     $second_day = new Carbon;
                     $second_day = Carbon::today();
                     $second_day->addDays($loops_second);
-
+                    $this_day2 = $second_day -> dayOfWeek;
+                    if($this_day2 == 6){
+                        $this_day2 = 1;
+                    }
+                    else{
+                        $this_day2 = $this_day2 + 2;
+                    }
                     foreach($doctor_timetable as $doctor_day2){
-                        if($second == $doctor_day2 -> day_id){
+                        if($this_day2 == $doctor_day2 -> day_id){
                             $appointments_at_day2= Appointment::where('doctor_id', $doctor_id)
                                 ->whereDate('appointment_time', $second_day)->get();
                             $appointments_count2 = Appointment::where('doctor_id', $doctor_id)
