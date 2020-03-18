@@ -175,7 +175,7 @@ class MedicationsController extends Controller
                         $pharmacy_id = $pharmacy_product -> pharmacy_id;
                         $pharmacies = Pharmacy::where('id', $pharmacy_id)->first();
                         $pharmacy_userid = $pharmacies -> user_id;
-                        $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id])->first();
+                        $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id, 'role_id' => 2])->first();
                         if($pharmacy == null){
 
                         }
