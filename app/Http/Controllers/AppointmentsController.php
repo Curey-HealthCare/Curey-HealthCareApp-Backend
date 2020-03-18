@@ -149,7 +149,7 @@ class AppointmentsController extends Controller
                     'error' => 'an appointment already exists at this time',
                 ];
             }
-            
+
         }
 
         $response = [
@@ -178,28 +178,109 @@ class AppointmentsController extends Controller
             // Get the doctor's ID
             $doctor_id = $request -> doctor_id;
             $doctor_data = Doctor::find($doctor_id);
-            $doctor_user_id = User::select('id')->where('id', $doctor_data -> user_id)->first();
-            // Get the doctor's timetable
+            $doctor_user_id = User::select('id')->where('id', $doctor_data -> user_id)->first() -> id;
+
+            $current_date = new Carbon;
+            $current_date = Carbon::now();
+
+            $current_day = $current_date -> dayOfWeek;
+            if($current_day == 6){
+                $current_day = 1;
+            }
+            else{
+                $current_day = $current_day + 2;
+            }
+
             $doctor_timetable = TimeTable::where('user_id', $doctor_user_id)->get();
             if($doctor_timetable -> isEmpty()){
                 $isFailed = true;
                 $errors += [
-                    'message' => 'this doctor do not have available appointments',
+                    'message' => 'this doctor do not have a schedule yet',
                 ];
             }
             else{
-                $current_date = (Carbon::now()->setWeekStartsAt(Carbon::SATURDAY)->setWeekEndsAt(Carbon::FRIDAY));
-                $current_day = ($current_date -> dayOfWeek)  + 1;
-                // check to show only two days, today & tomorrow || the next 2 days
-                // now we have days starting with 1 to 7 (Saturday to Friday)
-                foreach($doctor_timetable as $work_day){
-                    $available_appointments = [];
-                    if($work_day -> day_id == $current_day){
-                        $start_time = $work_day -> from;
-                        $end_time = $work_day -> to;
+                $today = null;
+                $next_day = null;
+
+                foreach($doctor_timetable as $doctor_day){
+                    if($doctor_day -> day_id == $current_day){
+                        $today = $doctor_day;
+                    }
+                }
+                $doctor_appointments_today = Appointment::where(['doctor_id' => $doctor_id,])
+                    ->whereDate('appointment_time', Carbon::today())->get();
+                $appointments_today = [];
+                if($doctor_appointments_today -> isNotEmpty()){
+                    foreach($doctor_appointments_today as $appointment){
+                        $appointments_today[] = $appointment -> appointment_time;
+                    }
+                }
+                $today_id = $today -> day_id;
+
+                $loops = 0;
+                $day = null;
+                for($i = $today_id; $i < 8; $i++){
+                    if($i == 7 && $loops == 0){
+                        $i = 1;
+                    }
+                    $loops += 1;
+                    $day = Carbon::today();
+                    $day->addDays($loops);
+
+                    $appointments_at_day = Appointment::where(['doctor_id' => $doctor_id,])
+                            ->whereDate('appointment_time', $day)->get();
+
+                    if($appointments_at_day -> isEmpty()){
+                        $next_interval = $loops;
+                        break;
+                    }
+                    else{
+                        $to = $today -> to;
+                        $from = $today -> from;
+                        $work_hours = (new Carbon($to))->diff(new Carbon($from))->format('%h');
+                        $max_appointment_count = $work_hours / 1;
+                        $appointments_count = $appointments_at_day->count();
+                        if($appointments_count == $max_appointment_count){
+                            continue;
+                        }
+                        else{
+                            break;
+                        }
                     }
                 }
 
+                $next_day = Carbon::today()->addDays($loops);
+
+                $doctor_appointments_next_day = Appointment::where(['doctor_id' => $doctor_id,])
+                    ->whereDate('appointment_time', $next_day)->get();
+
+                $appointments_next_day = [];
+                if($doctor_appointments_next_day -> isNotEmpty()){
+
+                    foreach($doctor_appointments_next_day as $appointment){
+
+                        $appointments_next_day[] = $appointment -> appointment_time;
+                    }
+                }
+
+
+                $appointments_today_response = [
+                    'from' => $today -> from,
+                    'to' => $today -> to,
+                    'appointments' => $appointments_today,
+                ];
+
+                $appointments_next_day_response = [
+                    'from' => $today -> from,
+                    'to' => $today -> to,
+                    'date' => $day,
+                    'appointments' => $appointments_next_day,
+                ];
+
+                $data = [
+                    'today' => $appointments_today_response,
+                    'next_day' => $appointments_next_day_response,
+                ];
             }
         }
 
@@ -208,6 +289,8 @@ class AppointmentsController extends Controller
             'data' => $data,
             'errors' => $errors
         ];
+
+        return response()->json($response);
     }
     //for web
 
