@@ -337,13 +337,22 @@ class MedicationsController extends Controller
                                 if($favourite != null){
                                     $isFav = true;
                                 }
+                                $keywords = ProductKeyword::where('product_id' , $product_id)->get();
+                                $keywords_ids = [];
+                                if($keywords -> isNotEmpty()){
+                                    foreach($keywords as $keyword){
+                                        $keyword_id = $keyword -> keyword_id;
+                                        $keywords_ids[] = $keyword_id;
+                                    }
+                                }
                                 $final_product = [
                                     'id' => $product -> id,
                                     'name' => $product -> name,
                                     'image' => $image_path,
                                     'price' => $product -> price,
                                     'is_favourite' => $isFav,
-                                    'description'  => $descrption
+                                    'description'  => $descrption,
+                                    'keywords' => $keywords_ids
                                 ];
 
                                 if(in_array($final_product, $products_response)){

@@ -177,6 +177,7 @@ class SearchController extends Controller
                 ];
             }
             else{
+                $products_response = [];
                 foreach($products as $pro){
 
                     $image_id = $pro -> image_id;
@@ -194,19 +195,42 @@ class SearchController extends Controller
                     if($favourite != null){
                         $isFav = true;
                     }
+                    $keywords = ProductKeyword::where('product_id' , $product_id)->get();
+                    $keywords_ids = [];
+                    if($keywords -> isNotEmpty()){
+                        foreach($keywords as $keyword){
+                            $keyword_id = $keyword -> keyword_id;
+                            $keywords_ids[] = $keyword_id;
+                        }
+                    }
                     $final_product = [
                         'id' => $pro -> id,
                         'name' => $pro -> name,
                         'image' => $image_path,
                         'price' => $pro -> price,
                         'is_favourite' => $isFav,
+                        'keywords' => $keywords_ids,
                     ];
 
-                    $data[] = $final_product;
+                    $products_response[] = $final_product;
                 }
             }
         }
+        // get keywords for filters
+        $keywords = Keyword::all();
 
+        foreach($keywords as $key){
+            $keywords_response[] = [
+                'id' => $key -> id,
+                'name' => $key -> name,
+            ];
+        }
+        if($isFailed == false){
+            $data = [
+                'products' => $products_response,
+                'keywords' => $keywords_response,
+            ];
+        }
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,
@@ -381,6 +405,7 @@ class SearchController extends Controller
                 ];
             }
             else{
+                $products_response = [];
                 foreach($products as $pro){
 
                     $image_id = $pro -> image_id;
@@ -398,18 +423,43 @@ class SearchController extends Controller
                     if($favourite != null){
                         $isFav = true;
                     }
+                    $keywords = ProductKeyword::where('product_id' , $product_id)->get();
+                    $keywords_ids = [];
+                    if($keywords -> isNotEmpty()){
+                        foreach($keywords as $keyword){
+                            $keyword_id = $keyword -> keyword_id;
+                            $keywords_ids[] = $keyword_id;
+                        }
+                    }
                     $final_product = [
                         'id' => $pro -> id,
                         'name' => $pro -> name,
                         'image' => $image_path,
                         'price' => $pro -> price,
                         'is_favourite' => $isFav,
-                        'description' => $pro -> description
+                        'description' => $pro -> description,
+                        'keywords' => $keywords_ids,
                     ];
 
-                    $data[] = $final_product;
+                    $products_response[] = $final_product;
                 }
             }
+        }
+
+        // get keywords for filters
+        $keywords = Keyword::all();
+
+        foreach($keywords as $key){
+            $keywords_response[] = [
+                'id' => $key -> id,
+                'name' => $key -> name,
+            ];
+        }
+        if($isFailed == false){
+            $data = [
+                'products' => $products_response,
+                'keywords' => $keywords_response,
+            ];
         }
 
         $response = [
