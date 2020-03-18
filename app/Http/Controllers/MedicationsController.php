@@ -117,7 +117,7 @@ class MedicationsController extends Controller
         $data = [];
         $errors =  [];
         $pharmacies_response = [];
-
+        $product = [];
         $api_token = $request -> api_token;
         $user = null;
         $user = User::where('api_token', $api_token)->first();
