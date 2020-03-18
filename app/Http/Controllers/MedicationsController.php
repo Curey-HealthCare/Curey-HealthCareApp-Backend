@@ -78,14 +78,21 @@ class MedicationsController extends Controller
                                     'price' => $product -> price,
                                     'is_favourite' => $isFav,
                                 ];
+                                if(in_array($final_product, $products_response)){
+                                    continue;
+                                }
+                                else{
+                                    $products_response[] = $final_product;
+                                }
+                                // $products_response[] = $final_product;
 
-                                $products_response[] = $final_product;
+
                             }
                         }
                     }
                 }
             }
-
+            // echo count($products_response);
             // get keywords for filters
             $keywords = Keyword::all();
 
@@ -329,7 +336,12 @@ class MedicationsController extends Controller
                                     'description'  => $descrption
                                 ];
 
-                                $products_response[] = $final_product;
+                                if(in_array($final_product, $products_response)){
+                                    continue;
+                                }
+                                else{
+                                    $products_response[] = $final_product;
+                                }
                             }
                         }
                     }
