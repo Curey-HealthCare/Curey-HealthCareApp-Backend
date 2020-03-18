@@ -8,9 +8,9 @@ use Faker\Generator as Faker;
 $factory->define(Appointment::class, function (Faker $faker) {
     return [
         'is_callup' => $faker->numberBetween($min = 0, $max = 1),
-        'appointment_time' => $faker->dateTimeInInterval('2020-03-01 00:00:00', $interval = '+ 1 hours'),
+        //'appointment_time' => $faker->dateTimeInInterval('2020-03-01 00:00:00', $interval = '+ 1 days'),
         'diagnosis' => $faker->catchPhrase,
-        'duration' => $faker->numberBetween($min = 1, $max = 3),
+        'duration' => 1,
         'last_checkup' => now(),
         're_examination' => $faker->numberBetween($min = 0, $max = 1),
         'created_at' => now(),

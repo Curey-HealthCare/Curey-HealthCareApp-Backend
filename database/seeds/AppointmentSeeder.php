@@ -5,6 +5,7 @@ use Faker\Generator as Faker;
 use App\User;
 use App\Doctor;
 use App\Appointment;
+use Carbon\Carbon;
 
 class AppointmentSeeder extends Seeder
 {
@@ -41,12 +42,14 @@ class AppointmentSeeder extends Seeder
             //  Assign random IDs in every iteration
             $user = DB::table('users')->inRandomOrder()->where('role_id', 1)->first() -> id;
             $doctor = DB::table('doctors')->inRandomOrder()->first() -> id;
+            $time = Carbon::createFromFormat('Y-m-d H:i:s', '2020-03-01 00:00:00')->addHours( rand(1,400) );
 
             //  Check if the user ID exists in the database alongside with the doctor ID, if not, adds the record
-            if (Appointment::where(['user_id' => $user, 'doctor_id' => $doctor])->count() == 0){
+            if (Appointment::where(['user_id' => $user, 'doctor_id' => $doctor, 'appointment_time' => $time])->count() == 0){
                 factory(Appointment::class)->create([
                     'user_id' => $user,
-                    'doctor_id' => $doctor
+                    'doctor_id' => $doctor,
+                    'appointment_time' => $time
                 ]);
             } 
             // If exists, minus 1 from the counter - restart this iteration -
