@@ -214,7 +214,7 @@ class AppointmentsController extends Controller
                     ->whereDate('appointment_time', Carbon::today())->get();
                 $first_appointments_count = Appointment::where('doctor_id', $doctor_id)
                     ->whereDate('appointment_time', Carbon::today())->count();
-                $skip = 1;
+                $skip = 0;
                 $first_day = null;
                 $appointments_first_day = [];
                 if($doctor_appointments_first_day -> isNotEmpty()){
@@ -268,7 +268,7 @@ class AppointmentsController extends Controller
                 $second = 0;
                 $second_day = null;
                 $skip_day = ($today -> id) + $skip;
-                $loops_second = $skip - 1;
+                $loops_second = $skip;
                 while($second <= 7){
                     $second_day = new Carbon;
                     $second_day = Carbon::today();
@@ -549,7 +549,7 @@ class AppointmentsController extends Controller
                     ->whereDate('appointment_time', Carbon::today())->get();
                 $first_appointments_count = Appointment::where('doctor_id', $doctor_id)
                     ->whereDate('appointment_time', Carbon::today())->count();
-                $skip = 1;
+                $skip = 0;
                 $first_day = null;
                 $appointments_first_day = [];
                 if($doctor_appointments_first_day -> isNotEmpty()){
@@ -603,7 +603,7 @@ class AppointmentsController extends Controller
                 $second = 0;
                 $second_day = null;
                 $skip_day = ($today -> id) + $skip;
-                $loops_second = $skip - 1;
+                $loops_second = $skip;
                 while($second <= 7){
                     $second_day = new Carbon;
                     $second_day = Carbon::today();
