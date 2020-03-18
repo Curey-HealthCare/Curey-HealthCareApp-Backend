@@ -132,19 +132,24 @@ class AppointmentsController extends Controller
             $appointment_time = $request -> appointment_time;
             $is_callup = $request -> is_callup;
             $duration = 1;
+            if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
+                $appointment = new Appointment;
+                $appointment -> user_id = $user_id;
+                $appointment -> doctor_id = $doctor_id;
+                $appointment -> appointment_time = $appointment_time;
+                $appointment -> is_callup = $is_callup;
+                $appointment -> duration = $duration;
+                $appointment -> save();
 
-            $appointment = new Appointment;
-            $appointment -> user_id = $user_id;
-            $appointment -> doctor_id = $doctor_id;
-            $appointment -> appointment_time = $appointment_time;
-            $appointment -> is_callup = $is_callup;
-            $appointment -> duration = $duration;
-
-            $appointment -> save();
-
-            $data += [
-                'message' => 'appointment booked successfully',
-            ];
+                $data += [
+                    'message' => 'appointment booked successfully',
+                ];
+            } else {
+                $errors += [
+                    'error' => 'an appointment already exists at this time',
+                ];
+            }
+            
         }
 
         $response = [
@@ -334,19 +339,23 @@ class AppointmentsController extends Controller
             $appointment_time = $request -> appointment_time;
             $is_callup = $request -> is_callup;
             $duration = 1;
+            if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
+                $appointment = new Appointment;
+                $appointment -> user_id = $user_id;
+                $appointment -> doctor_id = $doctor_id;
+                $appointment -> appointment_time = $appointment_time;
+                $appointment -> is_callup = $is_callup;
+                $appointment -> duration = $duration;
+                $appointment -> save();
 
-            $appointment = new Appointment;
-            $appointment -> user_id = $user_id;
-            $appointment -> doctor_id = $doctor_id;
-            $appointment -> appointment_time = $appointment_time;
-            $appointment -> is_callup = $is_callup;
-            $appointment -> duration = $duration;
-
-            $appointment -> save();
-
-            $data += [
-                'message' => 'appointment booked successfully',
-            ];
+                $data += [
+                    'message' => 'appointment booked successfully',
+                ];
+            } else {
+                $errors += [
+                    'error' => 'an appointment already exists at this time',
+                ];
+            }
         }
 
         $response = [
