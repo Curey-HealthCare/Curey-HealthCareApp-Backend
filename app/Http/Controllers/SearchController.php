@@ -195,7 +195,7 @@ class SearchController extends Controller
                     if($favourite != null){
                         $isFav = true;
                     }
-                    $keywords = ProductKeyword::where('product_id' , $product_id)->get();
+                    $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
                     $keywords_ids = [];
                     if($keywords -> isNotEmpty()){
                         foreach($keywords as $keyword){
@@ -423,7 +423,7 @@ class SearchController extends Controller
                     if($favourite != null){
                         $isFav = true;
                     }
-                    $keywords = ProductKeyword::where('product_id' , $product_id)->get();
+                    $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
                     $keywords_ids = [];
                     if($keywords -> isNotEmpty()){
                         foreach($keywords as $keyword){
