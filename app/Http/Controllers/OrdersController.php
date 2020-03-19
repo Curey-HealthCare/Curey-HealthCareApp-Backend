@@ -97,9 +97,12 @@ class OrdersController extends Controller
                         $orders_response[] = $order_response;
                     }
                 }
-                $data = [
-                    'orders' => $orders_response
-                ];
+                if($isFailed == false){
+                    $data = [
+                        'orders' => $orders_response
+                    ];
+                }
+
             }
         }
 
@@ -293,9 +296,11 @@ class OrdersController extends Controller
                         $orders_response[] = $order_response;
                     }
                 }
-                $data = [
-                    'orders' => $orders_response
-                ];
+                if($isFailed == false){
+                    $data = [
+                        'orders' => $orders_response
+                    ];
+                }
             }
         }
 
