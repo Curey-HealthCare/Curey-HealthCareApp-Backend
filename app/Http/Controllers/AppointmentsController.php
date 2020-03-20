@@ -342,13 +342,15 @@ class AppointmentsController extends Controller
             $first_day_data = [
                 'from' => $first_day -> from,
                 'to' => $first_day -> to,
-                'day' => $day_1 -> toDateString(),
+                'date' => $day_1 -> toDateString(),
+                'name' => $day_1 -> englishDayOfWeek,
                 'available' => $first_day_app,
             ];
             $second_day_data = [
                 'from' => $second_day -> from,
                 'to' => $second_day -> to,
-                'day' => $day_2 -> toDateString(),
+                'date' => $day_2 -> toDateString(),
+                'name' => $day_2 -> englishDayOfWeek,
                 'available' => $second_day_app,
             ];
             $data = [
@@ -705,13 +707,15 @@ class AppointmentsController extends Controller
             $first_day_data = [
                 'from' => $first_day -> from,
                 'to' => $first_day -> to,
-                'day' => $day_1 -> toDateString(),
+                'date' => $day_1 -> toDateString(),
+                'name' => $day_1 -> englishDayOfWeek,
                 'available' => $first_day_app,
             ];
             $second_day_data = [
                 'from' => $second_day -> from,
                 'to' => $second_day -> to,
-                'day' => $day_2 -> toDateString(),
+                'date' => $day_2 -> toDateString(),
+                'name' => $day_2 -> englishDayOfWeek,
                 'available' => $second_day_app,
             ];
             $data = [
