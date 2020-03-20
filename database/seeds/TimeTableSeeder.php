@@ -36,13 +36,13 @@ class TimeTableSeeder extends Seeder
         }
 
         //  Change the i for numbers of rows generated
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 70; $i++) {
             
             //  Assign random IDs in every iteration
             $doctor = DB::table('users')->inRandomOrder()->where('role_id', 3)->first() -> id;
             $day = DB::table('days')->inRandomOrder()->first() -> id;
             $from = Carbon::createFromFormat('H:i:s', '12:00:00')->addHours( rand(1,6) );
-            $to = Carbon::parse($from)->addHours( rand(3,6) );
+            $to = Carbon::parse($from)->addHours( rand(3,5) );
 
             //  Check if the user ID exists in the database alongside with the day ID and from-to constraint, if not, adds the record
             if (TimeTable::where(['user_id' => $doctor, 'day_id' => $day, 'from' => $to])->count() == 0){

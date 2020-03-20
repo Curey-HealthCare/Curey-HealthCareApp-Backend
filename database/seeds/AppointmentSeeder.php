@@ -39,7 +39,7 @@ class AppointmentSeeder extends Seeder
         }
 
         //  Change the i for numbers of rows generated
-        for ($j = 0; $j < 200; $j++) {
+        for ($j = 0; $j < 300; $j++) {
             
             //  Assign random IDs in every iteration
             $user = DB::table('users')->inRandomOrder()->where('role_id', 1)->first() -> id;
