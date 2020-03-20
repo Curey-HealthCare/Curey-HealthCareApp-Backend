@@ -690,7 +690,7 @@ class AppointmentsController extends Controller
             else{
                 $isFailed = true;
                 $errors += [
-                    'message' => 'this is not a doctor, ya 3omar ya "ZAKI"',
+                    'message' => 'this is not a doctor, ya Nahla OR ya Zayan',
                 ];
             }
         }
