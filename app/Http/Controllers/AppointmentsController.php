@@ -170,6 +170,13 @@ class AppointmentsController extends Controller
         $user = null;
         $user = User::where('api_token', $api_token)->first();
 
+        $first_day_app = [];
+        $first_day = null;
+        $day_1 = null;
+        $second_day_app = [];
+        $second_day = null;
+        $day_2 = null;
+
         if ($user == null){
             $isFailed = true;
             $errors []  = [ 'auth' => 'authentication failed'];
@@ -178,175 +185,175 @@ class AppointmentsController extends Controller
             // Get the doctor's ID
             $doctor_id = $request -> doctor_id;
             $doctor_data = Doctor::find($doctor_id);
-            $doctor_user_id = User::select('id')->where('id', $doctor_data -> user_id)->first() -> id;
-
-            $current_date = new Carbon;
-            $current_date = Carbon::now();
-
-            $current_day = $current_date -> dayOfWeek;
-            if($current_day == 6){
-                $current_day = 1;
-            }
-            else{
-                $current_day = $current_day + 2;
-            }
-
-            $doctor_timetable = TimeTable::where('user_id', $doctor_user_id)->get();
-            if($doctor_timetable -> isEmpty()){
-                $isFailed = true;
-                $errors += [
-                    'message' => 'this doctor do not have a schedule yet',
-                ];
-            }
-            else{
-                $today = null;
-                $next_day = null;
-                $days_ids = [];
-                foreach($doctor_timetable as $doctor_day){
-                    if($doctor_day -> day_id == $current_day){
-                        $today = $doctor_day;
-                    }
-                    $days_ids[] = $doctor_day -> day_id;
+            if($doctor_data != null){
+                $doctor_user_id = User::select('id')->where('id', $doctor_data -> user_id)->first() -> id;
+                // details about doctor's schedule in certain days
+                // The doctor's schedule
+                $doctor_timetables = TimeTable::where('user_id', $doctor_user_id)->orderBy('day_id', 'asc')->get();
+                if($doctor_timetables -> isEmpty()){
+                    $isFailed = true;
+                    $errors += [
+                        'message' => 'this doctor do not have a schedule yet',
+                    ];
                 }
-
-                // Get available appointments for first day
-                $doctor_appointments_first_day = Appointment::where(['doctor_id' => $doctor_id,])
-                    ->whereDate('appointment_time', Carbon::today())->get();
-                $first_appointments_count = Appointment::where('doctor_id', $doctor_id)
-                    ->whereDate('appointment_time', Carbon::today())->count();
-                $skip = 0;
-                $first_day = null;
-                $first_doctor_day = null;
-                $appointments_first_day = [];
-                if($doctor_appointments_first_day -> isNotEmpty()){
-                    $today_id = $today -> day_id;
-                    $loops_first = 0;
-
-                    $first = $today_id;
-                    while($first <= 7){
-                        $first_day = new Carbon;
-                        $first_day = Carbon::today();
-                        $skip++;
-                        $first_day->addDays($loops_first);
-                        $this_day1 = $first_day -> dayOfWeek;
-                        if($this_day1 == 6){
-                            $this_day1 = 1;
-                        }
-                        else{
-                            $this_day1= $this_day1 + 2;
-                        }
-                        // echo $first_day . "\n";
-                        foreach($doctor_timetable as $doctor_day){
-                            if($this_day1 == $doctor_day -> day_id){
-                                $appointments_at_day = Appointment::where('doctor_id', $doctor_id)
-                                    ->whereDate('appointment_time', $first_day)->get();
-                                $appointments_count = Appointment::where('doctor_id', $doctor_id)
-                                    ->whereDate('appointment_time', $first_day)->count();
-                                if($appointments_at_day == []){
-                                    $first_doctor_day = $doctor_day;
-                                    break 2;
-                                }
-                                else{
-                                    $to = $doctor_day -> to;
-                                    $from = $doctor_day -> from;
-                                    $work_hours = (new Carbon($to))->diff(new Carbon($from))->format('%h');
-                                    $max_appointment_count = $work_hours / 1;
-                                    if($appointments_count < $max_appointment_count){
-                                        foreach($appointments_at_day as $appointment){
-                                            $appointments_first_day[] = $appointment -> appointment_time;
-                                        }
-                                        $first_doctor_day = $doctor_day;
-                                        break 2;
-                                    }
-                                }
-                            }
-                        }
-                        // echo $first . "\n\n";
-                        $loops_first++;
-                        if($first >= 7){
-                            $first = 0;
-                        }
-                        $first++;
-                    }
-                }
-
-                // Get available appointments for second day
-                $appointments_second_day = [];
-                $second_doctor_day = null;
-
-                $second_day = null;
-                $skip_day = ($today -> id) + $skip;
-                if($skip_day > 7){
-                    $skip_day = $skip_day - 7;
-                }
-                $second = 0;
-                $loops_second = $skip;
-                while($second <= 7){
-                    $second_day = new Carbon;
-                    $second_day = Carbon::today();
-                    $second_day->addDays($loops_second);
-                    $this_day2 = $second_day -> dayOfWeek;
-                    if($this_day2 == 6){
-                        $this_day2 = 1;
-                    }
-                    else{
-                        $this_day2 = $this_day2 + 2;
-                    }
-                    foreach($doctor_timetable as $doctor_day2){
-                        if($this_day2 == $doctor_day2 -> day_id){
-                            $appointments_at_day2= Appointment::where('doctor_id', $doctor_id)
-                                ->whereDate('appointment_time', $second_day)->get();
-                            $appointments_count2 = Appointment::where('doctor_id', $doctor_id)
-                                ->whereDate('appointment_time', $second_day)->count();
-                            if($appointments_at_day2 == []){
-                                $second_doctor_day = $doctor_day2;
-                                break 2;
+                else{
+                    $this_day1 = Carbon::yesterday();
+                    // search for the first available 2 days for the next 7 days
+                    $m = 1;
+                    while($m <= 7){ // if edited edit the comment above ^
+                        if($first_day_app == []){
+                            $this_day_id = $this_day1 -> dayOfWeek;
+                            if($this_day_id == 6){
+                                $this_day_id = 1;
                             }
                             else{
-                                $to2 = $doctor_day2 -> to;
-                                $from2 = $doctor_day2 -> from;
-                                $work_hours2 = (new Carbon($to2))->diff(new Carbon($from2))->format('%h');
-                                $max_appointment_count2 = $work_hours2 / 1;
-                                if($appointments_count2 < $max_appointment_count2){
-                                    foreach($appointments_at_day2 as $appointment2){
-                                        $appointments_second_day[] = $appointment2 -> appointment_time;
+                                $this_day_id = $this_day_id + 2;
+                            }
+                            // get the doctor's schedule of the first available day
+                            foreach($doctor_timetables as $doctor_timetable){
+                                if($this_day_id == $doctor_timetable -> day_id){
+                                    $this_day_appointments = Appointment::where(['doctor_id' => $doctor_id])
+                                        ->whereDate('appointment_time', $this_day1)->get();
+                                    $this_day_appointments_no = $this_day_appointments->count();
+                                    $from = Carbon::parse( $doctor_timetable -> from);
+                                    $to = Carbon::parse( $doctor_timetable -> to);
+                                    // each appointment is estimated to last 1 Hour
+                                    $appointments_no = $to->diffInHours($from);
+                                    if($this_day_appointments -> isNotEmpty()){
+                                        if($this_day_appointments_no < $appointments_no){
+                                            $time = $this_day1->addHours($from -> hour);
+                                            for ($i = 0; $i < $appointments_no; $i++){
+                                                //  Check if the doctor has an appointment in the time specified, if not, adds the record
+                                                if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time])->count() == 0){
+                                                    $first_day_app[] = $time -> toTimeString();
+                                                }
+                                                ($time)->addHours(1);
+                                            }
+                                            $first_day = $doctor_timetable;
+                                            $day_1 = $this_day1;
+                                        break 2;
+                                        }
+                                        else{
+                                        break;
+                                        }
                                     }
-                                    $second_doctor_day = $doctor_day2;
+                                    else{
+                                        // this means that this day is empty
+                                        $time = $this_day1->addHours($from -> hour);
+                                        for ($i = 0; $i < $appointments_no; $i++){
+                                            $first_day_app[] = $time -> toTimeString();
+                                            ($time)->addHours(1);
+                                        }
+                                        $first_day = $doctor_timetable;
+                                        $day_1 = $this_day1;
                                     break 2;
+                                    }
                                 }
                             }
+                            $this_day1->addDays(1);
                         }
+                        if($first_day_app != []){
+                        break;
+                        }
+                        $m++;
                     }
-                    $loops_second++;
-                    if($second >= 7){
-                        $second = 0;
+
+                    $this_day2 = Carbon::today();
+                    $this_day2->addDays(1);
+                    $n = 1;
+
+                    while($n <= 7){
+                        if($first_day_app != []){
+                            $this_day_id = $this_day2 -> dayOfWeek;
+                            if($this_day_id == 6){
+                                $this_day_id = 1;
+                            }
+                            else{
+                                $this_day_id = $this_day_id + 2;
+                            }
+                            // Get the doctor's schedule of the second available day
+                            foreach($doctor_timetables as $doctor_timetable2){
+                                if($this_day_id == $doctor_timetable2 -> day_id){
+                                    $this_day_appointments2 = Appointment::where(['doctor_id' => $doctor_id])
+                                        ->whereDate('appointment_time', $this_day2)->get();
+                                    $this_day_appointments_no2 = $this_day_appointments2->count();
+                                    $from2 = Carbon::parse( $doctor_timetable2 -> from);
+                                    $to2 = Carbon::parse( $doctor_timetable2 -> to);
+                                    // each appointment is estimated to last 1 Hour
+                                    $appointments_no2 = $to2->diffInHours($from2);
+                                    if($this_day_appointments2 -> isNotEmpty()){
+                                        if($this_day_appointments_no2 < $appointments_no2){
+                                            $time2 = $this_day2->addHours($from2 -> hour);
+                                            for ($i = 0; $i < $appointments_no2; $i++){
+                                                //  Check if the doctor has an appointment in the time specified, if not, adds the record
+                                                if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time2])->count() == 0){
+                                                    $second_day_app[] = $time2 -> toTimeString();
+                                                }
+                                                ($time2)->addHours(1);
+                                            }
+                                            $second_day = $doctor_timetable2;
+                                            $day_2 = $this_day2;
+                                        break 2;
+                                        }
+                                        else{
+                                        break;
+                                        }
+                                    }
+                                    else{
+                                        // this means that this day is empty
+                                        $time2 = $this_day2->addHours($from2 -> hour);
+                                        for ($i = 0; $i < $appointments_no2; $i++){
+                                            $second_day_app[] = $time2 -> toTimeString();
+                                            ($time2)->addHours(1);
+                                        }
+                                        $second_day = $doctor_timetable2;
+                                        $day_2 = $this_day2;
+                                    break 2;
+                                    }
+                                }
+                            }
+                            $this_day2->addDays(1);
+                        }
+                        if($second_day_app != []){
+                        break;
+                        }
+                        $n++;
                     }
-                    $second++;
+                    if(($first_day_app == []) && ($second_day_app == [])){
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'this doctor does not have available appointments for the next 7 days',
+                        ];
+                    }
                 }
-
-
-
-                // Build Response
-                $appointments_first_response = [
-                    'from' => $first_doctor_day -> from,
-                    'to' => $first_doctor_day -> to,
-                    'date' => $first_day->toDateString(),
-                    'appointments' => $appointments_first_day,
-                ];
-
-                $appointments_second_response = [
-                    'from' => $second_doctor_day -> from,
-                    'to' => $second_doctor_day -> to,
-                    'date' => $second_day->toDateString(),
-                    'appointments' => $appointments_second_day,
-                ];
-
-                $data = [
-                    'first_day' => $appointments_first_response,
-                    'second_day' => $appointments_second_response,
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'message' => 'this is not a doctor, ya 3omar ya "ZAKI"',
                 ];
             }
         }
+
+        if($isFailed == false){
+            $first_day_data = [
+                'from' => $first_day -> from,
+                'to' => $first_day -> to,
+                'day' => $day_1 -> toDateString(),
+                'available' => $first_day_app,
+            ];
+            $second_day_data = [
+                'from' => $second_day -> from,
+                'to' => $second_day -> to,
+                'day' => $day_2 -> toDateString(),
+                'available' => $second_day_app,
+            ];
+            $data = [
+                'first_day' => $first_day_data,
+                'second_day' => $second_day_data,
+            ];
+        }
+
 
         $response = [
             'isFailed' => $isFailed,
@@ -523,6 +530,13 @@ class AppointmentsController extends Controller
         $user = null;
         $user = User::where('api_token', $api_token)->first();
 
+        $first_day_app = [];
+        $first_day = null;
+        $day_1 = null;
+        $second_day_app = [];
+        $second_day = null;
+        $day_2 = null;
+
         if ($user == null){
             $isFailed = true;
             $errors []  = [ 'auth' => 'authentication failed'];
@@ -531,175 +545,175 @@ class AppointmentsController extends Controller
             // Get the doctor's ID
             $doctor_id = $request -> doctor_id;
             $doctor_data = Doctor::find($doctor_id);
-            $doctor_user_id = User::select('id')->where('id', $doctor_data -> user_id)->first() -> id;
-
-            $current_date = new Carbon;
-            $current_date = Carbon::now();
-
-            $current_day = $current_date -> dayOfWeek;
-            if($current_day == 6){
-                $current_day = 1;
-            }
-            else{
-                $current_day = $current_day + 2;
-            }
-
-            $doctor_timetable = TimeTable::where('user_id', $doctor_user_id)->get();
-            if($doctor_timetable -> isEmpty()){
-                $isFailed = true;
-                $errors += [
-                    'message' => 'this doctor do not have a schedule yet',
-                ];
-            }
-            else{
-                $today = null;
-                $next_day = null;
-                $days_ids = [];
-                foreach($doctor_timetable as $doctor_day){
-                    if($doctor_day -> day_id == $current_day){
-                        $today = $doctor_day;
-                    }
-                    $days_ids[] = $doctor_day -> day_id;
+            if($doctor_data != null){
+                $doctor_user_id = User::select('id')->where('id', $doctor_data -> user_id)->first() -> id;
+                // details about doctor's schedule in certain days
+                // The doctor's schedule
+                $doctor_timetables = TimeTable::where('user_id', $doctor_user_id)->orderBy('day_id', 'asc')->get();
+                if($doctor_timetables -> isEmpty()){
+                    $isFailed = true;
+                    $errors += [
+                        'message' => 'this doctor do not have a schedule yet',
+                    ];
                 }
-
-                // Get available appointments for first day
-                $doctor_appointments_first_day = Appointment::where(['doctor_id' => $doctor_id,])
-                    ->whereDate('appointment_time', Carbon::today())->get();
-                $first_appointments_count = Appointment::where('doctor_id', $doctor_id)
-                    ->whereDate('appointment_time', Carbon::today())->count();
-                $skip = 0;
-                $first_day = null;
-                $first_doctor_day = null;
-                $appointments_first_day = [];
-                if($doctor_appointments_first_day -> isNotEmpty()){
-                    $today_id = $today -> day_id;
-                    $loops_first = 0;
-
-                    $first = $today_id;
-                    while($first <= 7){
-                        $first_day = new Carbon;
-                        $first_day = Carbon::today();
-                        $skip++;
-                        $first_day->addDays($loops_first);
-                        $this_day1 = $first_day -> dayOfWeek;
-                        if($this_day1 == 6){
-                            $this_day1 = 1;
-                        }
-                        else{
-                            $this_day1= $this_day1 + 2;
-                        }
-                        // echo $first_day . "\n";
-                        foreach($doctor_timetable as $doctor_day){
-                            if($this_day1 == $doctor_day -> day_id){
-                                $appointments_at_day = Appointment::where('doctor_id', $doctor_id)
-                                    ->whereDate('appointment_time', $first_day)->get();
-                                $appointments_count = Appointment::where('doctor_id', $doctor_id)
-                                    ->whereDate('appointment_time', $first_day)->count();
-                                if($appointments_at_day == []){
-                                    $first_doctor_day = $doctor_day;
-                                    break 2;
-                                }
-                                else{
-                                    $to = $doctor_day -> to;
-                                    $from = $doctor_day -> from;
-                                    $work_hours = (new Carbon($to))->diff(new Carbon($from))->format('%h');
-                                    $max_appointment_count = $work_hours / 1;
-                                    if($appointments_count < $max_appointment_count){
-                                        foreach($appointments_at_day as $appointment){
-                                            $appointments_first_day[] = $appointment -> appointment_time;
-                                        }
-                                        $first_doctor_day = $doctor_day;
-                                        break 2;
-                                    }
-                                }
-                            }
-                        }
-                        // echo $first . "\n\n";
-                        $loops_first++;
-                        if($first >= 7){
-                            $first = 0;
-                        }
-                        $first++;
-                    }
-                }
-
-                // Get available appointments for second day
-                $appointments_second_day = [];
-                $second_doctor_day = null;
-
-                $second_day = null;
-                $skip_day = ($today -> id) + $skip;
-                if($skip_day > 7){
-                    $skip_day = $skip_day - 7;
-                }
-                $second = 0;
-                $loops_second = $skip;
-                while($second <= 7){
-                    $second_day = new Carbon;
-                    $second_day = Carbon::today();
-                    $second_day->addDays($loops_second);
-                    $this_day2 = $second_day -> dayOfWeek;
-                    if($this_day2 == 6){
-                        $this_day2 = 1;
-                    }
-                    else{
-                        $this_day2 = $this_day2 + 2;
-                    }
-                    foreach($doctor_timetable as $doctor_day2){
-                        if($this_day2 == $doctor_day2 -> day_id){
-                            $appointments_at_day2= Appointment::where('doctor_id', $doctor_id)
-                                ->whereDate('appointment_time', $second_day)->get();
-                            $appointments_count2 = Appointment::where('doctor_id', $doctor_id)
-                                ->whereDate('appointment_time', $second_day)->count();
-                            if($appointments_at_day2 == []){
-                                $second_doctor_day = $doctor_day2;
-                                break 2;
+                else{
+                    $this_day1 = Carbon::yesterday();
+                    // search for the first available 2 days for the next 7 days
+                    $m = 1;
+                    while($m <= 7){ // if edited edit the comment above ^
+                        if($first_day_app == []){
+                            $this_day_id = $this_day1 -> dayOfWeek;
+                            if($this_day_id == 6){
+                                $this_day_id = 1;
                             }
                             else{
-                                $to2 = $doctor_day2 -> to;
-                                $from2 = $doctor_day2 -> from;
-                                $work_hours2 = (new Carbon($to2))->diff(new Carbon($from2))->format('%h');
-                                $max_appointment_count2 = $work_hours2 / 1;
-                                if($appointments_count2 < $max_appointment_count2){
-                                    foreach($appointments_at_day2 as $appointment2){
-                                        $appointments_second_day[] = $appointment2 -> appointment_time;
+                                $this_day_id = $this_day_id + 2;
+                            }
+                            // get the doctor's schedule of the first available day
+                            foreach($doctor_timetables as $doctor_timetable){
+                                if($this_day_id == $doctor_timetable -> day_id){
+                                    $this_day_appointments = Appointment::where(['doctor_id' => $doctor_id])
+                                        ->whereDate('appointment_time', $this_day1)->get();
+                                    $this_day_appointments_no = $this_day_appointments->count();
+                                    $from = Carbon::parse( $doctor_timetable -> from);
+                                    $to = Carbon::parse( $doctor_timetable -> to);
+                                    // each appointment is estimated to last 1 Hour
+                                    $appointments_no = $to->diffInHours($from);
+                                    if($this_day_appointments -> isNotEmpty()){
+                                        if($this_day_appointments_no < $appointments_no){
+                                            $time = $this_day1->addHours($from -> hour);
+                                            for ($i = 0; $i < $appointments_no; $i++){
+                                                //  Check if the doctor has an appointment in the time specified, if not, adds the record
+                                                if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time])->count() == 0){
+                                                    $first_day_app[] = $time -> toTimeString();
+                                                }
+                                                ($time)->addHours(1);
+                                            }
+                                            $first_day = $doctor_timetable;
+                                            $day_1 = $this_day1;
+                                        break 2;
+                                        }
+                                        else{
+                                        break;
+                                        }
                                     }
-                                    $second_doctor_day = $doctor_day2;
+                                    else{
+                                        // this means that this day is empty
+                                        $time = $this_day1->addHours($from -> hour);
+                                        for ($i = 0; $i < $appointments_no; $i++){
+                                            $first_day_app[] = $time -> toTimeString();
+                                            ($time)->addHours(1);
+                                        }
+                                        $first_day = $doctor_timetable;
+                                        $day_1 = $this_day1;
                                     break 2;
+                                    }
                                 }
                             }
+                            $this_day1->addDays(1);
                         }
+                        if($first_day_app != []){
+                        break;
+                        }
+                        $m++;
                     }
-                    $loops_second++;
-                    if($second >= 7){
-                        $second = 0;
+
+                    $this_day2 = Carbon::today();
+                    $this_day2->addDays(1);
+                    $n = 1;
+
+                    while($n <= 7){
+                        if($first_day_app != []){
+                            $this_day_id = $this_day2 -> dayOfWeek;
+                            if($this_day_id == 6){
+                                $this_day_id = 1;
+                            }
+                            else{
+                                $this_day_id = $this_day_id + 2;
+                            }
+                            // Get the doctor's schedule of the second available day
+                            foreach($doctor_timetables as $doctor_timetable2){
+                                if($this_day_id == $doctor_timetable2 -> day_id){
+                                    $this_day_appointments2 = Appointment::where(['doctor_id' => $doctor_id])
+                                        ->whereDate('appointment_time', $this_day2)->get();
+                                    $this_day_appointments_no2 = $this_day_appointments2->count();
+                                    $from2 = Carbon::parse( $doctor_timetable2 -> from);
+                                    $to2 = Carbon::parse( $doctor_timetable2 -> to);
+                                    // each appointment is estimated to last 1 Hour
+                                    $appointments_no2 = $to2->diffInHours($from2);
+                                    if($this_day_appointments2 -> isNotEmpty()){
+                                        if($this_day_appointments_no2 < $appointments_no2){
+                                            $time2 = $this_day2->addHours($from2 -> hour);
+                                            for ($i = 0; $i < $appointments_no2; $i++){
+                                                //  Check if the doctor has an appointment in the time specified, if not, adds the record
+                                                if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time2])->count() == 0){
+                                                    $second_day_app[] = $time2 -> toTimeString();
+                                                }
+                                                ($time2)->addHours(1);
+                                            }
+                                            $second_day = $doctor_timetable2;
+                                            $day_2 = $this_day2;
+                                        break 2;
+                                        }
+                                        else{
+                                        break;
+                                        }
+                                    }
+                                    else{
+                                        // this means that this day is empty
+                                        $time2 = $this_day2->addHours($from2 -> hour);
+                                        for ($i = 0; $i < $appointments_no2; $i++){
+                                            $second_day_app[] = $time2 -> toTimeString();
+                                            ($time2)->addHours(1);
+                                        }
+                                        $second_day = $doctor_timetable2;
+                                        $day_2 = $this_day2;
+                                    break 2;
+                                    }
+                                }
+                            }
+                            $this_day2->addDays(1);
+                        }
+                        if($second_day_app != []){
+                        break;
+                        }
+                        $n++;
                     }
-                    $second++;
+                    if(($first_day_app == []) && ($second_day_app == [])){
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'this doctor does not have available appointments for the next 7 days',
+                        ];
+                    }
                 }
-
-
-
-                // Build Response
-                $appointments_first_response = [
-                    'from' => $first_doctor_day -> from,
-                    'to' => $first_doctor_day -> to,
-                    'date' => $first_day->toDateString(),
-                    'appointments' => $appointments_first_day,
-                ];
-
-                $appointments_second_response = [
-                    'from' => $second_doctor_day -> from,
-                    'to' => $second_doctor_day -> to,
-                    'date' => $second_day->toDateString(),
-                    'appointments' => $appointments_second_day,
-                ];
-
-                $data = [
-                    'first_day' => $appointments_first_response,
-                    'second_day' => $appointments_second_response,
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'message' => 'this is not a doctor, ya 3omar ya "ZAKI"',
                 ];
             }
         }
+
+        if($isFailed == false){
+            $first_day_data = [
+                'from' => $first_day -> from,
+                'to' => $first_day -> to,
+                'day' => $day_1 -> toDateString(),
+                'available' => $first_day_app,
+            ];
+            $second_day_data = [
+                'from' => $second_day -> from,
+                'to' => $second_day -> to,
+                'day' => $day_2 -> toDateString(),
+                'available' => $second_day_app,
+            ];
+            $data = [
+                'first_day' => $first_day_data,
+                'second_day' => $second_day_data,
+            ];
+        }
+
 
         $response = [
             'isFailed' => $isFailed,
