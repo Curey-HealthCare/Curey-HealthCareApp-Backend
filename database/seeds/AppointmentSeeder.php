@@ -5,6 +5,8 @@ use Faker\Generator as Faker;
 use App\User;
 use App\Doctor;
 use App\Appointment;
+use App\Day;
+use App\TimeTable;
 use Carbon\Carbon;
 
 class AppointmentSeeder extends Seeder
@@ -37,23 +39,52 @@ class AppointmentSeeder extends Seeder
         }
 
         //  Change the i for numbers of rows generated
-        for ($i = 0; $i < 100; $i++) {
+        for ($j = 0; $j < 200; $j++) {
             
             //  Assign random IDs in every iteration
             $user = DB::table('users')->inRandomOrder()->where('role_id', 1)->first() -> id;
             $doctor = DB::table('doctors')->inRandomOrder()->first() -> id;
-            $time = Carbon::createFromFormat('Y-m-d H:i:s', '2020-03-01 00:00:00')->addHours( rand(1,400) );
+            $timetable = DB::table('timetables')->where(['user_id' => $doctor])->inRandomOrder()->first();
 
-            //  Check if the user ID exists in the database alongside with the doctor ID, if not, adds the record
-            if (Appointment::where(['user_id' => $user, 'doctor_id' => $doctor, 'appointment_time' => $time])->count() == 0){
-                factory(Appointment::class)->create([
-                    'user_id' => $user,
-                    'doctor_id' => $doctor,
-                    'appointment_time' => $time
-                ]);
-            } 
-            // If exists, minus 1 from the counter - restart this iteration -
-            else { $i--; }
+            // Before doing anything, check if the timetable for the doctor exists, if not, reset the iteration
+            if ($timetable == []){
+                $j--;
+                continue;
+            }
+
+            // Get timetable day, from, to
+            $timetable_day = Day::where(['id' => $timetable -> day_id])->first() -> name;
+            $timetable_from = Carbon::parse( $timetable -> from);
+            $timetable_to = Carbon::parse( $timetable -> to);
+
+            // Calculate the no. of appointments per day
+            $appointments_no = $timetable_to->diffInHours($timetable_from);
+
+            // Start of the time for the appointment
+            $time = Carbon::yesterday()->next($timetable_day)->addHours($timetable_from -> hour);
+
+            // Iterate through the appointments, adding the record
+            for ($i = 0; $i < $appointments_no; $i++){
+                //  Check if the doctor ID exists in the database alongside with the time specified, if not, adds the record
+                if (Appointment::where(['doctor_id' => $doctor, 'appointment_time' => $time])->count() == 0){
+                    factory(Appointment::class)->create([
+                        'user_id' => $user,
+                        'doctor_id' => $doctor,
+                        'appointment_time' => $time
+                    ]);
+                    break;
+                } 
+                // If exists, increase the time by 1 hour, or 1 day if already reached the end of the day
+                else {
+                    if ($i == $appointments_no-1){
+                        $time->next($timetable_day)->addHours($timetable_from -> hour);
+                        $i = 0;
+                    } else {
+                        $time->addHours(1);
+                    }
+                }
+            }
+            
         }
 
         // Re add the foreign key checks
