@@ -197,7 +197,7 @@ class AppointmentsController extends Controller
                     ];
                 }
                 else{
-                    $this_day1 = Carbon::yesterday();
+                    $this_day1 = Carbon::today();
                     // search for the first available 2 days for the next 7 days
                     $m = 1;
                     while($m <= 7){ // if edited edit the comment above ^
@@ -557,7 +557,7 @@ class AppointmentsController extends Controller
                     ];
                 }
                 else{
-                    $this_day1 = Carbon::yesterday();
+                    $this_day1 = Carbon::today();
                     // search for the first available 2 days for the next 7 days
                     $m = 1;
                     while($m <= 7){ // if edited edit the comment above ^
