@@ -273,6 +273,9 @@ class AppointmentsController extends Controller
                             }
                             // Get the doctor's schedule of the second available day
                             foreach($doctor_timetables as $doctor_timetable2){
+                                if($doctor_timetable2 == $first_day){
+                                    continue;
+                                }
                                 if($this_day_id == $doctor_timetable2 -> day_id){
                                     $this_day_appointments2 = Appointment::where(['doctor_id' => $doctor_id])
                                         ->whereDate('appointment_time', $this_day2)->get();
