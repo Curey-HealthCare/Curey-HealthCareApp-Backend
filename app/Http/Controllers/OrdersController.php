@@ -152,8 +152,10 @@ class OrdersController extends Controller
                     }
                 }
                 // $data = $pharmacies;
+                $order = null;
                 for($i = 0; $i < count($pharmacies); $i++){
                     $user_id = $user -> id;
+                    $products = [];
                     foreach ($products_pharmacies as $product_pharmacy) {
                         $pharmacy_id_request = $product_pharmacy['id'];
                         $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
@@ -173,20 +175,19 @@ class OrdersController extends Controller
                             $order -> user_id = $user_id;
                             $order -> delivery_type = 1;
                             $order -> save();
-                            foreach($products as $pro){
-                                $order_detail = new OrderDetail;
-                                $order_detail -> order_id = $order -> id;
-                                $order_detail -> product_id = $pro['id'];
-                                $order_detail -> amount = $pro['amount'];
-                                $order_detail -> save();
-                            }
-
                             $data += [
                                 'success' => 'your orders have been sent'
                             ];
                         }
                         else{
                             continue;
+                        }
+                        foreach($products as $pro){
+                            $order_detail = new OrderDetail;
+                            $order_detail -> order_id = $order -> id;
+                            $order_detail -> product_id = $pro['id'];
+                            $order_detail -> amount = $pro['amount'];
+                            $order_detail -> save();
                         }
                     }
                 }
@@ -350,8 +351,10 @@ class OrdersController extends Controller
                     }
                 }
                 // $data = $pharmacies;
+                $order = null;
                 for($i = 0; $i < count($pharmacies); $i++){
                     $user_id = $user -> id;
+                    $products = [];
                     foreach ($products_pharmacies as $product_pharmacy) {
                         $pharmacy_id_request = $product_pharmacy['id'];
                         $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
@@ -371,20 +374,19 @@ class OrdersController extends Controller
                             $order -> user_id = $user_id;
                             $order -> delivery_type = 1;
                             $order -> save();
-                            foreach($products as $pro){
-                                $order_detail = new OrderDetail;
-                                $order_detail -> order_id = $order -> id;
-                                $order_detail -> product_id = $pro['id'];
-                                $order_detail -> amount = $pro['amount'];
-                                $order_detail -> save();
-                            }
-
                             $data += [
                                 'success' => 'your orders have been sent'
                             ];
                         }
                         else{
                             continue;
+                        }
+                        foreach($products as $pro){
+                            $order_detail = new OrderDetail;
+                            $order_detail -> order_id = $order -> id;
+                            $order_detail -> product_id = $pro['id'];
+                            $order_detail -> amount = $pro['amount'];
+                            $order_detail -> save();
                         }
                     }
                 }
