@@ -197,9 +197,7 @@ class DoctorsController extends Controller
                 $appointments_count = Appointment::where('doctor_id', $id)->count();
                 $ratings = [];
                 if($appointments == null || $appointments_count == 0){
-                    $ratings = [
-                        'error' => 'no available ratings yet'
-                    ];
+                    $ratings = [];
                 }
                 else{
                     $overall_rate = 0;
@@ -487,9 +485,7 @@ class DoctorsController extends Controller
                 $callup_count = Appointment::where('doctor_id', $id)->where('is_callup', '1')->count();
                 $ratings = [];
                 if($appointments == null && $appointments_count == 0){
-                    $ratings = [
-                        'error' => 'no available ratings yet'
-                    ];
+                    $ratings = [];
                 }
                 else{
                     $review_count = 0;
