@@ -156,12 +156,16 @@ class OrdersController extends Controller
                 for($i = 0; $i < count($pharmacies); $i++){
                     $user_id = $user -> id;
                     $products = [];
+                    $order = new Order;
+                    $order -> pharmacy_id = $pharmacy_id;
+                    $order -> user_id = $user_id;
+                    $order -> delivery_type = 1;
+                    $order -> save();
+                    $products = [];
                     foreach ($products_pharmacies as $product_pharmacy) {
                         $pharmacy_id_request = $product_pharmacy['id'];
                         $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
-                        $products = [];
                         if($pharmacy_id == $pharmacies[$i]){
-                            // echo "Tmam\n" . " " . $i;
                             $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
                             $amount = $product_pharmacy['amount'];
                             $product = [
@@ -169,28 +173,22 @@ class OrdersController extends Controller
                                 'amount' => $amount,
                             ];
                             $products[] = $product;
-                            // $data[] = $products;
-                            $order = new Order;
-                            $order -> pharmacy_id = $pharmacy_id;
-                            $order -> user_id = $user_id;
-                            $order -> delivery_type = 1;
-                            $order -> save();
-                            $data += [
-                                'success' => 'your orders have been sent'
-                            ];
                         }
                         else{
                             continue;
                         }
-                        foreach($products as $pro){
-                            $order_detail = new OrderDetail;
-                            $order_detail -> order_id = $order -> id;
-                            $order_detail -> product_id = $pro['id'];
-                            $order_detail -> amount = $pro['amount'];
-                            $order_detail -> save();
-                        }
+                    }
+                    foreach($products as $pro){
+                        $order_detail = new OrderDetail;
+                        $order_detail -> order_id = $order -> id;
+                        $order_detail -> product_id = $pro['id'];
+                        $order_detail -> amount = $pro['amount'];
+                        $order_detail -> save();
                     }
                 }
+                $data += [
+                    'success' => 'your orders have been sent'
+                ];
             }
         }
 
@@ -355,12 +353,16 @@ class OrdersController extends Controller
                 for($i = 0; $i < count($pharmacies); $i++){
                     $user_id = $user -> id;
                     $products = [];
+                    $order = new Order;
+                    $order -> pharmacy_id = $pharmacy_id;
+                    $order -> user_id = $user_id;
+                    $order -> delivery_type = 1;
+                    $order -> save();
+                    $products = [];
                     foreach ($products_pharmacies as $product_pharmacy) {
                         $pharmacy_id_request = $product_pharmacy['id'];
                         $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
-                        $products = [];
                         if($pharmacy_id == $pharmacies[$i]){
-                            // echo "Tmam\n" . " " . $i;
                             $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
                             $amount = $product_pharmacy['amount'];
                             $product = [
@@ -368,28 +370,22 @@ class OrdersController extends Controller
                                 'amount' => $amount,
                             ];
                             $products[] = $product;
-                            // $data[] = $products;
-                            $order = new Order;
-                            $order -> pharmacy_id = $pharmacy_id;
-                            $order -> user_id = $user_id;
-                            $order -> delivery_type = 1;
-                            $order -> save();
-                            $data += [
-                                'success' => 'your orders have been sent'
-                            ];
                         }
                         else{
                             continue;
                         }
-                        foreach($products as $pro){
-                            $order_detail = new OrderDetail;
-                            $order_detail -> order_id = $order -> id;
-                            $order_detail -> product_id = $pro['id'];
-                            $order_detail -> amount = $pro['amount'];
-                            $order_detail -> save();
-                        }
+                    }
+                    foreach($products as $pro){
+                        $order_detail = new OrderDetail;
+                        $order_detail -> order_id = $order -> id;
+                        $order_detail -> product_id = $pro['id'];
+                        $order_detail -> amount = $pro['amount'];
+                        $order_detail -> save();
                     }
                 }
+                $data += [
+                    'success' => 'your orders have been sent'
+                ];
             }
         }
 
