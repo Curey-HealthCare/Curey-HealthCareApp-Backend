@@ -92,7 +92,9 @@ class DoctorsController extends Controller
                                 $overall_rate += $appointment_rating;
                             }
                         }
-                        $overall_rating = $overall_rate / $appointments_count;
+                        if ($appointments_count != 0){
+                            $overall_rating = $overall_rate / $appointments_count;
+                        }
                         $ratings = [
                             'rating' => $overall_rating
                         ];
@@ -196,6 +198,7 @@ class DoctorsController extends Controller
                 $appointments = Appointment::where('doctor_id', $id)->get();
                 $appointments_count = Appointment::where('doctor_id', $id)->count();
                 $ratings = [];
+                $overall_rating = 0;
                 if($appointments == null || $appointments_count == 0){
                     $ratings = [];
                 }
@@ -238,7 +241,9 @@ class DoctorsController extends Controller
                             $ratings[] = $rate;
                         }
                     }
-                    $overall_rating = $overall_rate / $appointments_count;
+                    if ($appointments_count != 0){
+                        $overall_rating = $overall_rate / $appointments_count;
+                    }
                 }
 
                 // Get doctor degrees
@@ -377,7 +382,9 @@ class DoctorsController extends Controller
                                 $overall_rate += $appointment_rating;
                             }
                         }
-                        $overall_rating = $overall_rate / $appointments_count;
+                        if ($appointments_count != 0){
+                            $overall_rating = $overall_rate / $appointments_count;
+                        }
                         $ratings = [
                             'rating' => $overall_rating
                         ];
@@ -453,6 +460,7 @@ class DoctorsController extends Controller
         }
         if($isFailed == false){
             $id = $request -> id;
+            $overall_rating = 0;
             // get basic information of doctor
             $doc = Doctor::where('id', $id)->first();
             if($doc == null){
@@ -484,6 +492,7 @@ class DoctorsController extends Controller
                 $clinic_count = Appointment::where('doctor_id', $id)->where('is_callup', '0')->count();
                 $callup_count = Appointment::where('doctor_id', $id)->where('is_callup', '1')->count();
                 $ratings = [];
+                $overall_rating = 0;
                 if($appointments == null && $appointments_count == 0){
                     $ratings = [];
                 }
@@ -530,8 +539,10 @@ class DoctorsController extends Controller
                             $ratings[] = $rate;
                         }
                     }
-                    $overall_rating = $overall_rate / $appointments_count;
-                    $noOfBooking = $appointments_count - $noOfCallup ;
+                    if ($appointments_count != 0){
+                        $overall_rating = $overall_rate / $appointments_count;
+                        $noOfBooking = $appointments_count - $noOfCallup ;
+                    }
                 }
 
                 // Get doctor degrees
