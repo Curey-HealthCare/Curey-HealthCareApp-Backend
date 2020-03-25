@@ -70,6 +70,9 @@ class CartController extends Controller
         $isFailed = false;
         $data = [];
         $errors =  [];
+
+        $products = [];
+
         $api_token = $request -> api_token;
         $user = User::where('api_token', $api_token)->first();
 
@@ -89,7 +92,7 @@ class CartController extends Controller
             }
             else{
                 // get details about each item in the cart
-                $products = [];
+
                 foreach($cart_items as $item){
                     $product_pharmacy_id = $item -> id;
                     $amount = $item -> amount;
@@ -108,11 +111,49 @@ class CartController extends Controller
                         // get all product information
                         $product = Product::where('id', $product_id)->first();
                         if($product != null){
+                            // get the pharmacy
+                            $pharmacy = Pharmacy::where('id', $pharmacy_id)->first();
+                            if($pharmacy != null){
+                                // get pharmacy name
+                                $pharmacy_user = User::where('id', $pharmacy -> user_id)->first();
+                                if($pharmacy_user != null){
+                                    // get all needed data and build response object
+                                    // pharmacy image
+                                    $p_image = Image::where('id', $pharmacy_user -> image_id)->first();
+                                    $p_image_path = null;
+                                    if($p_image != null){
+                                        $p_image_path = $p_image -> path;
+                                    }
 
+                                    $pharmacy_obj = [
+                                        'name' => $pharmacy_user -> name,
+                                        'address' => $pharmacy -> address,
+                                        'image' => $p_image_path,
+                                    ];
+
+                                    // get product image and details
+                                    $image = Image::where('id', $product -> image_id)->first();
+                                    $image_path = null;
+                                    if($image != null){
+                                        $image_path = $image -> path;
+                                    }
+                                    $product_obj = [
+                                        'name' => $product -> name,
+                                        'price' => $product -> price,
+                                        'amount' => $amount,
+                                        'image' => $image_path,
+                                        'pharmacy' => $pharmacy_obj
+                                    ];
+
+                                }$products[] = $product_obj;
+                            }
                         }
                     }
                 }
             }
+        }
+        if($isFailed == false){
+            $data = $products;
         }
 
         $response = [
@@ -255,6 +296,9 @@ class CartController extends Controller
         $isFailed = false;
         $data = [];
         $errors =  [];
+
+        $products = [];
+
         $api_token = $request -> api_token;
         $user = User::where('api_token', $api_token)->first();
 
@@ -274,7 +318,7 @@ class CartController extends Controller
             }
             else{
                 // get details about each item in the cart
-                $products = [];
+
                 foreach($cart_items as $item){
                     $product_pharmacy_id = $item -> id;
                     $amount = $item -> amount;
@@ -293,11 +337,49 @@ class CartController extends Controller
                         // get all product information
                         $product = Product::where('id', $product_id)->first();
                         if($product != null){
+                            // get the pharmacy
+                            $pharmacy = Pharmacy::where('id', $pharmacy_id)->first();
+                            if($pharmacy != null){
+                                // get pharmacy name
+                                $pharmacy_user = User::where('id', $pharmacy -> user_id)->first();
+                                if($pharmacy_user != null){
+                                    // get all needed data and build response object
+                                    // pharmacy image
+                                    $p_image = Image::where('id', $pharmacy_user -> image_id)->first();
+                                    $p_image_path = null;
+                                    if($p_image != null){
+                                        $p_image_path = $p_image -> path;
+                                    }
 
+                                    $pharmacy_obj = [
+                                        'name' => $pharmacy_user -> name,
+                                        'address' => $pharmacy -> address,
+                                        'image' => $p_image_path,
+                                    ];
+
+                                    // get product image and details
+                                    $image = Image::where('id', $product -> image_id)->first();
+                                    $image_path = null;
+                                    if($image != null){
+                                        $image_path = $image -> path;
+                                    }
+                                    $product_obj = [
+                                        'name' => $product -> name,
+                                        'price' => $product -> price,
+                                        'amount' => $amount,
+                                        'image' => $image_path,
+                                        'pharmacy' => $pharmacy_obj
+                                    ];
+
+                                }$products[] = $product_obj;
+                            }
                         }
                     }
                 }
             }
+        }
+        if($isFailed == false){
+            $data = $products;
         }
 
         $response = [
