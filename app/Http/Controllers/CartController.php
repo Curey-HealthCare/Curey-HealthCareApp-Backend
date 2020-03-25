@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\User;
 use App\ProductPharmacy;
 use App\Cart;
+use App\Product;
+use App\Pharmacy;
+use App\Image;
 
 class CartController extends Controller
 {
@@ -47,8 +50,10 @@ class CartController extends Controller
                     ];
                 }
                 else{
-                    // option 1 : send to update and increase the amount
-                    // option 2 : send an error message
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'this item already exists in your cart'
+                    ];
                 }
             }
         }
@@ -76,6 +81,38 @@ class CartController extends Controller
         }
         else{
             $cart_items = Cart::where('user_id', $user -> id)->get();
+            if($cart_items -> isEmpty()){
+                $isFailed = true;
+                $errors += [
+                    'error' => 'you do not have any items'
+                ];
+            }
+            else{
+                // get details about each item in the cart
+                $products = [];
+                foreach($cart_items as $item){
+                    $product_pharmacy_id = $item -> id;
+                    $amount = $item -> amount;
+                    $product = null;
+                    // get product id and pharmacy id
+                    $product_pharmacy = ProductPharmacy::where('id', $product_pharmacy_id)->first();
+                    if($product_pharmacy == null){
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'can not retrieve item data'
+                        ];
+                    }
+                    else{
+                        $product_id = $product_pharmacy -> product_id;
+                        $pharmacy_id = $product_pharmacy -> pharmacy_id;
+                        // get all product information
+                        $product = Product::where('id', $product_id)->first();
+                        if($product != null){
+
+                        }
+                    }
+                }
+            }
         }
 
         $response = [
