@@ -69,10 +69,15 @@ Route::group(['prefix' => '/mobile'], function(){
     // Search Products
     Route::get('/medications/search', 'SearchController@mobileSearchProducts');
 
-                       //order for mobile
+                        //order for mobile
     //show orders page
     Route::get('/orders', 'OrdersController@mobileShowOrders');
     Route::post('/submit_order', 'OrdersController@mobileSubmit');
+                        // Cart functionailty
+    Route::post('/add_item', 'CartController@mobileCreate');
+    Route::post('/update_item', 'CartController@mobileUpdate');
+    Route::post('/delete_item', 'CartController@mobileDelete');
+    Route::get('/cart', 'CartController@mobileRead');
                      // Appointments for mobile
     //show appointment page
     Route::get('/appointments', 'AppointmentsController@mobileAppShowAll');
@@ -156,5 +161,11 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/orders', 'OrdersController@webShowOrders');
     // Submit order
     Route::post('/submit_order', 'OrdersController@webSubmit');
+
+                        // Cart functionailty
+    Route::post('/add_item', 'CartController@mobileCreate');
+    Route::post('/update_item', 'CartController@mobileUpdate');
+    Route::post('/delete_item', 'CartController@mobileDelete');
+    Route::get('/cart', 'CartController@mobileRead');
 
 });
