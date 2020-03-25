@@ -137,7 +137,19 @@ class CartController extends Controller
             ];
         }
         else{
-
+            $product = $request -> product;
+            if($product == null){
+                $isFailed = true;
+                $errors += [
+                    'error' => 'can not update an empty product'
+                ];
+            }
+            else{
+                Cart::where(['user_id' => $user -> id, 'product_id' => $product['id']])->update(['amount' => $product['amount']]);
+                $data += [
+                    'success' => 'updated successfully'
+                ];
+            }
         }
 
         $response = [
@@ -162,7 +174,19 @@ class CartController extends Controller
             ];
         }
         else{
-
+            $product = $request -> product;
+            if($product == null){
+                $isFailed = true;
+                $errors += [
+                    'error' => 'can not update an empty product'
+                ];
+            }
+            else{
+                Cart::where(['user_id' => $user -> id, 'product_id' => $product['id']])->delete();
+                $data += [
+                    'success' => 'deleted successfully'
+                ];
+            }
         }
 
         $response = [
