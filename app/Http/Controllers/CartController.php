@@ -126,7 +126,7 @@ class CartController extends Controller
                                     }
 
                                     $pharmacy_obj = [
-                                        'name' => $pharmacy_user -> name,
+                                        'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
                                     ];
@@ -215,15 +215,15 @@ class CartController extends Controller
             ];
         }
         else{
-            $product = $request -> product;
-            if($product == null){
+            $product_id = $request -> product_id;
+            if($product_id == null){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'can not update an empty product'
+                    'error' => 'can not delete a non existing cart item'
                 ];
             }
             else{
-                Cart::where(['user_id' => $user -> id, 'product_id' => $product['id']])->delete();
+                Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
                 $data += [
                     'success' => 'deleted successfully'
                 ];
@@ -352,7 +352,7 @@ class CartController extends Controller
                                     }
 
                                     $pharmacy_obj = [
-                                        'name' => $pharmacy_user -> name,
+                                        'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
                                     ];
@@ -441,15 +441,15 @@ class CartController extends Controller
             ];
         }
         else{
-            $product = $request -> product;
-            if($product == null){
+            $product_id = $request -> product_id;
+            if($product_id == null){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'can not update an empty product'
+                    'error' => 'can not delete a non existing cart item'
                 ];
             }
             else{
-                Cart::where(['user_id' => $user -> id, 'product_id' => $product['id']])->delete();
+                Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
                 $data += [
                     'success' => 'deleted successfully'
                 ];
