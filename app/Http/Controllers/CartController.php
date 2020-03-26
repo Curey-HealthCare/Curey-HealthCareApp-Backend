@@ -94,7 +94,7 @@ class CartController extends Controller
                 // get details about each item in the cart
 
                 foreach($cart_items as $item){
-                    $product_pharmacy_id = $item -> id;
+                    $product_pharmacy_id = $item -> product_id;
                     $amount = $item -> amount;
                     $product = null;
                     // get product id and pharmacy id
@@ -129,7 +129,7 @@ class CartController extends Controller
                                         'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
-                                        'product_pharmacy_id' => $item -> id,
+                                        'product_pharmacy_id' => $item -> product_id,
                                     ];
 
                                     // get product image and details
@@ -322,7 +322,7 @@ class CartController extends Controller
                 // get details about each item in the cart
 
                 foreach($cart_items as $item){
-                    $product_pharmacy_id = $item -> id;
+                    $product_pharmacy_id = $item -> product_id;
                     $amount = $item -> amount;
                     $product = null;
                     // get product id and pharmacy id
@@ -357,7 +357,7 @@ class CartController extends Controller
                                         'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
-                                        'product_pharmacy_id' => $item -> id,
+                                        'product_pharmacy_id' => $item -> product_id,
                                     ];
 
                                     // get product image and details
