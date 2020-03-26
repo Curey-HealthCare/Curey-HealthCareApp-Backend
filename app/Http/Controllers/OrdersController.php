@@ -195,8 +195,8 @@ class OrdersController extends Controller
                     $product_id = $deproduct['id'];
                     Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
                     $existing = ProductPharmacy::find($product_id);
-                    $remaining = $existing -> amount - $deproduct['amount'];
-                    ProductPharmacy::where('id', $product_id)->update(['amount' => $remaining]);
+                    $remaining = $existing -> count - $deproduct['amount'];
+                    ProductPharmacy::where('id', $product_id)->update(['count' => $remaining]);
                 }
                 $data += [
                     'success' => 'your orders have been sent'
@@ -232,7 +232,7 @@ class OrdersController extends Controller
             $order_id = $request -> order_id;
             $order_tracking = OrderTracking::where('order_id', $order_id)->first();
             if($order_tracking == null){
-                OrderDetails::where(['order_id' => $order_id])->delete();
+                OrderDetail::where(['order_id' => $order_id])->delete();
                 Order::where('id', $order_id)->delete();
                 $data += [
                     'success' => 'order cancelled successfully'
@@ -246,7 +246,7 @@ class OrdersController extends Controller
                     ];
                 }
                 else{
-                    OrderDetails::where(['order_id' => $order_id])->delete();
+                    OrderDetail::where(['order_id' => $order_id])->delete();
                     OrderTracking::where('order_id', $order_id)->delete();
                     Order::where('id', $order_id)->delete();
                     $data += [
@@ -453,8 +453,8 @@ class OrdersController extends Controller
                     $product_id = $deproduct['id'];
                     Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
                     $existing = ProductPharmacy::find($product_id);
-                    $remaining = $existing -> amount - $deproduct['amount'];
-                    ProductPharmacy::where('id', $product_id)->update(['amount' => $remaining]);
+                    $remaining = $existing -> count - $deproduct['amount'];
+                    ProductPharmacy::where('id', $product_id)->update(['count' => $remaining]);
                 }
                 $data += [
                     'success' => 'your orders have been sent'
@@ -490,7 +490,7 @@ class OrdersController extends Controller
             $order_id = $request -> order_id;
             $order_tracking = OrderTracking::where('order_id', $order_id)->first();
             if($order_tracking == null){
-                OrderDetails::where(['order_id' => $order_id])->delete();
+                OrderDetail::where(['order_id' => $order_id])->delete();
                 Order::where('id', $order_id)->delete();
                 $data += [
                     'success' => 'order cancelled successfully'
@@ -504,7 +504,7 @@ class OrdersController extends Controller
                     ];
                 }
                 else{
-                    OrderDetails::where(['order_id' => $order_id])->delete();
+                    OrderDetail::where(['order_id' => $order_id])->delete();
                     OrderTracking::where('order_id', $order_id)->delete();
                     Order::where('id', $order_id)->delete();
                     $data += [
