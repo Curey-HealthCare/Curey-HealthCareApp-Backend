@@ -129,6 +129,7 @@ class CartController extends Controller
                                         'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
+                                        'product_pharmacy_id' => $item -> id,
                                     ];
 
                                     // get product image and details
@@ -138,6 +139,7 @@ class CartController extends Controller
                                         $image_path = $image -> path;
                                     }
                                     $product_obj = [
+                                        'id' => $product -> id,
                                         'name' => $product -> name,
                                         'price' => $product -> price,
                                         'amount' => $amount,
@@ -355,6 +357,7 @@ class CartController extends Controller
                                         'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
+                                        'product_pharmacy_id' => $item -> id,
                                     ];
 
                                     // get product image and details
@@ -364,6 +367,7 @@ class CartController extends Controller
                                         $image_path = $image -> path;
                                     }
                                     $product_obj = [
+                                        'id' => $product -> id,
                                         'name' => $product -> name,
                                         'price' => $product -> price,
                                         'amount' => $amount,
