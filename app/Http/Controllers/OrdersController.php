@@ -194,6 +194,9 @@ class OrdersController extends Controller
                 foreach($products_pharmacies as $deproduct){
                     $product_id = $deproduct['id'];
                     Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
+                    $existing = ProductPharmacy::find($product_id);
+                    $remaining = $existing -> amount - $deproduct['amount'];
+                    ProductPharmacy::where('id', $product_id)->update(['amount' => $remaining]);
                 }
                 $data += [
                     'success' => 'your orders have been sent'
@@ -398,6 +401,9 @@ class OrdersController extends Controller
                 foreach($products_pharmacies as $deproduct){
                     $product_id = $deproduct['id'];
                     Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
+                    $existing = ProductPharmacy::find($product_id);
+                    $remaining = $existing -> amount - $deproduct['amount'];
+                    ProductPharmacy::where('id', $product_id)->update(['amount' => $remaining]);
                 }
                 $data += [
                     'success' => 'your orders have been sent'
