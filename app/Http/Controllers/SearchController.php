@@ -39,24 +39,46 @@ class SearchController extends Controller
             $errors []  = [ 'auth' => 'authentication failed'];
         }
         else{
-            $doctors_count = User::where('full_name', 'LIKE', '%'. $name .'%')->where('role_id', '3')->count();
-            if($doctors_count == 0){
+            $spec_filter = $request -> speciality_id;
+            $city_filter = $request -> city_id;
+            $skip = $request -> skip;
+            $limit = $request -> limit;
+            $doctors_user = null;
+            if($city_filter != null){
+                $doctors_user = User::where('full_name', 'LIKE', '%'. $name .'%')
+                    ->where(['role_id' => 3, 'city_id' => $city_filter])
+                    ->orderBy('id', 'asc')
+                    ->skip($skip)
+                    ->take($limit)
+                    ->get();
+            }
+            else{
+                $doctors_user = User::where('full_name', 'LIKE', '%'. $name .'%')
+                    ->where('role_id', '3')
+                    ->orderBy('id', 'asc')
+                    ->skip($skip)
+                    ->take($limit)
+                    ->get();
+            }
+            if($doctors_user -> isEmpty()){
                 $isFailed = true;
-                $errors[] = [
+                $errors += [
                     'error' => 'no results'
                 ];
             }
             else{
-                $max = $doctors_count / 5;
-                for ($i=0; $i<= $max; $i++){
-                    $doctors = User::where('role_id', '3')
-                    ->where('full_name', 'LIKE', '%'. $name .'%')
-                    ->skip($i*5)
-                    ->take(5)
-                    ->get();
-                    foreach ($doctors as $doctor_user){
-                        $id = $doctor_user -> id;
+                foreach ($doctors_user as $doctor_user){
+                    $id = $doctor_user -> id;
+                    $doc = null;
+                    if($spec_filter != null){
+                        $doc = Doctor::where('user_id', $id)
+                            ->where('speciality_id', $spec_filter)
+                            ->first();
+                    }
+                    else{
                         $doc = Doctor::where('user_id', $id)->first();
+                    }
+                    if($doc != null){
                         $spec_id = $doc -> speciality_id;
                         $speciality = Speciality::where('id', $spec_id)->first();
                         if ($speciality == NULL){
@@ -115,6 +137,7 @@ class SearchController extends Controller
                         ];
                         $doctors_response[] = $doctor;
                     }
+
                 }
             }
             $specialities = Speciality::all();
@@ -267,24 +290,46 @@ class SearchController extends Controller
             $errors []  = [ 'auth' => 'authentication failed'];
         }
         else{
-            $doctors_count = User::where('full_name', 'LIKE', '%'. $name .'%')->where('role_id', '3')->count();
-            if($doctors_count == 0){
+            $spec_filter = $request -> speciality_id;
+            $city_filter = $request -> city_id;
+            $skip = $request -> skip;
+            $limit = $request -> limit;
+            $doctors_user = null;
+            if($city_filter != null){
+                $doctors_user = User::where('full_name', 'LIKE', '%'. $name .'%')
+                    ->where(['role_id' => 3, 'city_id' => $city_filter])
+                    ->orderBy('id', 'asc')
+                    ->skip($skip)
+                    ->take($limit)
+                    ->get();
+            }
+            else{
+                $doctors_user = User::where('full_name', 'LIKE', '%'. $name .'%')
+                    ->where('role_id', '3')
+                    ->orderBy('id', 'asc')
+                    ->skip($skip)
+                    ->take($limit)
+                    ->get();
+            }
+            if($doctors_user -> isEmpty()){
                 $isFailed = true;
-                $errors[] = [
+                $errors += [
                     'error' => 'no results'
                 ];
             }
             else{
-                $max = $doctors_count / 5;
-                for ($i=0; $i<= $max; $i++){
-                    $doctors = User::where('role_id', '3')
-                    ->where('full_name', 'LIKE', '%'. $name .'%')
-                    ->skip($i*5)
-                    ->take(5)
-                    ->get();
-                    foreach ($doctors as $doctor_user){
-                        $id = $doctor_user -> id;
+                foreach ($doctors_user as $doctor_user){
+                    $id = $doctor_user -> id;
+                    $doc = null;
+                    if($spec_filter != null){
+                        $doc = Doctor::where('user_id', $id)
+                            ->where('speciality_id', $spec_filter)
+                            ->first();
+                    }
+                    else{
                         $doc = Doctor::where('user_id', $id)->first();
+                    }
+                    if($doc != null){
                         $spec_id = $doc -> speciality_id;
                         $speciality = Speciality::where('id', $spec_id)->first();
                         if ($speciality == NULL){
@@ -343,6 +388,7 @@ class SearchController extends Controller
                         ];
                         $doctors_response[] = $doctor;
                     }
+
                 }
             }
             $specialities = Speciality::all();
