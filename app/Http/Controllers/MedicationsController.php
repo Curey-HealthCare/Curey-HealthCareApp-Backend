@@ -40,6 +40,8 @@ class MedicationsController extends Controller
 
         if($isFailed == false){
             $city_id = $user -> city_id;
+            $skip = $request -> skip;
+            $limit = $request -> limit;
             $pharmacies = User::where('city_id', $city_id)->where('role_id', '2')->get();
 
 
@@ -49,7 +51,7 @@ class MedicationsController extends Controller
                     $pharma = Pharmacy::where('user_id', $pharma_id)->first();
                     if($pharma != null){
                         $pharma_id =  $pharma -> id;
-                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->get();
+                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->orderBy('id', 'asc')->skip($skip)->take($limit)->get();
 
                         if($products_pharmacy != []){
                             foreach($products_pharmacy as $pro){
@@ -305,6 +307,8 @@ class MedicationsController extends Controller
 
         if($isFailed == false){
             $city_id = $user -> city_id;
+            $skip = $request -> skip;
+            $limit = $request -> limit;
             $pharmacies = User::where('city_id', $city_id)->where('role_id', '2')->get();
 
             if($pharmacies != []){
@@ -313,7 +317,7 @@ class MedicationsController extends Controller
                     $pharma = Pharmacy::where('user_id', $pharma_id)->first();
                     if($pharma != null){
                         $pharma_id =  $pharma -> id;
-                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->get();
+                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->orderBy('id', 'asc')->skip($skip)->take($limit)->get();
 
                         if($products_pharmacy != []){
                             foreach($products_pharmacy as $pro){
