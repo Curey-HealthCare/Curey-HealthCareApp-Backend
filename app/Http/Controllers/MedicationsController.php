@@ -51,7 +51,11 @@ class MedicationsController extends Controller
                     $pharma = Pharmacy::where('user_id', $pharma_id)->first();
                     if($pharma != null){
                         $pharma_id =  $pharma -> id;
-                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->orderBy('id', 'asc')->skip($skip)->take($limit)->get();
+                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)
+                            ->orderBy('id', 'asc')
+                            ->skip($skip)
+                            ->take($limit)
+                            ->get();
 
                         if($products_pharmacy != []){
                             foreach($products_pharmacy as $pro){
@@ -114,8 +118,13 @@ class MedicationsController extends Controller
                 ];
             }
 
+            $pro_res = [];
+            for($i = $skip; $i <= ($skip + $limit - 1); $i++){
+                $pro_res[] = $products_response[$i];
+            }
+
             $data = [
-                'products' => $products_response,
+                'products' => $pro_res,
                 'keywords' => $keywords_response,
             ];
         }
@@ -317,7 +326,11 @@ class MedicationsController extends Controller
                     $pharma = Pharmacy::where('user_id', $pharma_id)->first();
                     if($pharma != null){
                         $pharma_id =  $pharma -> id;
-                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->orderBy('id', 'asc')->skip($skip)->take($limit)->get();
+                        $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)
+                            ->orderBy('id', 'asc')
+                            ->skip($skip)
+                            ->take($limit)
+                            ->get();
 
                         if($products_pharmacy != []){
                             foreach($products_pharmacy as $pro){
@@ -380,9 +393,13 @@ class MedicationsController extends Controller
                     'name' => $key -> name,
                 ];
             }
+            $pro_res = [];
+            for($i = $skip; $i <= ($skip + $limit - 1); $i++){
+                $pro_res[] = $products_response[$i];
+            }
 
             $data = [
-                'products' => $products_response,
+                'products' => $pro_res,
                 'keywords' => $keywords_response,
             ];
         }
