@@ -233,7 +233,6 @@ class OrdersController extends Controller
             $order_tracking = OrderTracking::where('order_id', $order_id)->first();
             if($order_tracking == null){
                 OrderDetails::where(['order_id' => $order_id])->delete();
-                OrderTracking::where('order_id', $order_id)->delete();
                 Order::where('id', $order_id)->delete();
                 $data += [
                     'success' => 'order cancelled successfully'
@@ -492,7 +491,6 @@ class OrdersController extends Controller
             $order_tracking = OrderTracking::where('order_id', $order_id)->first();
             if($order_tracking == null){
                 OrderDetails::where(['order_id' => $order_id])->delete();
-                OrderTracking::where('order_id', $order_id)->delete();
                 Order::where('id', $order_id)->delete();
                 $data += [
                     'success' => 'order cancelled successfully'
