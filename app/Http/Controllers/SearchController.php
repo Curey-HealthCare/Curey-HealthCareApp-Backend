@@ -192,7 +192,22 @@ class SearchController extends Controller
         }
 
         if($isFailed == false){
-            $products = Product::where('name', 'LIKE', '%'. $name .'%')->get();
+            $skip = $request -> skip;
+            $limit = $request -> limit;
+            $keywords_filter = $request -> keywords;
+            if($keywords_filter != []){
+                $products_ids = ProductKeyword::select('product_id')->whereIn('keyword_id', $keywords_filter)->get();
+                $ids = [];
+                foreach($products_ids as $it){
+                    if(in_array($it -> product_id, $ids)){
+                        continue;
+                    }
+                    else{
+                        $ids[] = $it -> product_id;
+                    }
+                }
+            }
+            $products = Product::where('name', 'LIKE', '%'. $name .'%')->skip($skip)->take($limit)->get();
             if($products->isEmpty()){
                 $isFailed = true;
                 $errors[] = [
@@ -201,42 +216,83 @@ class SearchController extends Controller
             }
             else{
                 $products_response = [];
-                foreach($products as $pro){
+                if($keywords_filter != []){
+                    foreach($products as $pro){
+                        if(in_array($pro -> id, $ids)){
+                            $image_id = $pro -> image_id;
+                            $image = Image::where('id', $image_id)->first();
 
-                    $image_id = $pro -> image_id;
-                    $image = Image::where('id', $image_id)->first();
+                            if($image != null){
+                                $image_path = $image -> path;
+                            }
+                            else{
+                                $image_path = null;
+                            }
 
-                    if($image != null){
-                        $image_path = $image -> path;
-                    }
-                    else{
-                        $image_path = null;
-                    }
+                            $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
+                            $isFav = false;
+                            if($favourite != null){
+                                $isFav = true;
+                            }
+                            $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
+                            $keywords_ids = [];
+                            if($keywords -> isNotEmpty()){
+                                foreach($keywords as $keyword){
+                                    $keyword_id = $keyword -> keyword_id;
+                                    $keywords_ids[] = $keyword_id;
+                                }
+                            }
+                            $final_product = [
+                                'id' => $pro -> id,
+                                'name' => $pro -> name,
+                                'image' => $image_path,
+                                'price' => $pro -> price,
+                                'is_favourite' => $isFav,
+                                'keywords' => $keywords_ids,
+                            ];
 
-                    $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
-                    $isFav = false;
-                    if($favourite != null){
-                        $isFav = true;
-                    }
-                    $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
-                    $keywords_ids = [];
-                    if($keywords -> isNotEmpty()){
-                        foreach($keywords as $keyword){
-                            $keyword_id = $keyword -> keyword_id;
-                            $keywords_ids[] = $keyword_id;
+                            $products_response[] = $final_product;
                         }
                     }
-                    $final_product = [
-                        'id' => $pro -> id,
-                        'name' => $pro -> name,
-                        'image' => $image_path,
-                        'price' => $pro -> price,
-                        'is_favourite' => $isFav,
-                        'keywords' => $keywords_ids,
-                    ];
-
-                    $products_response[] = $final_product;
                 }
+                else{
+                    foreach($products as $pro){
+                        $image_id = $pro -> image_id;
+                        $image = Image::where('id', $image_id)->first();
+
+                        if($image != null){
+                            $image_path = $image -> path;
+                        }
+                        else{
+                            $image_path = null;
+                        }
+
+                        $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
+                        $isFav = false;
+                        if($favourite != null){
+                            $isFav = true;
+                        }
+                        $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
+                        $keywords_ids = [];
+                        if($keywords -> isNotEmpty()){
+                            foreach($keywords as $keyword){
+                                $keyword_id = $keyword -> keyword_id;
+                                $keywords_ids[] = $keyword_id;
+                            }
+                        }
+                        $final_product = [
+                            'id' => $pro -> id,
+                            'name' => $pro -> name,
+                            'image' => $image_path,
+                            'price' => $pro -> price,
+                            'is_favourite' => $isFav,
+                            'keywords' => $keywords_ids,
+                        ];
+
+                        $products_response[] = $final_product;
+                    }
+                }
+
             }
         }
         // get keywords for filters
@@ -443,7 +499,22 @@ class SearchController extends Controller
         }
 
         if($isFailed == false){
-            $products = Product::where('name', 'LIKE', '%'. $name .'%')->get();
+            $skip = $request -> skip;
+            $limit = $request -> limit;
+            $keywords_filter = $request -> keywords;
+            if($keywords_filter != []){
+                $products_ids = ProductKeyword::select('product_id')->whereIn('keyword_id', $keywords_filter)->get();
+                $ids = [];
+                foreach($products_ids as $it){
+                    if(in_array($it -> product_id, $ids)){
+                        continue;
+                    }
+                    else{
+                        $ids[] = $it -> product_id;
+                    }
+                }
+            }
+            $products = Product::where('name', 'LIKE', '%'. $name .'%')->skip($skip)->take($limit)->get();
             if($products->isEmpty()){
                 $isFailed = true;
                 $errors[] = [
@@ -452,46 +523,87 @@ class SearchController extends Controller
             }
             else{
                 $products_response = [];
-                foreach($products as $pro){
+                if($keywords_filter != []){
+                    foreach($products as $pro){
+                        if(in_array($pro -> id, $ids)){
+                            $image_id = $pro -> image_id;
+                            $image = Image::where('id', $image_id)->first();
 
-                    $image_id = $pro -> image_id;
-                    $image = Image::where('id', $image_id)->first();
+                            if($image != null){
+                                $image_path = $image -> path;
+                            }
+                            else{
+                                $image_path = null;
+                            }
 
-                    if($image != null){
-                        $image_path = $image -> path;
-                    }
-                    else{
-                        $image_path = null;
-                    }
+                            $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
+                            $isFav = false;
+                            if($favourite != null){
+                                $isFav = true;
+                            }
+                            $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
+                            $keywords_ids = [];
+                            if($keywords -> isNotEmpty()){
+                                foreach($keywords as $keyword){
+                                    $keyword_id = $keyword -> keyword_id;
+                                    $keywords_ids[] = $keyword_id;
+                                }
+                            }
+                            $final_product = [
+                                'id' => $pro -> id,
+                                'name' => $pro -> name,
+                                'image' => $image_path,
+                                'price' => $pro -> price,
+                                'is_favourite' => $isFav,
+                                'description' => $pro -> description,
+                                'keywords' => $keywords_ids,
+                            ];
 
-                    $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
-                    $isFav = false;
-                    if($favourite != null){
-                        $isFav = true;
-                    }
-                    $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
-                    $keywords_ids = [];
-                    if($keywords -> isNotEmpty()){
-                        foreach($keywords as $keyword){
-                            $keyword_id = $keyword -> keyword_id;
-                            $keywords_ids[] = $keyword_id;
+                            $products_response[] = $final_product;
                         }
                     }
-                    $final_product = [
-                        'id' => $pro -> id,
-                        'name' => $pro -> name,
-                        'image' => $image_path,
-                        'price' => $pro -> price,
-                        'is_favourite' => $isFav,
-                        'description' => $pro -> description,
-                        'keywords' => $keywords_ids,
-                    ];
-
-                    $products_response[] = $final_product;
                 }
+                else{
+                    foreach($products as $pro){
+                        $image_id = $pro -> image_id;
+                        $image = Image::where('id', $image_id)->first();
+
+                        if($image != null){
+                            $image_path = $image -> path;
+                        }
+                        else{
+                            $image_path = null;
+                        }
+
+                        $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
+                        $isFav = false;
+                        if($favourite != null){
+                            $isFav = true;
+                        }
+                        $keywords = ProductKeyword::where('product_id' , $pro -> id)->get();
+                        $keywords_ids = [];
+                        if($keywords -> isNotEmpty()){
+                            foreach($keywords as $keyword){
+                                $keyword_id = $keyword -> keyword_id;
+                                $keywords_ids[] = $keyword_id;
+                            }
+                        }
+                        $final_product = [
+                            'id' => $pro -> id,
+                            'name' => $pro -> name,
+                            'image' => $image_path,
+                            'price' => $pro -> price,
+                            'is_favourite' => $isFav,
+                            'description' => $pro -> description,
+                            'keywords' => $keywords_ids,
+                        ];
+
+                        $products_response[] = $final_product;
+                    }
+                }
+
             }
         }
-
         // get keywords for filters
         $keywords = Keyword::all();
 
@@ -507,7 +619,6 @@ class SearchController extends Controller
                 'keywords' => $keywords_response,
             ];
         }
-
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,
