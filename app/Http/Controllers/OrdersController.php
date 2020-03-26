@@ -11,6 +11,7 @@ use App\Product;
 use App\ProductPharmacy;
 use App\Image;
 use App\UserRole;
+use App\OrderTracking;
 
 class OrdersController extends Controller
 {

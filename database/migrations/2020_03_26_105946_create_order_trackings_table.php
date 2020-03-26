@@ -15,18 +15,18 @@ class CreateOrderTrackingsTable extends Migration
     {
         Schema::create('order_trackings', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('order_id');
-            $table->unsignedInteger('user_id');
-            $table->boolean('is_accepted');
-            $table->dateTime('accepted_at');
-            $table->boolean('is_prepared');
-            $table->dateTime('prepared_at');
-            $table->boolean('is_ofd');
-            $table->dateTime('ofd_at');
-            $table->boolean('is_waiting');
-            $table->dateTime('waiting_at');
-            $table->boolean('is_delivered');
-            $table->dateTime('delivered_at');
+            $table->unsignedInteger('order_id')->nullable(true);
+            $table->unsignedInteger('user_id')->nullable(true);
+            $table->boolean('is_accepted')->nullable(true);
+            $table->dateTime('accepted_at')->nullable(true);
+            $table->boolean('is_prepared')->nullable(true);
+            $table->dateTime('prepared_at')->nullable(true);
+            $table->boolean('is_ofd')->nullable(true);
+            $table->dateTime('ofd_at')->nullable(true);
+            $table->boolean('is_waiting')->nullable(true);
+            $table->dateTime('waiting_at')->nullable(true);
+            $table->boolean('is_delivered')->nullable(true);
+            $table->dateTime('delivered_at')->nullable(true);
             $table->timestamps();
 
 //            Constraints
