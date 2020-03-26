@@ -130,6 +130,7 @@ class CartController extends Controller
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
                                         'product_pharmacy_id' => $item -> product_id,
+                                        'count' => $product_pharmacy -> count,
                                     ];
 
                                     // get product image and details
@@ -358,6 +359,7 @@ class CartController extends Controller
                                         'address' => $pharmacy -> address,
                                         'image' => $p_image_path,
                                         'product_pharmacy_id' => $item -> product_id,
+                                        'count' => $product_pharmacy -> count,
                                     ];
 
                                     // get product image and details
