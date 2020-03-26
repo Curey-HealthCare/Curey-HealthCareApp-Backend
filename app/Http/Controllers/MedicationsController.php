@@ -119,8 +119,13 @@ class MedicationsController extends Controller
             }
 
             $pro_res = [];
-            for($i = $skip; $i <= ($skip + $limit - 1); $i++){
-                $pro_res[] = $products_response[$i];
+            if($skip >= count($products_response)){
+
+            }
+            else{
+                for($i = $skip; $i <= ($skip + $limit - 1); $i++){
+                    $pro_res[] = $products_response[$i];
+                }
             }
 
             $data = [
@@ -397,8 +402,13 @@ class MedicationsController extends Controller
                 ];
             }
             $pro_res = [];
-            for($i = $skip; $i <= ($skip + $limit - 1); $i++){
-                $pro_res[] = $products_response[$i];
+            if($skip >= count($products_response)){
+
+            }
+            else{
+                for($i = $skip; $i <= ($skip + $limit - 1); $i++){
+                    $pro_res[] = $products_response[$i];
+                }
             }
 
             $data = [

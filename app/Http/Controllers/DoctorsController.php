@@ -42,7 +42,7 @@ class DoctorsController extends Controller
 
         if ($isFailed == false){
             $skip = $request -> skip;
-            $limit  =$request -> limit;
+            $limit = $request -> limit;
             $city = $user -> city_id;
             $doctors = User::where('role_id', '3')->skip($skip)->take($limit)->get();
 
