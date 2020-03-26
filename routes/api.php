@@ -73,6 +73,8 @@ Route::group(['prefix' => '/mobile'], function(){
     //show orders page
     Route::get('/orders', 'OrdersController@mobileShowOrders');
     Route::post('/submit_order', 'OrdersController@mobileSubmit');
+    // cancel order
+    Route::post('/cancel_order', 'OrdersController@mobileCancelOrder');
                         // Cart functionailty
     Route::post('/add_item', 'CartController@mobileCreate');
     Route::post('/update_item', 'CartController@mobileUpdate');
@@ -161,6 +163,8 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/orders', 'OrdersController@webShowOrders');
     // Submit order
     Route::post('/submit_order', 'OrdersController@webSubmit');
+    // cancel order
+    Route::post('/cancel_order', 'OrdersController@webCancelOrder');
 
                         // Cart functionailty
     Route::post('/add_item', 'CartController@mobileCreate');
