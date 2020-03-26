@@ -249,6 +249,7 @@ class MedicationsController extends Controller
                                 'overall_rating' => $overall_rating,
                                 'city_id' => $pharmacy -> city_id,
                                 'product_pharmacy_id' => $pharmacy_product -> id,
+                                'count' => $pharmacy_product -> count,
                             ];
                             $pharmacies_response[] = $pharma;
                         }
@@ -524,6 +525,7 @@ class MedicationsController extends Controller
                                 'overall_rating' => $overall_rating,
                                 'city_id' => $pharmacy -> city_id,
                                 'product_pharmacy_id' => $pharmacy_product -> id,
+                                'count' => $pharmacy_product -> count,
                             ];
                             $pharmacies_response[] = $pharma;
                         }
