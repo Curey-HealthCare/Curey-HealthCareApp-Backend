@@ -213,6 +213,58 @@ class OrdersController extends Controller
         return response()->json($response);
     }
 
+    public function mobileCancelOrder(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            $order_id = $request -> order_id;
+            $order_tracking = OrderTracking::where('order_id', $order_id)->first();
+            if($order_tracking == null){
+                OrderDetails::where(['order_id' => $order_id])->delete();
+                OrderTracking::where('order_id', $order_id)->delete();
+                Order::where('id', $order_id)->delete();
+                $data += [
+                    'success' => 'order cancelled successfully'
+                ];
+            }
+            else{
+                if($order_tracking -> is_accepted == 1){
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'this order is getting prepared and can not be cancelled'
+                    ];
+                }
+                else{
+                    OrderDetails::where(['order_id' => $order_id])->delete();
+                    OrderTracking::where('order_id', $order_id)->delete();
+                    Order::where('id', $order_id)->delete();
+                    $data += [
+                        'success' => 'order cancelled successfully'
+                    ];
+                }
+            }
+        }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
     /* Web Tailored Functions */
     /* ***************************************************************************************************
     ******************************************************************************************************
@@ -411,6 +463,58 @@ class OrdersController extends Controller
             }
         }
 
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
+    public function webCancelOrder(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            $order_id = $request -> order_id;
+            $order_tracking = OrderTracking::where('order_id', $order_id)->first();
+            if($order_tracking == null){
+                OrderDetails::where(['order_id' => $order_id])->delete();
+                OrderTracking::where('order_id', $order_id)->delete();
+                Order::where('id', $order_id)->delete();
+                $data += [
+                    'success' => 'order cancelled successfully'
+                ];
+            }
+            else{
+                if($order_tracking -> is_accepted == 1){
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'this order is getting prepared and can not be cancelled'
+                    ];
+                }
+                else{
+                    OrderDetails::where(['order_id' => $order_id])->delete();
+                    OrderTracking::where('order_id', $order_id)->delete();
+                    Order::where('id', $order_id)->delete();
+                    $data += [
+                        'success' => 'order cancelled successfully'
+                    ];
+                }
+            }
+        }
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,
