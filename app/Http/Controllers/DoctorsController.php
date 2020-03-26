@@ -41,8 +41,10 @@ class DoctorsController extends Controller
 
 
         if ($isFailed == false){
+            $skip = $request -> skip;
+            $limit  =$request -> limit;
             $city = $user -> city_id;
-            $doctors = User::where('role_id', '3')->get();
+            $doctors = User::where('role_id', '3')->skip($skip)->take($limit)->get();
 
             if($doctors == null){
                 $isFailed = true;
@@ -331,8 +333,10 @@ class DoctorsController extends Controller
 
 
         if ($isFailed == false){
+            $skip = $request -> skip;
+            $limit  =$request -> limit;
             $city = $user -> city_id;
-            $doctors = User::where('role_id', '3')->get();
+            $doctors = User::where('role_id', '3')->skip($skip)->take($limit)->get();
 
             if($doctors == null){
                 $isFailed = true;
