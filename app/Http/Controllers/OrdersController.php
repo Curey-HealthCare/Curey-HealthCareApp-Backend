@@ -12,6 +12,7 @@ use App\ProductPharmacy;
 use App\Image;
 use App\UserRole;
 use App\OrderTracking;
+use App\Cart;
 
 class OrdersController extends Controller
 {
@@ -162,6 +163,9 @@ class OrdersController extends Controller
                     $order -> user_id = $user_id;
                     $order -> delivery_type = 1;
                     $order -> save();
+                    $order_tracking = new OrderTracking;
+                    $order_tracking -> user_id = $user -> id;
+                    $order_tracking -> order_id = $order -> id;
                     $products = [];
                     foreach ($products_pharmacies as $product_pharmacy) {
                         $pharmacy_id_request = $product_pharmacy['id'];
@@ -186,6 +190,10 @@ class OrdersController extends Controller
                         $order_detail -> amount = $pro['amount'];
                         $order_detail -> save();
                     }
+                }
+                foreach($products_pharmacies as $deproduct){
+                    $product_id = $deproduct['id'];
+                    Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
                 }
                 $data += [
                     'success' => 'your orders have been sent'
@@ -359,6 +367,9 @@ class OrdersController extends Controller
                     $order -> user_id = $user_id;
                     $order -> delivery_type = 1;
                     $order -> save();
+                    $order_tracking = new OrderTracking;
+                    $order_tracking -> user_id = $user -> id;
+                    $order_tracking -> order_id = $order -> id;
                     $products = [];
                     foreach ($products_pharmacies as $product_pharmacy) {
                         $pharmacy_id_request = $product_pharmacy['id'];
@@ -383,6 +394,10 @@ class OrdersController extends Controller
                         $order_detail -> amount = $pro['amount'];
                         $order_detail -> save();
                     }
+                }
+                foreach($products_pharmacies as $deproduct){
+                    $product_id = $deproduct['id'];
+                    Cart::where(['user_id' => $user -> id, 'product_id' => $product_id])->delete();
                 }
                 $data += [
                     'success' => 'your orders have been sent'
