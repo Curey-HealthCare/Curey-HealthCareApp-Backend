@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\ForgetPasswordMail;
+use Illuminate\Support\Facades\Mail;
 
 use App\User;
 use App\ForgetPassword;
@@ -35,6 +37,8 @@ class ForgetPasswordController extends Controller
                 $new_user_pass -> code = $code;
                 $new_user_pass -> save();
 
+                Mail::to($email)->send(new ForgetPasswordMail($code));
+
                 $data += [
                     'success' => 'check your email for the code',
                 ];
@@ -47,6 +51,8 @@ class ForgetPasswordController extends Controller
                         $old_count = ($user_pass -> count) + 1;
                         ForgetPassword::where('id', $user_pass -> id)
                             -> update(['count' => $old_count]);
+
+                        Mail::to($email)->send(new ForgetPasswordMail($user_pass -> code));
 
                         $data += [
                             'success' => 'check your email for the code, you have ' . (3 - $old_count) . ' tries',
@@ -70,6 +76,8 @@ class ForgetPasswordController extends Controller
                     $new_user_pass -> email = $email;
                     $new_user_pass -> code = $code;
                     $new_user_pass -> save();
+
+                    Mail::to($email)->send(new ForgetPasswordMail($code));
 
                     $data += [
                         'success' => 'check your email for the code',
