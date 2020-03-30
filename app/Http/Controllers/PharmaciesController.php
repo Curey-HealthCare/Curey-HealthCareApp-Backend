@@ -137,7 +137,7 @@ class PharmaciesController extends Controller
                           $image_path = null;
                         }
                         //quantity 
-                        $amount = OrderDetail::where('product_id',$pro -> id)->first(); 
+                        $amount = OrderDetail::where('product_id',$pro -> id)->count(); 
 
                         $product_response=[
                             'id'=>$pro-> id,
@@ -174,6 +174,112 @@ class PharmaciesController extends Controller
             }
         }
 
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+    public function WebMedication(Request $request)
+    {
+      //authentication 
+      $isFailed = false;
+      $data = [];
+      $errors =  [];
+      $api_token = $request -> api_token;
+      $user = null;
+      $user = User::where('api_token', $api_token)->first();
+
+      if ($user == null)
+      {
+          $isFailed = true;
+          $errors += [
+              'auth' => 'authentication failed'
+          ];
+      }
+      if ($isFailed == false)
+      {
+          $pharmacy_id = $user -> id;
+          $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
+          
+          if($pharmacy == null)
+          {
+              $isFailed = true;
+              $errors += [
+                  'pharmacy' => 'error'
+              ];
+          }
+          else
+          {
+            $pharma=[];
+            //pharmacy name 
+            $pharmacy_name = $user -> full_name;  
+            //no of reviews 
+            //ratings
+            $overall_rating = 0;
+            $rate = 0;
+            $reviewCount = 0;
+            $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
+            $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
+                foreach($orders as $order)
+                {
+                    $order_id = $order -> id;
+                    $rating = PharmacyRating::where('order_id', $order_id)->first();
+                    if($rating == null){
+                        continue;
+                    }
+                    else
+                    {
+                        $rate += $rating -> rating ;
+                    }
+                }
+              $overall_rating = $rate / $orders_count;
+              $review = $rating -> review;
+              $reviewCount = $review ->count();
+              //image 
+              $image_id = $user -> image_id;
+              $image = Image::where('id', $image_id)->first();
+              if($image != null)
+              {
+                  $image_path = $image -> path;
+              }
+              else
+              {
+                   $image_path = null;
+              }
+              $product_id = ProductPharmacy::where('pharmacy_id',$pharmacy_id)->first();
+              $products = Product::where('id',$product_id)->get();
+              $product_response = [];
+              foreach($products as $pro)
+              {
+                  //name 
+                  $pro_name = $pro -> name;
+                  //price
+                  $price = $pro -> price ;
+                  //amount
+                  $quantity = ProductPharmacy::where('product_id',$pro -> id)->count();
+                  $product_response=
+                  [
+                    'id'=> $pro -> id,
+                    'name'=>$pro_name,
+                    'price'=>$price,
+                    'quantity'=> $quantity
+                  ];
+              }
+              $pharma=[
+                'name' => $pharmacy_name,
+                  'raring'=>$overall_rating,
+                  'reviews'=>$reviewCount,
+                  'image'=>$image_path  
+              ];
+              $data += [
+                'pharmacy' => $pharma,
+                'product' =>  $product_response
+            ];
+            } 
+        } 
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,
