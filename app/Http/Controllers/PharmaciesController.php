@@ -288,7 +288,7 @@ class PharmaciesController extends Controller
 
         return response()->json($response);
     }
-    public function WebShowRequest()
+    public function WebShowRequest(Request $request)
     {
 
         $isFailed = false;
