@@ -171,7 +171,6 @@ class PharmaciesController extends Controller
                 'pharmacy' => $pharma,
                 'users' => $usersRe
             ];
-              
             }
         }
 
