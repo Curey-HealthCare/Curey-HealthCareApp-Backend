@@ -40,6 +40,7 @@ class PharmaciesController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
+       else{
         if ($isFailed == false)
         {
             $pharmacy_id = $user -> id;
@@ -95,8 +96,8 @@ class PharmaciesController extends Controller
                      $image_path = null;
                 }
                 $id = $orders -> id;
-                $is_delivered=OrderTracking::find($id -> order_id);
-                if($is_deliveried == '1')
+                $order_tracking=OrderTracking::find($id -> order_id);
+                if($order_tracking -> is_deliveried == '1')
               {      
                 $U_id = $orders-> user_id ;
                 $users = User::where('id',$U_id)->get();
@@ -169,7 +170,7 @@ class PharmaciesController extends Controller
                     'no of customers'=> $noOfCustomers ,
                 ];
               }
-              elseif($is_delivered=='0')
+              elseif($order_tracking -> is_delivered=='0')
               {
                 $o_id = $orders -> id;
                 $Us_id = $orders-> user_id ;
@@ -248,6 +249,7 @@ class PharmaciesController extends Controller
             ];
             }
         }
+      }  
 
         $response = [
             'isFailed' => $isFailed,
@@ -274,6 +276,8 @@ class PharmaciesController extends Controller
               'auth' => 'authentication failed'
           ];
       }
+      else
+      {
       if ($isFailed == false)
       {
           $pharmacy_id = $user -> id;
@@ -361,7 +365,7 @@ class PharmaciesController extends Controller
             'errors' => $errors
         ];
 
-        return response()->json($response);
+       }   return response()->json($response);
     }
    /* public function WebShowRequest(Request $request)
     {
@@ -522,5 +526,104 @@ class PharmaciesController extends Controller
         return response()->json($response);
     }*/
     
-    
+    public function webAcceptRequest(Request $request)
+    {
+         //authentication 
+      $isFailed = false;
+      $data = [];
+      $errors =  [];
+      $api_token = $request -> api_token;
+      $user = null;
+      $user = User::where('api_token', $api_token)->first();
+
+      if ($user == null)
+      {
+          $isFailed = true;
+          $errors += [
+              'auth' => 'authentication failed'
+          ];
+      }
+      
+      else
+      {
+        $pharmacy_id = $user -> id;
+        $pharmacy = Pharmacy::where('id',$user_id)->first();
+          
+          if($pharmacy == null)
+          {
+              $isFailed = true;
+              $errors += [
+                  'pharmacy' => 'no  requested orders'
+              ];
+          }
+          else 
+          {
+              
+            $order_id = Order::select('id')->where('pharmacy_id', $pharmacy_id)->first();
+            $request_order = OrderTracking::where('order_id', $order_id)->first();
+            foreach($request_order as $order)
+           {
+             if( $order -> is_delivered == '0')
+             {
+                if($order -> is_accepted == '1')
+                {   
+                    $Us_id = $order -> user_id;
+                    $user_info = new User;
+                    $user_info -> id =  $Us_id;
+                    $user_info -> full_name = $request-> full_name;
+                    $user_info -> address = $request-> address;
+                    $user_info -> image_id = $request -> image_id;
+                    $image = Image::where('id', $user_info -> image_id)->first();
+                    $image_path = null;
+                    if($image != null)
+                    {
+                     $image_path = $image -> path;
+                    }
+                    $user_info -> save();
+                   
+                    $product_id = OrderDetail::select('product_id')->where('order_id',$order_id)->first(); 
+                    $products = Product::where('id',$product_id)->get(); 
+                    
+                    foreach($products as $pro)
+                    {
+
+                        $product_info = new Product;
+                        $product_info -> id =  $pro -> id;
+                        $product_info -> name = $request -> name;
+                        $product_info -> image_id = $request -> image_id;
+                        $image = Image::where('id', $product_info -> image_id)->first();
+                        $image_path = null;
+                        if($image != null)
+                        {
+                          $image_path = $image -> path;
+                        }
+                        $product_info -> save();
+                        $order_detail = new OrderDetail;
+                        $order_detail -> order_id = $order -> id;
+                        $order_detail -> product_id = $pro -> id;
+                        $order_detail -> amount = $pro -> amount;
+                        $order_detail -> save();
+                    }
+            
+                }
+            
+            }
+                       
+         }
+                        $data += [
+                            'success' => 'your request have been accepted'
+                        ];
+          }
+      }
+     
+                $response = [
+                    'isFailed' => $isFailed,
+                    'data' => $data,
+                    'errors' => $errors
+                ];
+
+                return response()->json($response); 
+                                
+
+    }
 }
