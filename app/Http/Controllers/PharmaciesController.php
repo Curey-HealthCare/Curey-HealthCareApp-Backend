@@ -63,7 +63,11 @@ class PharmaciesController extends Controller
               $rate = 0;
               $reviewCount = 0;
               $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
+              //no of orders 
               $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
+              //no of customers 
+              $users_id = $orders -> user_id;
+              $noOfCustomers =  $users_id->count();
                   foreach($orders as $order)
                   {
                       $order_id = $order -> id;
@@ -90,8 +94,8 @@ class PharmaciesController extends Controller
                 {
                      $image_path = null;
                 }
-                $deliveried = $orders-> delivery_type;
-                if($deliveried == '1')
+                $is_delivered=OrderTracking::find($order_id -> order_id);
+                if($is_deliveried == '1')
               {      
                 $id = $orders -> id;
                 $U_id = $orders-> user_id ;
@@ -165,7 +169,9 @@ class PharmaciesController extends Controller
                   'name' => $pharmacy_name,
                   'raring'=>$overall_rating,
                   'reviews'=>$reviewCount,
-                  'image'=>$image_path
+                  'image'=>$image_path,
+                  'no of orders'=>$orders_count,
+                  'no of customers'=> $noOfCustomers ,
               ];
               $data += [
                 'pharmacy' => $pharma,
