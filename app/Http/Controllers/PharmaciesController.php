@@ -22,7 +22,7 @@ use App\Favourite;
 
 class PharmaciesController extends Controller
 {
-    public function WebShowStatement(Request $request)
+    public function WebShowAll(Request $request)
     {
         
         //authentication 
@@ -363,7 +363,7 @@ class PharmaciesController extends Controller
 
         return response()->json($response);
     }
-    public function WebShowRequest(Request $request)
+   /* public function WebShowRequest(Request $request)
     {
 
         $isFailed = false;
@@ -520,6 +520,7 @@ class PharmaciesController extends Controller
         ];
 
         return response()->json($response);
-    }
+    }*/
+    
     
 }
