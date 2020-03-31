@@ -171,5 +171,11 @@ Route::group(['prefix' => '/web'], function(){
     Route::post('/update_item', 'CartController@mobileUpdate');
     Route::post('/delete_item', 'CartController@mobileDelete');
     Route::get('/cart', 'CartController@mobileRead');
+                      //pharmacy dashboard for web
+     // pharmacy dashboard Page
+     Route::get('/pharmacy', 'pharmaciesController@WebShowAll');
+     //medication list
+    Route::get('/pharmacy/Medication', 'pharmaciesController@WebMedication');
+
 
 });
