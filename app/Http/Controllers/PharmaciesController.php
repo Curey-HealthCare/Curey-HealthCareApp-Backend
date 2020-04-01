@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 use App\User;
 use App\City;
 use App\Image;
@@ -22,16 +24,23 @@ use App\Favourite;
 
 class PharmaciesController extends Controller
 {
-    public function WebShowAll(Request $request)
+    public function WebPharmacyDashboard(Request $request)
     {
 
         //authentication
         $isFailed = false;
         $data = [];
         $errors =  [];
+
         $api_token = $request -> api_token;
         $user = null;
-        $user = User::where('api_token', $api_token)->first();
+        $user = User::where(['api_token' => $api_token, 'role_id' => 2])->first();
+
+        // Needed Variables
+        $overall_rating = 0;
+        $no_of_reviews = 0;
+        $image_pharmacy = null;
+        $performed = [];
 
         if ($user == null)
         {
@@ -41,8 +50,6 @@ class PharmaciesController extends Controller
             ];
         }
         else{
-        if ($isFailed == false)
-        {
             $pharmacy_id = $user -> id;
             $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
 
@@ -50,206 +57,103 @@ class PharmaciesController extends Controller
             {
                 $isFailed = true;
                 $errors += [
-                    'pharmacy' => 'error'
+                    'error' => 'can not retrieve data'
                 ];
             }
             else
             {
-                $pharma=[];
-              //pharmacy name
-                $pharmacy_name = $user -> full_name;
-              //no of reviews
-              //ratings
-                $overall_rating = 0;
-                $rate = 0;
-                $reviewCount = 0;
-                $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
-                //no of orders
-                $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
-                //no of customers
-                $users_id = $orders -> user_id;
-                $noOfCustomers =  $users_id->count();
-                    foreach($orders as $order)
-                    {
-                        $order_id = $order -> id;
-                        $rating = PharmacyRating::where('order_id', $order_id)->first();
-                        if($rating == null){
-                            continue;
-                        }
-                        else
-                        {
-                            $rate += $rating -> rating ;
-                        }
-                    }
-                    $overall_rating = $rate / $orders_count;
-                $review = $rating -> review;
-                $reviewCount = $review ->count();
-                //image
+                $pharma = [];
+                // get pharmacy image
                 $image_id = $user -> image_id;
                 $image = Image::where('id', $image_id)->first();
-                if($image != null)
-                {
-                    $image_path = $image -> path;
+                if($image != null){
+                    $image_pharmacy = $image -> path;
                 }
-                else
-                {
-                    $image_path = null;
+                else{
+                    $image_pharmacy = null;
                 }
-                $id = $orders -> id;
-                $order_tracking=OrderTracking::find($id -> order_id);
-                if($order_tracking -> is_deliveried == '1')
-            {
-                $U_id = $orders-> user_id ;
-                $users = User::where('id',$U_id)->get();
-                $user_response=[];
-                $statement_response=[];
-                foreach($users as $us)
-                {
-
-                   //name
-                    $name = $us -> full_name;
-                    //address
-                    $address = $us -> address;
-                    //rate
-                    $ph_rating = PharmacyRating::where('order_id',$id)->first();
-                    //image
-                    $image_id = $us -> image_id;
-                    $image = Image::where('id', $image_id)->first();
-                    if($image != null)
-                        {
-                        $image_path = $image -> path;
+                // get pharmacy overall rating and reviews
+                $ratings = 0;
+                $orders = Order::where('pharmacy_id', $pharmacy -> id)->get();
+                if($orders -> isNotEmpty()){
+                    foreach($orders as $order){
+                        $review = PharmacyRating::where('order_id', $order -> id)->first();
+                        if($review != null){
+                            $ratings += $review -> rating;
+                            $no_of_reviews += 1;
                         }
-                    else
-                        {
-                        $image_path = null;
-                        }
-                    //order details
-                    $Ord = OrderDetail::where('order_id',$id)->first();
-                    $product_id = $Ord -> product_id;
-                    $products = Product::where('id',$product_id)->get();
-                    $orders_response=[];
-                    foreach($products as $pro)
-                    {
-                        //name
-                        $pName = $pro -> name;
-                        //image
-                        $image_id = $pro -> image_id;
-                        $image = Image::where('id', $image_id)->first();
-                        if($image != null)
-                            {
-                            $image_path = $image -> path;
-                        }
-                        else
-                        {
-                            $image_path = null;
-                        }
-                        //quantity
-                        $amount = OrderDetail::where('product_id',$pro -> id)->count();
-
-                        $orders_response=[
-                            'id'=>$pro-> id,
-                            'name'=> $pName,
-                            'image'=>$image_path,
-                            'quantity'=>$amount
-                        ];
-
                     }
+                    $overall_rating = $ratings / $no_of_reviews;
 
-                    $user_response=[
-                        'id' => $us -> id,
-                        'name' => $name ,
-                        'address'=> $address,
-                        'image'=>$image_path,
-                        'rate'=>$ph_rating,
-                        'order details'=>$orders_response
-                    ];
+                    // get performed orders
+                    foreach($orders as $order){
+                        $order_tracking = OrderTracking::where(['order_id' => $order -> id])->first();
+                        if($order_tracking != null){
+                            if($order_tracking -> is_delivered == 1){
+                                // get the order details
 
-                }
-                $statement_response=[
-                    'no of orders'=>$orders_count,
-                    'no of customers'=> $noOfCustomers ,
-                ];
-            }
-            elseif($order_tracking -> is_delivered=='0')
-            {
-                $o_id = $orders -> id;
-                $Us_id = $orders-> user_id ;
-                $users = User::where('id',$Us_id)->get();
-                $user_response=[];
-                foreach($users as $or_us)
-                {
-                   //name
-                $name = $or_us -> full_name;
-                //address
-                $address = $or_us -> address;
-                //image
-                $image_id = $or_us -> image_id;
-                $image = Image::where('id', $image_id)->first();
-                if($image != null)
-                {
-                    $image_path = $image -> path;
-                }
-                else
-                {
-                    $image_path = null;
-                }
-                //order details
-                $Ord = OrderDetail::where('order_id',$o_id)->first();
-                $product_id = $Ord -> product_id;
-                $products = Product::where('id',$product_id)->get();
-                $product_response=[];
-                foreach($products as $product)
-                {
-                    //name
-                    $p_Name = $product -> name;
-                    //image
-                    $image_id = $product -> image_id;
-                    $image = Image::where('id', $image_id)->first();
-                    if($image != null)
-                    {
-                        $image_path = $image -> path;
-                    }
-                    else
-                    {
-                        $image_path = null;
+                                $order_data = [];
+                                $items = [];
+                                $order_details = OrderDetail::where('order_id', $order -> id)->get();
+                                if($order_details -> isNotEmpty()){
+                                    foreach($order_details as $order_product){
+                                        $product = Product::where('id', $order_product -> product_id)->first();
+                                        $product_image = null;
+                                        $p_image = Image::where('id', $product -> image_id)->first();
+                                        if($p_image != null){
+                                            $product_image = $p_image -> path;
+                                        }
+                                        else{
+                                            $product_image = null;
+                                        }
+                                        $item = [
+                                            'product' => $product -> name,
+                                            'image' => $product_image,
+                                            'amount' => $order_product -> amount,
+                                        ];
+                                        $items[] = $item;
+                                    }
+                                    $order_user = User::where('id', $order -> user_id)->first();
+                                    $user_image = null;
+                                    $u_image = Image::where('id', $order_user -> image_id)->first();
+                                    if($u_image != null){
+                                        $user_image = $u_image -> path;
+                                    }
+                                    else{
+                                        $user_image = null;
+                                    }
+                                    $order_data = [
+                                        'buyer' => $order_user -> full_name,
+                                        'address' => $order_user -> address,
+                                        'image' => $user_image,
+                                        'details' => $items
+                                    ];
+
+                                    $preformed[] = $order_data;
+                                }
+                            }
                         }
-                        //quantity
-                        $amount = OrderDetail::where('product_id',$product -> id)->count();
-
-                        $product_response=[
-                            'id'=>$product-> id,
-                            'name'=> $p_Name,
-                            'image'=>$image_path,
-                            'quantity'=>$amount
-                        ];
-
+                    }
                 }
 
-                $user_response=[
-                    'id' => $or_us -> id,
-                    'name' => $name ,
-                    'address'=> $address,
-                    'image'=>$image_path,
-                    'order details'=>$product_response
+                $pharma = [
+                    'name' => $user -> full_name,
+                    'image' => $image_pharmacy,
+                    'address' => $pharmacy -> address,
+                    'rating' => $overall_rating,
+                    'reviews_count' => $no_of_reviews,
                 ];
 
-                }
-
-                }
-                $pharma=[
-                    'name' => $pharmacy_name,
-                    'rating'=>$overall_rating,
-                    'reviews'=>$reviewCount,
-                    'image'=>$image_path,
-                ];
-                $data = [
-                    'pharmacy' => $pharma,
-                    'users' => $user_response,
-                    'statistics'=>$statement_response
-                ];
             }
         }
-    }
+
+
+        if($isFailed == false){
+            $data = [
+                'pharmacy' => $pharma,
+                'performed' => $performed
+            ];
+        }
 
         $response = [
             'isFailed' => $isFailed,
@@ -259,6 +163,8 @@ class PharmaciesController extends Controller
 
         return response()->json($response);
     }
+
+
     public function WebMedication(Request $request)
     {
       //authentication
@@ -367,6 +273,9 @@ class PharmaciesController extends Controller
 
         }   return response()->json($response);
     }
+
+
+
     /* public function WebShowRequest(Request $request)
     {
 
@@ -529,101 +438,100 @@ class PharmaciesController extends Controller
     public function webAcceptRequest(Request $request)
     {
          //authentication
-      $isFailed = false;
-      $data = [];
-      $errors =  [];
-      $api_token = $request -> api_token;
-      $user = null;
-      $user = User::where('api_token', $api_token)->first();
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
 
-      if ($user == null)
-      {
-          $isFailed = true;
-          $errors += [
-              'auth' => 'authentication failed'
-          ];
-      }
+        if ($user == null)
+        {
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
 
-      else
-      {
-        $pharmacy_id = $user -> id;
-        $pharmacy = Pharmacy::where('id',$user_id)->first();
+        else
+        {
+            $pharmacy_id = $user -> id;
+            $pharmacy = Pharmacy::where('id',$user_id)->first();
 
-          if($pharmacy == null)
-          {
-              $isFailed = true;
-              $errors += [
-                  'pharmacy' => 'no  requested orders'
-              ];
-          }
-          else
-          {
+            if($pharmacy == null)
+            {
+                $isFailed = true;
+                $errors += [
+                    'pharmacy' => 'no  requested orders'
+                ];
+            }
+            else
+            {
 
-            $order_id = Order::select('id')->where('pharmacy_id', $pharmacy_id)->first();
-            $request_order = OrderTracking::where('order_id', $order_id)->first();
-            foreach($request_order as $order)
-           {
-             if( $order -> is_delivered == '0')
-             {
-                if($order -> is_accepted == '1')
+                $order_id = Order::select('id')->where('pharmacy_id', $pharmacy_id)->first();
+                $request_order = OrderTracking::where('order_id', $order_id)->first();
+                foreach($request_order as $order)
+            {
+                if( $order -> is_delivered == '0')
                 {
-                    $Us_id = $order -> user_id;
-                    $user_info = new User;
-                    $user_info -> id =  $Us_id;
-                    $user_info -> full_name = $request-> full_name;
-                    $user_info -> address = $request-> address;
-                    $user_info -> image_id = $request -> image_id;
-                    $image = Image::where('id', $user_info -> image_id)->first();
-                    $image_path = null;
-                    if($image != null)
+                    if($order -> is_accepted == '1')
                     {
-                     $image_path = $image -> path;
-                    }
-                    $user_info -> save();
-
-                    $product_id = OrderDetail::select('product_id')->where('order_id',$order_id)->first();
-                    $products = Product::where('id',$product_id)->get();
-
-                    foreach($products as $pro)
-                    {
-
-                        $product_info = new Product;
-                        $product_info -> id =  $pro -> id;
-                        $product_info -> name = $request -> name;
-                        $product_info -> image_id = $request -> image_id;
-                        $image = Image::where('id', $product_info -> image_id)->first();
+                        $Us_id = $order -> user_id;
+                        $user_info = new User;
+                        $user_info -> id =  $Us_id;
+                        $user_info -> full_name = $request-> full_name;
+                        $user_info -> address = $request-> address;
+                        $user_info -> image_id = $request -> image_id;
+                        $image = Image::where('id', $user_info -> image_id)->first();
                         $image_path = null;
                         if($image != null)
                         {
-                          $image_path = $image -> path;
+                        $image_path = $image -> path;
                         }
-                        $product_info -> save();
-                        $order_detail = new OrderDetail;
-                        $order_detail -> order_id = $order -> id;
-                        $order_detail -> product_id = $pro -> id;
-                        $order_detail -> amount = $pro -> amount;
-                        $order_detail -> save();
+                        $user_info -> save();
+
+                        $product_id = OrderDetail::select('product_id')->where('order_id',$order_id)->first();
+                        $products = Product::where('id',$product_id)->get();
+
+                        foreach($products as $pro)
+                        {
+
+                            $product_info = new Product;
+                            $product_info -> id =  $pro -> id;
+                            $product_info -> name = $request -> name;
+                            $product_info -> image_id = $request -> image_id;
+                            $image = Image::where('id', $product_info -> image_id)->first();
+                            $image_path = null;
+                            if($image != null)
+                            {
+                            $image_path = $image -> path;
+                            }
+                            $product_info -> save();
+                            $order_detail = new OrderDetail;
+                            $order_detail -> order_id = $order -> id;
+                            $order_detail -> product_id = $pro -> id;
+                            $order_detail -> amount = $pro -> amount;
+                            $order_detail -> save();
+                        }
+
                     }
 
                 }
 
             }
+                            $data += [
+                                'success' => 'your request have been accepted'
+                            ];
+            }
+        }
 
-         }
-                        $data += [
-                            'success' => 'your request have been accepted'
-                        ];
-          }
-      }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
 
-                $response = [
-                    'isFailed' => $isFailed,
-                    'data' => $data,
-                    'errors' => $errors
-                ];
-
-                return response()->json($response);
-
+        return response()->json($response);
 
     }
 }
