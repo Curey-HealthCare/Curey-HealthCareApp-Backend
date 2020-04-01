@@ -182,5 +182,6 @@ Route::group(['prefix' => '/web'], function(){
 
     // packing list
     Route::get('/packing_list', 'PharmaciesController@webPackingList');
+    Route::post('/order_ready', 'PharmaciesController@webOrderReady');
 
 });

@@ -453,5 +453,42 @@ class PharmaciesController extends Controller
         return response()->json($response);
     }
 
+    public function webOrderReady(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where(['api_token' => $api_token, 'role_id' => 2])->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            $order_id = $request -> order_id;
+            OrderTracking::where('order_id', $order_id)
+                ->update(
+                    [
+                        'is_prepared' => 1,
+                        'prepared_at' => Carbon::now(),
+                        'is_ofd' => 1,
+                        'ofd_at' => Carbon::now()
+                    ]);
+            $data += [
+                'success' => 'order ready for delivery'
+            ];
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
 
 }
