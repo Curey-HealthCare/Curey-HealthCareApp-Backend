@@ -180,4 +180,7 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/requests', 'PharmaciesController@webRequests');
     Route::post('/accept_request', 'PharmaciesController@webAcceptRequest');
 
+    // packing list
+    Route::get('/packing_list', 'PharmaciesController@webPackingList');
+
 });
