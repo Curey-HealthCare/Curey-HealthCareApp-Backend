@@ -173,10 +173,11 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/cart', 'CartController@mobileRead');
                       //pharmacy dashboard for web
      // pharmacy dashboard Page
-    Route::get('/pharmacy_dashboard', 'pharmaciesController@WebPharmacyDashboard');
+    Route::get('/pharmacy_dashboard', 'PharmaciesController@WebPharmacyDashboard');
      //medication list
-    Route::get('/stock', 'pharmaciesController@webStock');
-    //accept request
-    Route::post('/accept_request', 'pharmaciesController@webAcceptRequest');
+    Route::get('/stock', 'PharmaciesController@webStock');
+    //requests
+    Route::get('/requests', 'PharmaciesController@webRequests');
+    Route::post('/accept_request', 'PharmaciesController@webAcceptRequest');
 
 });

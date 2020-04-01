@@ -232,154 +232,84 @@ class PharmaciesController extends Controller
 
 
 
-    /* public function WebShowRequest(Request $request)
-    {
-
+    public function WebRequests(Request $request){
         $isFailed = false;
         $data = [];
         $errors =  [];
+
         $api_token = $request -> api_token;
         $user = null;
-        $user = User::where('api_token', $api_token)->first();
+        $user = User::where(['api_token' => $api_token, 'role_id' => 2])->first();
 
-        if ($user == null)
-        {
+        // needed variables
+        $requests = [];
+
+        if ($user == null){
             $isFailed = true;
             $errors += [
                 'auth' => 'authentication failed'
             ];
         }
-        if ($isFailed == false)
-        {
+        else{
             $pharmacy_id = $user -> id;
             $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
+            $orders = Order::where('pharmacy_id', $pharmacy -> id)->get();
+            if($orders -> isNotEmpty()){
+                // get new orders
+                foreach($orders as $order){
+                    $order_tracking = OrderTracking::where(['order_id' => $order -> id])->first();
+                    if($order_tracking != null){
+                        if($order_tracking -> is_accepted == 0 || $order_tracking -> is_accepted == null){
+                            // get the order details
+                            $order_data = [];
+                            $items = [];
+                            $order_details = OrderDetail::where('order_id', $order -> id)->get();
+                            if($order_details -> isNotEmpty()){
+                                foreach($order_details as $order_product){
+                                    $product = Product::where('id', $order_product -> product_id)->first();
+                                    $product_image = null;
+                                    $p_image = Image::where('id', $product -> image_id)->first();
+                                    if($p_image != null){
+                                        $product_image = $p_image -> path;
+                                    }
+                                    else{
+                                        $product_image = null;
+                                    }
+                                    $item = [
+                                        'product' => $product -> name,
+                                        'image' => $product_image,
+                                        'amount' => $order_product -> amount,
+                                    ];
+                                    $items[] = $item;
+                                }
+                                $order_user = User::where('id', $order -> user_id)->first();
+                                $user_image = null;
+                                $u_image = Image::where('id', $order_user -> image_id)->first();
+                                if($u_image != null){
+                                    $user_image = $u_image -> path;
+                                }
+                                else{
+                                    $user_image = null;
+                                }
+                                $order_data = [
+                                    'id' => $order -> id,
+                                    'buyer' => $order_user -> full_name,
+                                    'address' => $order_user -> address,
+                                    'image' => $user_image,
+                                    'details' => $items,
+                                    'timestamp' => $order -> created_at,
+                                ];
 
-            if($pharmacy == null)
-            {
-                $isFailed = true;
-                $errors += [
-                    'pharmacy' => 'error'
-                ];
-            }
-            else
-            {
-              $pharma=[];
-              //pharmacy name
-              $pharmacy_name = $user -> full_name;
-              //no of reviews
-              //ratings
-              $overall_rating = 0;
-              $rate = 0;
-              $reviewCount = 0;
-              $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
-              $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
-                  foreach($orders as $order)
-                  {
-                      $order_id = $order -> id;
-                      $rating = PharmacyRating::where('order_id', $order_id)->first();
-                      if($rating == null){
-                          continue;
-                      }
-                      else
-                      {
-                          $rate += $rating -> rating ;
-                      }
-                  }
-                $overall_rating = $rate / $orders_count;
-                $review = $rating -> review;
-                $reviewCount = $review ->count();
-                //image
-                $image_id = $user -> image_id;
-                $image = Image::where('id', $image_id)->first();
-                if($image != null)
-                {
-                    $image_path = $image -> path;
-                }
-                else
-                {
-                     $image_path = null;
-                }
-                $deliveried = $orders-> delivery_type;
-                if($deliveried == '0')
-              {
-                $id = $orders -> id;
-                $U_id = $orders-> user_id ;
-                $users = User::where('id',$U_id)->get();
-                $user_response=[];
-                foreach($users as $us)
-                {
-
-                   //name
-                   $name = $us -> full_name;
-                   //address
-                   $address = $us -> address;
-                   //image
-                   $image_id = $us -> image_id;
-                   $image = Image::where('id', $image_id)->first();
-                   if($image != null)
-                    {
-                      $image_path = $image -> path;
-                    }
-                   else
-                    {
-                      $image_path = null;
-                    }
-                   //order details
-                   $Ord = OrderDetail::where('order_id',$id)->first();
-                   $product_id = $Ord -> product_id;
-                   $products = Product::where('id',$product_id)->get();
-                   $product_response=[];
-                   foreach($products as $pro)
-                   {
-                       //name
-                       $pName = $pro -> name;
-                       //image
-                       $image_id = $pro -> image_id;
-                       $image = Image::where('id', $image_id)->first();
-                       if($image != null)
-                        {
-                          $image_path = $image -> path;
+                                $requests[] = $order_data;
+                            }
                         }
-                        else
-                        {
-                          $image_path = null;
-                        }
-                        //quantity
-                        $amount = OrderDetail::where('product_id',$pro -> id)->count();
-
-                        $product_response=[
-                            'id'=>$pro-> id,
-                            'name'=> $pName,
-                            'image'=>$image_path,
-                            'quantity'=>$amount
-                        ];
-
-                   }
-
-                   $user_response=[
-                       'id' => $us -> id,
-                       'name' => $name ,
-                       'address'=> $address,
-                       'image'=>$image_path
-
-                   ];
-                   $usersRe += [
-                    'user' => $user_response,
-                    'products' => $product_response
-                       ];
+                    }
                 }
-              }
-              $pharma=[
-                  'name' => $pharmacy_name,
-                  'raring'=>$overall_rating,
-                  'reviews'=>$reviewCount,
-                  'image'=>$image_path
-              ];
-              $data += [
-                'pharmacy' => $pharma,
-                'users' => $usersRe
-            ];
             }
+        }
+
+        if($isFailed == false){
+            $data = $requests;
         }
 
         $response = [
@@ -389,7 +319,7 @@ class PharmaciesController extends Controller
         ];
 
         return response()->json($response);
-    }*/
+    }
 
     public function webAcceptRequest(Request $request)
     {
