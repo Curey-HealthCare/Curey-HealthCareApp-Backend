@@ -24,8 +24,7 @@ use App\Favourite;
 
 class PharmaciesController extends Controller
 {
-    public function WebPharmacyDashboard(Request $request)
-    {
+    public function WebPharmacyDashboard(Request $request){
 
         //authentication
         $isFailed = false;
@@ -42,8 +41,7 @@ class PharmaciesController extends Controller
         $image_pharmacy = null;
         $performed = [];
 
-        if ($user == null)
-        {
+        if ($user == null){
             $isFailed = true;
             $errors += [
                 'auth' => 'authentication failed'
@@ -165,27 +163,26 @@ class PharmaciesController extends Controller
     }
 
 
-    public function WebMedication(Request $request)
-    {
-      //authentication
+    public function webStock(Request $request){
         $isFailed = false;
         $data = [];
         $errors =  [];
+
         $api_token = $request -> api_token;
         $user = null;
-        $user = User::where('api_token', $api_token)->first();
+        $user = User::where(['api_token' => $api_token, 'role_id' => 2])->first();
 
-        if ($user == null)
-        {
+        // needed variables
+        $ph_stock = [];
+
+        if ($user == null){
             $isFailed = true;
             $errors += [
                 'auth' => 'authentication failed'
             ];
         }
-        else
-        {
-        if ($isFailed == false)
-        {
+        else{
+
             $pharmacy_id = $user -> id;
             $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
 
@@ -193,85 +190,44 @@ class PharmaciesController extends Controller
             {
                 $isFailed = true;
                 $errors += [
-                    'pharmacy' => 'error'
+                    'error' => 'can not retrieve data'
                 ];
             }
             else
             {
-                $pharma=[];
-                //pharmacy name
-                $pharmacy_name = $user -> full_name;
-                //no of reviews
-                //ratings
-                $overall_rating = 0;
-                $rate = 0;
-                $reviewCount = 0;
-                $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
-                $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
-                    foreach($orders as $order)
-                    {
-                        $order_id = $order -> id;
-                        $rating = PharmacyRating::where('order_id', $order_id)->first();
-                        if($rating == null){
-                            continue;
-                        }
-                        else
-                        {
-                            $rate += $rating -> rating ;
-                        }
+                // get the pharmacy stock
+                $stock = ProductPharmacy::where('pharmacy_id', $pharmacy -> id)->get();
+                if($stock -> isNotEmpty()){
+                    foreach($stock as $item){
+                        $product = Product::where('id', $item -> product_id)->first();
+                        $ph_stock[] = [
+                            'name' => $product -> name,
+                            'amount' => $item -> count,
+                            'price' => $product -> price,
+                        ];
                     }
-                $overall_rating = $rate / $orders_count;
-                $review = $rating -> review;
-                $reviewCount = $review ->count();
-                //image
-                $image_id = $user -> image_id;
-                $image = Image::where('id', $image_id)->first();
-                if($image != null)
-                {
-                    $image_path = $image -> path;
                 }
-                else
-                {
-                    $image_path = null;
-                }
-                $product_id = ProductPharmacy::where('pharmacy_id',$pharmacy_id)->first();
-                $products = Product::where('id',$product_id)->get();
-                $product_response = [];
-                foreach($products as $pro)
-                {
-                    //name
-                    $pro_name = $pro -> name;
-                    //price
-                    $price = $pro -> price ;
-                    //amount
-                    $quantity = ProductPharmacy::where('product_id',$pro -> id)->count();
-                    $product_response=
-                    [
-                        'id'=> $pro -> id,
-                        'name'=>$pro_name,
-                        'price'=>$price,
-                        'quantity'=> $quantity
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'no stock available in database'
                     ];
                 }
-                $pharma=[
-                    'name' => $pharmacy_name,
-                    'raring'=>$overall_rating,
-                    'reviews'=>$reviewCount,
-                    'image'=>$image_path
-                ];
-                $data += [
-                    'pharmacy' => $pharma,
-                    'product' =>  $product_response
-                ];
-                }
             }
-            $response = [
-                'isFailed' => $isFailed,
-                'data' => $data,
-                'errors' => $errors
-            ];
 
-        }   return response()->json($response);
+        }
+
+        if($isFailed == false){
+            $data = $ph_stock;
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
     }
 
 

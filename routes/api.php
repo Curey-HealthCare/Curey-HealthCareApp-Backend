@@ -175,7 +175,7 @@ Route::group(['prefix' => '/web'], function(){
      // pharmacy dashboard Page
     Route::get('/pharmacy_dashboard', 'pharmaciesController@WebPharmacyDashboard');
      //medication list
-    Route::get('/pharmacy/Medication', 'pharmaciesController@WebMedication');
+    Route::get('/stock', 'pharmaciesController@webStock');
     //accept request
     Route::post('/accept_request', 'pharmaciesController@webAcceptRequest');
 
