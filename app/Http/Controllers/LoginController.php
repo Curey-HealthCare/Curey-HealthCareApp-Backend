@@ -87,30 +87,9 @@ class LoginController extends Controller
                     $data = [
                         'api_token' => $api_token,
                         'full_name' => $existing_data -> full_name,
-                        'image' => $image_path
+                        'image' => $image_path,
+                        'role' => $existing_data -> role_id,
                     ];
-
-                    /*
-                    if ($role_id == '1'){
-                        $data = [
-                            'user' => $existing_data
-                        ];
-                    }
-                    elseif ($role_id == '2'){
-                        $pharmacy = Pharmacy::where('user_id', $existing_data -> id)->first();
-                        $data = [
-                            'user' => $existing_data,
-                            'pharmacy' => $pharmacy
-                        ];
-                    }
-                    elseif ($role_id == '3'){
-                        $doctor = Doctor::where('user_id', $existing_data -> id)->first();
-                        $data = [
-                            'user' => $existing_data,
-                            'doctor' => $doctor
-                        ];
-                    }
-                    */
                 }
                 else{
                     $errors = [
