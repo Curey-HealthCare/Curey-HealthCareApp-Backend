@@ -188,4 +188,6 @@ Route::group(['prefix' => '/web'], function(){
     // doctor Dashboard
     Route::get('/doctor_dashboard', 'DoctorDashboardController@webDashboard');
 
+    // doctor schedule
+    Route::post('/add_schedule', 'ScheduleController@webCreate');
 });
