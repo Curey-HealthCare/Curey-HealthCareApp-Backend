@@ -41,7 +41,7 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::get('/signup', 'SignupController@show');
 
     // Login
-    Route::post('/userLogin', 'LoginController@mobileLogin');
+    Route::post('/login', 'LoginController@mobileLogin');
     // Logout
     Route::post('/logout', 'LoginController@logout');
 
@@ -110,7 +110,7 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/signup', 'SignupController@show');
 
     // User Login
-    Route::post('/userLogin', 'LoginController@webLogin');
+    Route::post('/login', 'LoginController@webLogin');
     // Logout
     Route::post('/logout', 'LoginController@logout');
 
