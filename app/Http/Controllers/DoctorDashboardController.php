@@ -57,8 +57,8 @@ class DoctorDashboardController extends Controller
                 }
 
                 // get ratings
-                $all_appointments = Appointment::where('doctor_id', $id)->get();
-                $appointments_count = Appointment::where('doctor_id', $id)->count();
+                $all_appointments = Appointment::where('doctor_id', $doctor -> id)->get();
+                $appointments_count = Appointment::where('doctor_id', $doctor -> id)->count();
                 $overall_rating = 0;
                 if($all_appointments == null && $appointments_count == 0){
                     $overall_rating = 0;
@@ -97,34 +97,35 @@ class DoctorDashboardController extends Controller
                     'rating' => $overall_rating,
                     'no_reviews' => $review_count,
                 ];
-            }
 
-            // get all performed appointments
-            $past_appointments = Appointment::where(['doctor_id' => $doctor -> id, 'appointment_time', '<', Carbon::now()])->get();
-            if($past_appointments -> isNotEmpty()){
-                foreach($past_appointments as $app){
-                    // get patient data
-                    $patient = User::where('id', $app -> user_id)->first();
-                    $p_image_path = null;
-                    $p_image = Image::where('id', $patient -> image_id)->first();
-                    if($p_image != null){
-                        $p_image_path = $p_image -> path;
+                // get all performed appointments
+                $past_appointments = Appointment::where(['doctor_id' => $doctor -> id,])
+                    ->where('appointment_time', '<', Carbon::now())->get();
+                if($past_appointments -> isNotEmpty()){
+                    foreach($past_appointments as $app){
+                        // get patient data
+                        $patient = User::where('id', $app -> user_id)->first();
+                        $p_image_path = null;
+                        $p_image = Image::where('id', $patient -> image_id)->first();
+                        if($p_image != null){
+                            $p_image_path = $p_image -> path;
+                        }
+                        $past_app = [
+                            'patient' => $patient -> full_name,
+                            'address' => $patient -> address,
+                            'image' => $p_image_path,
+                            'timestamp' => $app -> appointment_time,
+                            'home_visit' => $app -> is_callup,
+                            're_examination' => $app -> re_examination,
+                        ];
+
+                        $past[] = $past_app;
                     }
-                    $past_app = [
-                        'patient' => $patient -> full_name,
-                        'address' => $patient -> address,
-                        'image' => $p_image_path,
-                        'timestamp' => $app -> appointment_time,
-                        'home_visit' => $app -> is_callup,
-                        're_examination' => $app -> re_examination,
-                    ];
-
-                    $past[] = $past_app;
                 }
-            }
-            else{
-                $isFailed = true;
-                $errors += [];
+                // else{
+                //     $isFailed = true;
+                //     $errors += [];
+                // }
             }
         }
 

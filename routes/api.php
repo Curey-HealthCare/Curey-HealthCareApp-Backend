@@ -184,4 +184,8 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/packing_list', 'PharmaciesController@webPackingList');
     Route::post('/order_ready', 'PharmaciesController@webOrderReady');
 
+    // *********************************************************** //
+    // doctor Dashboard
+    Route::get('/doctor_dashboard', 'DoctorDashboardController@webDashboard');
+
 });
