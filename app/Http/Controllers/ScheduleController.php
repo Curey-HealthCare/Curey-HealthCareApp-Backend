@@ -57,7 +57,53 @@ class ScheduleController extends Controller
 
         return response()->json($response);
     }
-    public function webRead(Reqest $request){
+    public function webRead(Request $request){
+        //authentication
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        // Global variables
+        $days = [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
+        if($user == null){
+            $isFailed = true;
+            $errors += [
+                'error' => 'authentication failed'
+            ];
+        }
+        else{
+            $existing_schedule = TimeTable::where('user_id', $user -> id)->get();
+            if($existing_schedule -> isNotEmpty()){
+                foreach($existing_schedule as $day){
+                    $the_day = Day::where('id', $day -> day_id)->first();
+                    if($the_day != null){
+                        $schedule = [
+                            'day' => $the_day -> name,
+                            'from' => $day -> from,
+                            'to' => $day -> to,
+                        ];
+                        $days[] = $schedule;
+                    }
+                }
+            }
+        }
+        if($isFailed == false){
+            $data = $days;
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+    public function webUpdate(Request $request){
         //authentication
         $isFailed = false;
         $data = [];
@@ -74,6 +120,9 @@ class ScheduleController extends Controller
                 'error' => 'authentication failed'
             ];
         }
+        else{
+
+        }
 
         $response = [
             'isFailed' => $isFailed,
@@ -83,7 +132,7 @@ class ScheduleController extends Controller
 
         return response()->json($response);
     }
-    public function webUpdate(Reqest $request){
+    public function webDelete(Request $request){
         //authentication
         $isFailed = false;
         $data = [];
@@ -100,31 +149,8 @@ class ScheduleController extends Controller
                 'error' => 'authentication failed'
             ];
         }
+        else{
 
-        $response = [
-            'isFailed' => $isFailed,
-            'data' => $data,
-            'errors' => $errors
-        ];
-
-        return response()->json($response);
-    }
-    public function webDelete(Reqest $request){
-        //authentication
-        $isFailed = false;
-        $data = [];
-        $errors =  [];
-
-        // Global variables
-
-        $api_token = $request -> api_token;
-        $user = null;
-        $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
-        if($user == null){
-            $isFailed = true;
-            $errors += [
-                'error' => 'authentication failed'
-            ];
         }
 
         $response = [
