@@ -193,4 +193,7 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/schedule', 'ScheduleController@webRead');
     Route::post('/update_day', 'ScheduleController@webUpdate');
     Route::post('/delete_day', 'ScheduleController@webDelete');
+
+    // home visit status
+    Route::post('/homevisit_status', 'ScheduleController@webHomeVisitStatus');
 });

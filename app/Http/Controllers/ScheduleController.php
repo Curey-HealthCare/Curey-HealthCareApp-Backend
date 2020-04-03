@@ -167,4 +167,39 @@ class ScheduleController extends Controller
 
         return response()->json($response);
     }
+
+    public function webHomeVisitStatus(Request $request){
+        //authentication
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        // Global variables
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
+        if($user == null){
+            $isFailed = true;
+            $errors += [
+                'error' => 'authentication failed'
+            ];
+        }
+        else{
+            $doctor = Doctor::where('user_id', $user -> id)->first();
+            if($doctor != null){
+                Doctor::where('user_id', $user -> id)->update([
+                    'offers_callup' => $request -> status,
+                ]);
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
 }
