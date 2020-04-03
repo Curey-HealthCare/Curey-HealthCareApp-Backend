@@ -82,6 +82,7 @@ class ScheduleController extends Controller
                     $the_day = Day::where('id', $day -> day_id)->first();
                     if($the_day != null){
                         $schedule = [
+                            'id' => $day -> id,
                             'day' => $the_day -> name,
                             'from' => $day -> from,
                             'to' => $day -> to,
@@ -121,7 +122,11 @@ class ScheduleController extends Controller
             ];
         }
         else{
-
+            $record_id = $request -> day_id;
+            TimeTable::where('id', $record_id)->update([
+                'from' => $request -> from,
+                'to' => $request -> to,
+            ]);
         }
 
         $response = [

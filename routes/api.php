@@ -191,4 +191,5 @@ Route::group(['prefix' => '/web'], function(){
     // doctor schedule
     Route::post('/add_schedule', 'ScheduleController@webCreate');
     Route::get('/schedule', 'ScheduleController@webRead');
+    Route::post('/update_day', 'ScheduleController@webUpdate');
 });
