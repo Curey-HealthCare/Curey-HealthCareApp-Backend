@@ -155,7 +155,8 @@ class ScheduleController extends Controller
             ];
         }
         else{
-
+            $record_id = $request -> day_id;
+            TimeTable::where('id', $record_id)->delete();
         }
 
         $response = [

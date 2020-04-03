@@ -192,4 +192,5 @@ Route::group(['prefix' => '/web'], function(){
     Route::post('/add_schedule', 'ScheduleController@webCreate');
     Route::get('/schedule', 'ScheduleController@webRead');
     Route::post('/update_day', 'ScheduleController@webUpdate');
+    Route::post('/delete_day', 'ScheduleController@webDelete');
 });
