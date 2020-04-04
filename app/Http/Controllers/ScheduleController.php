@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Image;
 use App\Doctor;
-use App\Timetable;
+use App\TimeTable;
 use App\Day;
 
 class ScheduleController extends Controller
