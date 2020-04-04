@@ -91,6 +91,9 @@ class ScheduleController extends Controller
                     }
                 }
             }
+            else{
+                $isFailed = true;
+            }
         }
         if($isFailed == false){
             $data = $days;
