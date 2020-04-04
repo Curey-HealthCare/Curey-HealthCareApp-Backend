@@ -77,7 +77,10 @@ class ScheduleController extends Controller
         }
         else{
             $existing_schedule = TimeTable::where('user_id', $user -> id)->get();
-            if($existing_schedule -> isNotEmpty()){
+            if($existing_schedule -> isEmpty()){
+                $isFailed = true;
+            }
+            else{
                 foreach($existing_schedule as $day){
                     $the_day = Day::where('id', $day -> day_id)->first();
                     if($the_day != null){
@@ -90,9 +93,6 @@ class ScheduleController extends Controller
                         $days[] = $schedule;
                     }
                 }
-            }
-            else{
-                $isFailed = true;
             }
         }
         if($isFailed == false){
