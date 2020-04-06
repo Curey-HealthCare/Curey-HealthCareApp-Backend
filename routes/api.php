@@ -196,4 +196,8 @@ Route::group(['prefix' => '/web'], function(){
 
     // home visit status
     Route::post('/homevisit_status', 'ScheduleController@webHomeVisitStatus');
+
+    // doctor appointments
+    Route::get('/doctor/requests', 'DoctorAppointmentsController@webReadRequests');
+    Route::get('/doctor/re_examinations', 'DoctorAppointmentsController@webReadReExamination');
 });

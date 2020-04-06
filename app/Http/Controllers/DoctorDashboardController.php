@@ -111,6 +111,7 @@ class DoctorDashboardController extends Controller
                             $p_image_path = $p_image -> path;
                         }
                         $past_app = [
+                            'id' => $app -> id,
                             'patient' => $patient -> full_name,
                             'address' => $patient -> address,
                             'image' => $p_image_path,
