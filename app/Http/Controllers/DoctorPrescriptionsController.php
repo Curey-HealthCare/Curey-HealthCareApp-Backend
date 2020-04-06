@@ -136,7 +136,34 @@ class DoctorPrescriptionsController extends Controller
         else{
             $doctor = Doctor::where('user_id', $user -> id)->first();
             if($doctor != null){
-
+                $items = $request -> items;
+                if($request -> appointment_id != null){
+                    if($items != []){
+                        $prescription = new DrPrescription;
+                        $prescription -> appointment_id = $request -> appointment_id;
+                        if($prescription -> save()){
+                            foreach($items as $item){
+                                $pres_detail = new PrescriptionDe;
+                                $pres_detail -> prescription_id = $prescription -> id;
+                                $pres_detail -> product_id = $item['product_id'];
+                                $pres_detail -> dosage = $item['dosage'];
+                                $pres_detail -> save();
+                            }
+                        }
+                    }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'feen elAdwya? هل أنت عبيت؟'
+                        ];
+                    }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'feeeen el appointment id? هل أنت عبيت؟'
+                    ];
+                }
             }
         }
 
