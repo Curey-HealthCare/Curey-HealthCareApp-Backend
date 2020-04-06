@@ -199,5 +199,6 @@ Route::group(['prefix' => '/web'], function(){
 
     // doctor appointments
     Route::get('/doctor/requests', 'DoctorAppointmentsController@webReadRequests');
-    Route::get('/doctor/re_examinations', 'DoctorAppointmentsController@webReadReExamination');
+    Route::get('/doctor/reExaminations', 'DoctorAppointmentsController@webReadReExamination');
+    Route::post('/doctor/set_reExamination', 'DoctorAppointmentsController@webSetReExamination');
 });

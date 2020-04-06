@@ -153,6 +153,33 @@ class DoctorAppointmentsController extends Controller
                 'error' => 'authentication failed'
             ];
         }
+        else{
+            $doctor = Doctor::where('user_id', $user -> id)->first();
+            if($doctor != null){
+                $doctor_id = $doctor -> id;
+                $user_id = $request -> user_id;
+                $appointment_time = $request -> appointment_time;
+                $is_callup = $request -> is_callup;
+                $duration = 1;
+                if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
+                    $appointment = new Appointment;
+                    $appointment -> user_id = $user_id;
+                    $appointment -> doctor_id = $doctor_id;
+                    $appointment -> appointment_time = $appointment_time;
+                    $appointment -> is_callup = $is_callup;
+                    $appointment -> duration = $duration;
+                    $appointment -> save();
+
+                    $data += [
+                        'message' => 'appointment booked successfully',
+                    ];
+                } else {
+                    $errors += [
+                        'error' => 'an appointment already exists at this time',
+                    ];
+                }
+            }
+        }
 
         $response = [
             'isFailed' => $isFailed,
