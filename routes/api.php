@@ -201,4 +201,7 @@ Route::group(['prefix' => '/web'], function(){
     Route::get('/doctor/requests', 'DoctorAppointmentsController@webReadRequests');
     Route::get('/doctor/reExaminations', 'DoctorAppointmentsController@webReadReExamination');
     Route::post('/doctor/set_reExamination', 'DoctorAppointmentsController@webSetReExamination');
+
+    // doctor prescriptions
+    Route::get('/doctor/prescriptions', 'DoctorPrescriptionsController@webReadAll');
 });
