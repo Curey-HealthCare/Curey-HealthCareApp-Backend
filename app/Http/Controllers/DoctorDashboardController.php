@@ -50,6 +50,12 @@ class DoctorDashboardController extends Controller
             }
             else{
                 $speciality = Speciality::where('id', $doctor -> speciality_id)->first();
+                if($speciality == null){
+                    $speciality_name = null;
+                }
+                else{
+                    $speciality_name = $speciality -> name;
+                }
                 $d_image_path = null;
                 $d_image = Image::where('id', $user -> image_id)->first();
                 if($d_image != null){
@@ -93,7 +99,7 @@ class DoctorDashboardController extends Controller
                     'name' => $user -> full_name,
                     'image' => $d_image_path,
                     'address' => $doctor -> address,
-                    'speciality' => $speciality -> name,
+                    'speciality' => $speciality_name,
                     'rating' => $overall_rating,
                     'no_reviews' => $review_count,
                 ];
