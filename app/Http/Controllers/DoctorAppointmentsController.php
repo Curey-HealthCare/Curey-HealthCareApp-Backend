@@ -82,6 +82,7 @@ class DoctorAppointmentsController extends Controller
         $errors =  [];
 
         // Global variables
+        $appointments = [];
 
         $api_token = $request -> api_token;
         $user = null;
