@@ -245,7 +245,7 @@ class LoginController extends Controller
         }
         else{
             User::where('id', $user -> id)
-                        -> update(['api_token' => NULL]);
+                        -> update(['api_token' => Str::random(80)]);
         }
 
         $response = [
