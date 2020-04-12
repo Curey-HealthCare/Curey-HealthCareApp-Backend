@@ -69,7 +69,7 @@ class DoctorsController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        $image_path = "default/doctor.png";
                     }
 
                     // TO DO
@@ -193,7 +193,7 @@ class DoctorsController extends Controller
                     $image_path = $image -> path;
                 }
                 else{
-                    $image_path = null;
+                    $image_path = "default/doctor.png";
                 }
 
                 // Get Reviews
@@ -232,7 +232,7 @@ class DoctorsController extends Controller
                                 $image_path = $image -> path;
                             }
                             else{
-                                $image_path = null;
+                                $image_path = "default/user.png";
                             }
                             $rate = [
                                 'rating' => $appointment_rating,
@@ -361,7 +361,7 @@ class DoctorsController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        $image_path = "default/doctor.png";
                     }
 
                     // TO DO
@@ -486,7 +486,7 @@ class DoctorsController extends Controller
                     $image_path = $image -> path;
                 }
                 else{
-                    $image_path = null;
+                    $image_path = "default/doctor.png";
                 }
 
                 // Get Reviews
@@ -532,7 +532,7 @@ class DoctorsController extends Controller
                                 $image_path = $image -> path;
                             }
                             else{
-                                $image_path = null;
+                                $image_path = "default/user.png";
                             }
                             $rate = [
                                 'rating' => $appointment_rating,

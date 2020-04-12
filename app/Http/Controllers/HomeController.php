@@ -86,7 +86,7 @@ class HomeController extends Controller
                 $image_path = $image -> path;
             }
             else{
-                $image_path = null;
+                $image_path = "default/user.png";
             }
 
             $user_data = [
@@ -120,7 +120,7 @@ class HomeController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        $image_path = "default/doctor.png";
                     }
 
                     // TO DO
@@ -195,7 +195,7 @@ class HomeController extends Controller
                                     $image_path = $image -> path;
                                 }
                                 else{
-                                    $image_path = null;
+                                    $image_path = "default/product.png";
                                 }
                                 // check if the user have the product in favourites
                                 $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product -> id)->first();

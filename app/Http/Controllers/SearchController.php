@@ -94,7 +94,7 @@ class SearchController extends Controller
                             $image_path = $image -> path;
                         }
                         else{
-                            $image_path = null;
+                            $image_path = "default/doctor.png";
                         }
 
                         // show overall rating
@@ -226,7 +226,7 @@ class SearchController extends Controller
                                 $image_path = $image -> path;
                             }
                             else{
-                                $image_path = null;
+                                $image_path = "default/product.png";
                             }
 
                             $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
@@ -264,7 +264,7 @@ class SearchController extends Controller
                             $image_path = $image -> path;
                         }
                         else{
-                            $image_path = null;
+                            $image_path = "default/product.png";
                         }
 
                         $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
@@ -401,7 +401,7 @@ class SearchController extends Controller
                             $image_path = $image -> path;
                         }
                         else{
-                            $image_path = null;
+                            $image_path = "default/doctor.png";
                         }
 
                         // show overall rating
@@ -533,7 +533,7 @@ class SearchController extends Controller
                                 $image_path = $image -> path;
                             }
                             else{
-                                $image_path = null;
+                                $image_path = "default/product.png";
                             }
 
                             $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
@@ -572,7 +572,7 @@ class SearchController extends Controller
                             $image_path = $image -> path;
                         }
                         else{
-                            $image_path = null;
+                            $image_path = "default/product.png";
                         }
 
                         $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();

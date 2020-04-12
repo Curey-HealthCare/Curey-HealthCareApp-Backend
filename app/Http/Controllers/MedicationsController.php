@@ -69,7 +69,7 @@ class MedicationsController extends Controller
                                     $image_path = $image -> path;
                                 }
                                 else{
-                                    $image_path = null;
+                                    $image_path = "default/product.png";
                                 }
                                 // check if the user have the product in favourites
                                 $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product -> id)->first();
@@ -184,7 +184,7 @@ class MedicationsController extends Controller
                     $image_path = $image -> path;
                 }
                 else{
-                    $image_path = null;
+                    $image_path = "default/product.png";
                 }
                 $city = City::find($user -> city_id);
 
@@ -226,7 +226,7 @@ class MedicationsController extends Controller
                                     $image_path = $image -> path;
                                 }
                                 else{
-                                    $image_path = null;
+                                    $image_path = "default/pharmacy.png";
                                 }
                                 //ratings
                                 $overall_rating = 0;
@@ -361,7 +361,7 @@ class MedicationsController extends Controller
                                     $image_path = $image -> path;
                                 }
                                 else{
-                                    $image_path = null;
+                                    $image_path = "default/product.png";
                                 }
                                 // check if the user have the product in favourites
                                 $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product -> id)->first();
@@ -474,7 +474,7 @@ class MedicationsController extends Controller
                     $image_path = $image -> path;
                 }
                 else{
-                    $image_path = null;
+                    $image_path = "default/product.png";
                 }
                 $city = City::find($user -> city_id);
 
@@ -516,7 +516,7 @@ class MedicationsController extends Controller
                                     $image_path = $image -> path;
                                 }
                                 else{
-                                    $image_path = null;
+                                    $image_path = "default/pharmacy.png";
                                 }
                                 //ratings
                                 $overall_rating = 0;
