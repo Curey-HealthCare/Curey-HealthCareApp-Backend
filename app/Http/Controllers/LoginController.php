@@ -78,11 +78,20 @@ class LoginController extends Controller
 
                     $image_id = $existing_data -> image_id;
                     $image = Image::where('id', $image_id)->first();
+                    $image_path = null;
                     if($image != null){
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        if($existing_data -> role_id = 1){
+                            $image_path = "default/user.png";
+                        }
+                        elseif($existing_data -> role_id = 2){
+                            $image_path = "default/pharmacy.png";
+                        }
+                        elseif($existing_data -> role_id = 3){
+                            $image_path = "default/doctor.png";
+                        }
                     }
                     $data = [
                         'api_token' => $api_token,
@@ -179,11 +188,20 @@ class LoginController extends Controller
 
                     $image_id = $existing_data -> image_id;
                     $image = Image::where('id', $image_id)->first();
+                    $image_path = null;
                     if($image != null){
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        if($existing_data -> role_id = 1){
+                            $image_path = "default/user.png";
+                        }
+                        elseif($existing_data -> role_id = 2){
+                            $image_path = "default/pharmacy.png";
+                        }
+                        elseif($existing_data -> role_id = 3){
+                            $image_path = "default/doctor.png";
+                        }
                     }
                     $data = [
                         'api_token' => $api_token,
