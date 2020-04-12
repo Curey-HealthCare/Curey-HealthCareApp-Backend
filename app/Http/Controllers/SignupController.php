@@ -26,14 +26,10 @@ class SignupController extends Controller
         $data = [];
         $errors =  [];
 
-        // $data = [
-        //     'cities' => $cities
-        // ];
-
         if($cities->isEmpty()){
             $isFailed = true;
             $errors = [
-                'error' => 'error can not connect to server',
+                'error' => 'error connecting to server',
             ];
         }
         else{
@@ -94,11 +90,8 @@ class SignupController extends Controller
                 ];
             }
         }
-
-
 //        Check existing records in database for conflicts
         $all_users = User::all();
-
         foreach ($all_users as $user){
             if ($user -> email == $email and $user -> role_id == $role){
 //                Add error that this email is already in database with same user role
@@ -112,23 +105,36 @@ class SignupController extends Controller
         if($isFailed == false){
 //            Generate api_token
             $api_token = Str::random(80);
-
-
             if($role == '1'){
 //                sign up as customer
-                $new_user = new User;
-                $new_user -> full_name = $full_name;
-                $new_user -> email = $request -> email;
-                $new_user -> role_id = $request -> role_id;
-                $new_user -> api_token = $api_token;
-                $hashed = Hash::make($request -> password);
-                $new_user -> password = $hashed;
-                $new_user -> city_id = $request -> city_id;
-                $new_user -> save();
+                if($request -> city_id == null){
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not sign up without a city'
+                    ];
+                }
+                else{
+                    $new_user = new User;
+                    $new_user -> full_name = $full_name;
+                    $new_user -> email = $request -> email;
+                    $new_user -> role_id = $request -> role_id;
+                    $new_user -> api_token = $api_token;
+                    $hashed = Hash::make($request -> password);
+                    $new_user -> password = $hashed;
+                    $new_user -> city_id = $request -> city_id;
 
-                $data = [
-                    'success' => 'Registeration successful'
-                ];
+                    if($new_user -> save()){
+                        $data = [
+                            'success' => 'Registeration successful'
+                        ];
+                    }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'error signing up, please try again'
+                        ];
+                    }
+                }
             }
             elseif ($role == '2'){
 //                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
@@ -139,16 +145,15 @@ class SignupController extends Controller
                 $new_ph -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_ph -> password = $hashed;
-                // $new_ph -> city_id = $request -> city_id;
-                $new_ph -> save();
-
-                $pharmacy = new Pharmacy;
-                $pharmacy -> user_id = $new_ph -> id;
-                $pharmacy -> save();
-
-                $data = [
-                    'success' => 'Registeration successful'
-                ];
+                if($new_ph -> save()){
+                    $pharmacy = new Pharmacy;
+                    $pharmacy -> user_id = $new_ph -> id;
+                    if($pharmacy -> save()){
+                        $data = [
+                            'success' => 'Registeration successful'
+                        ];
+                    }
+                }
             }
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
@@ -159,18 +164,16 @@ class SignupController extends Controller
                 $new_dr -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_dr -> password = $hashed;
-                // $new_dr -> city_id = $request -> city_id;
-                $new_dr -> save();
-
-                $doctor = new Doctor;
-                $doctor -> user_id = $new_dr -> id;
-                $doctor -> save();
-
-                $data = [
-                    'success' => 'Registeration successful'
-                ];
+                if($new_dr -> save()){
+                    $doctor = new Doctor;
+                    $doctor -> user_id = $new_dr -> id;
+                    if($doctor -> save()){
+                        $data = [
+                            'success' => 'Registeration successful'
+                        ];
+                    }
+                }
             }
-
         }
 
         $response = [
@@ -393,11 +396,8 @@ class SignupController extends Controller
                 ];
             }
         }
-
-
 //        Check existing records in database for conflicts
         $all_users = User::all();
-
         foreach ($all_users as $user){
             if ($user -> email == $email and $user -> role_id == $role){
 //                Add error that this email is already in database with same user role
@@ -411,23 +411,36 @@ class SignupController extends Controller
         if($isFailed == false){
 //            Generate api_token
             $api_token = Str::random(80);
-
-
             if($role == '1'){
 //                sign up as customer
-                $new_user = new User;
-                $new_user -> full_name = $full_name;
-                $new_user -> email = $request -> email;
-                $new_user -> role_id = $request -> role_id;
-                $new_user -> api_token = $api_token;
-                $hashed = Hash::make($request -> password);
-                $new_user -> password = $hashed;
-                $new_user -> city_id = $request -> city_id;
-                $new_user -> save();
+                if($request -> city_id == null){
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'can not sign up without a city'
+                    ];
+                }
+                else{
+                    $new_user = new User;
+                    $new_user -> full_name = $full_name;
+                    $new_user -> email = $request -> email;
+                    $new_user -> role_id = $request -> role_id;
+                    $new_user -> api_token = $api_token;
+                    $hashed = Hash::make($request -> password);
+                    $new_user -> password = $hashed;
+                    $new_user -> city_id = $request -> city_id;
 
-                $data = [
-                    'success' => 'Registeration successful'
-                ];
+                    if($new_user -> save()){
+                        $data = [
+                            'success' => 'Registeration successful'
+                        ];
+                    }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'error signing up, please try again'
+                        ];
+                    }
+                }
             }
             elseif ($role == '2'){
 //                 sign up as pharmacy, need to make the user first then get the user id for pharmacies table
@@ -438,16 +451,15 @@ class SignupController extends Controller
                 $new_ph -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_ph -> password = $hashed;
-                // $new_ph -> city_id = $request -> city_id;
-                $new_ph -> save();
-
-                $pharmacy = new Pharmacy;
-                $pharmacy -> user_id = $new_ph -> id;
-                $pharmacy -> save();
-
-                $data = [
-                    'success' => 'Registeration successful'
-                ];
+                if($new_ph -> save()){
+                    $pharmacy = new Pharmacy;
+                    $pharmacy -> user_id = $new_ph -> id;
+                    if($pharmacy -> save()){
+                        $data = [
+                            'success' => 'Registeration successful'
+                        ];
+                    }
+                }
             }
             elseif ($role == '3'){
 //             sign up as doctor, need to make the user first then get the user id for doctors table
@@ -458,18 +470,16 @@ class SignupController extends Controller
                 $new_dr -> api_token = $api_token;
                 $hashed = Hash::make($request -> password);
                 $new_dr -> password = $hashed;
-                // $new_dr -> city_id = $request -> city_id;
-                $new_dr -> save();
-
-                $doctor = new Doctor;
-                $doctor -> user_id = $new_dr -> id;
-                $doctor -> save();
-
-                $data = [
-                    'success' => 'Registeration successful'
-                ];
+                if($new_dr -> save()){
+                    $doctor = new Doctor;
+                    $doctor -> user_id = $new_dr -> id;
+                    if($doctor -> save()){
+                        $data = [
+                            'success' => 'Registeration successful'
+                        ];
+                    }
+                }
             }
-
         }
 
         $response = [
