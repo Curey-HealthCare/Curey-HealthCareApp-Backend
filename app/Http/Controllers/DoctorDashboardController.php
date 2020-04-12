@@ -61,6 +61,9 @@ class DoctorDashboardController extends Controller
                 if($d_image != null){
                     $d_image_path = $d_image -> path;
                 }
+                else{
+                    $d_image_path = "default/doctor.png";
+                }
 
                 // get ratings
                 $all_appointments = Appointment::where('doctor_id', $doctor -> id)->get();
@@ -115,6 +118,9 @@ class DoctorDashboardController extends Controller
                         $p_image = Image::where('id', $patient -> image_id)->first();
                         if($p_image != null){
                             $p_image_path = $p_image -> path;
+                        }
+                        else{
+                            $p_image_path  ="default/user.png";
                         }
                         $past_app = [
                             'id' => $app -> id,

@@ -48,6 +48,9 @@ class DoctorAppointmentsController extends Controller
                         if($p_image != null){
                             $p_image_path = $p_image -> path;
                         }
+                        else{
+                            $p_image_path = "default/user.png";
+                        }
                         $appointment = [
                             'id' => $app -> id,
                             'patient' => $patient -> full_name,
@@ -109,6 +112,9 @@ class DoctorAppointmentsController extends Controller
                         $p_image = Image::where('id', $patient -> image_id)->first();
                         if($p_image != null){
                             $p_image_path = $p_image -> path;
+                        }
+                        else{
+                            $p_image_path = "default/user.png";
                         }
                         $appointment = [
                             'id' => $app -> id,

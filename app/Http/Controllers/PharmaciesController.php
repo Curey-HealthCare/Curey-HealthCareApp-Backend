@@ -68,7 +68,7 @@ class PharmaciesController extends Controller
                     $image_pharmacy = $image -> path;
                 }
                 else{
-                    $image_pharmacy = null;
+                    $image_pharmacy = "default/pharmacy.png";
                 }
                 // get pharmacy overall rating and reviews
                 $ratings = 0;
@@ -102,7 +102,7 @@ class PharmaciesController extends Controller
                                             $product_image = $p_image -> path;
                                         }
                                         else{
-                                            $product_image = null;
+                                            $product_image = "default/product.png";
                                         }
                                         $item = [
                                             'product' => $product -> name,
@@ -118,7 +118,7 @@ class PharmaciesController extends Controller
                                         $user_image = $u_image -> path;
                                     }
                                     else{
-                                        $user_image = null;
+                                        $user_image = "default/user.png";
                                     }
                                     $order_data = [
                                         'buyer' => $order_user -> full_name,
@@ -274,7 +274,7 @@ class PharmaciesController extends Controller
                                             $product_image = $p_image -> path;
                                         }
                                         else{
-                                            $product_image = null;
+                                            $product_image = "default/product.png";
                                         }
                                         $item = [
                                             'product' => $product -> name,
@@ -290,7 +290,7 @@ class PharmaciesController extends Controller
                                         $user_image = $u_image -> path;
                                     }
                                     else{
-                                        $user_image = null;
+                                        $user_image = "default/user.png";
                                     }
                                     $order_data = [
                                         'id' => $order -> id,
@@ -406,7 +406,7 @@ class PharmaciesController extends Controller
                                             $product_image = $p_image -> path;
                                         }
                                         else{
-                                            $product_image = null;
+                                            $product_image = "default/product.png";
                                         }
                                         $item = [
                                             'product' => $product -> name,
@@ -422,7 +422,7 @@ class PharmaciesController extends Controller
                                         $user_image = $u_image -> path;
                                     }
                                     else{
-                                        $user_image = null;
+                                        $user_image = "default/user.png";
                                     }
                                     $order_data = [
                                         'id' => $order -> id,

@@ -129,7 +129,7 @@ class FavouritesController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        $image_path = "default/product.png";
                     }
                     $final_product = [
                         'id' => $product -> id,
@@ -278,7 +278,7 @@ class FavouritesController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        $image_path = "default/product.png";
                     }
                     $final_product = [
                         'id' => $product -> id,

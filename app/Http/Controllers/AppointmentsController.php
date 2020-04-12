@@ -82,7 +82,7 @@ class AppointmentsController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        $image_path = "default/doctor.png";
                     }
                     //response
                     $appointment=[
@@ -449,7 +449,7 @@ class AppointmentsController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        $image_path = null;
+                        $image_path = "default/doctor.png";
                     }
                     //response
                     $appointment=[

@@ -87,7 +87,7 @@ class OrdersController extends Controller
                             $image_path = $image -> path;
                         }
                         else{
-                            $image_path = null;
+                            $image_path = "default/pharmacy.png";
                         }
                         $order_response = [
                             'id' => $order_id,
@@ -346,7 +346,7 @@ class OrdersController extends Controller
                             $image_path = $image -> path;
                         }
                         else{
-                            $image_path = null;
+                            $image_path = "default/pharmacy.png";
                         }
                         $order_response = [
                             'id' => $order_id,

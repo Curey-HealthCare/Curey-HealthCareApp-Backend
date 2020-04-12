@@ -47,6 +47,9 @@ class DoctorPrescriptionsController extends Controller
                             if($p_image != null){
                                 $p_image_path = $p_image -> path;
                             }
+                            else{
+                                $p_image_path = "default/user.png";
+                            }
                             $prescriptions = DrPrescription::where('appointment_id', $appointment -> id)->get();
                             // echo $prescriptions;
                             if($prescriptions -> isNotEmpty()){
@@ -61,6 +64,9 @@ class DoctorPrescriptionsController extends Controller
                                                 $image = Image::where('id', $product -> image_id)->first();
                                                 if($image != null){
                                                     $image_path = $image -> path;
+                                                }
+                                                else{
+                                                    $image_path = "default/product.png";
                                                 }
                                                 $item = [
                                                     'name' => $product -> name,

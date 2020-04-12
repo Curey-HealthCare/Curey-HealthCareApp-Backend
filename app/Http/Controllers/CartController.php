@@ -124,6 +124,9 @@ class CartController extends Controller
                                     if($p_image != null){
                                         $p_image_path = $p_image -> path;
                                     }
+                                    else{
+                                        $p_image_path = "default/pharmacy.png";
+                                    }
 
                                     $pharmacy_obj = [
                                         'name' => $pharmacy_user -> full_name,
@@ -138,6 +141,9 @@ class CartController extends Controller
                                     $image_path = null;
                                     if($image != null){
                                         $image_path = $image -> path;
+                                    }
+                                    else{
+                                        $image_path = "default/product.png";
                                     }
                                     $product_obj = [
                                         'id' => $product -> id,
@@ -353,6 +359,9 @@ class CartController extends Controller
                                     if($p_image != null){
                                         $p_image_path = $p_image -> path;
                                     }
+                                    else{
+                                        $p_image_path = "default/pharmacy.png";
+                                    }
 
                                     $pharmacy_obj = [
                                         'name' => $pharmacy_user -> full_name,
@@ -367,6 +376,9 @@ class CartController extends Controller
                                     $image_path = null;
                                     if($image != null){
                                         $image_path = $image -> path;
+                                    }
+                                    else{
+                                        $image_path = "default/product.png";
                                     }
                                     $product_obj = [
                                         'id' => $product -> id,
