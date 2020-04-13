@@ -59,9 +59,15 @@ class DoctorsController extends Controller
 
                     $id = $doc -> id;
                     $doc2 = Doctor::where('user_id', $id)->first();
+                    // if the doctor's profile isn't complete skip this doctor
+                    if($doc -> city_id == null){
+                        continue;
+                    }
+                    if($doc2 -> speciality_id == null){
+                        continue;
+                    }
                     $spec_id = $doc2 -> speciality_id;
                     $speciality = Speciality::find($spec_id);
-
                     // Get the doctor's photo
                     $image_id = $doc -> image_id;
                     $image = Image::where('id', $image_id)->first();
@@ -351,6 +357,13 @@ class DoctorsController extends Controller
 
                     $id = $doc -> id;
                     $doc2 = Doctor::where('user_id', $id)->first();
+                    // if the doctor's profile isn't complete skip this doctor
+                    if($doc -> city_id == null){
+                        continue;
+                    }
+                    if($doc2 -> speciality_id == null){
+                        continue;
+                    }
                     $spec_id = $doc2 -> speciality_id;
                     $speciality = Speciality::find($spec_id);
 
