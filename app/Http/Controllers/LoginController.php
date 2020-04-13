@@ -83,13 +83,13 @@ class LoginController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        if($existing_data -> role_id = 1){
+                        if($existing_data -> role_id == 1){
                             $image_path = "default/user.png";
                         }
-                        elseif($existing_data -> role_id = 2){
+                        elseif($existing_data -> role_id == 2){
                             $image_path = "default/pharmacy.png";
                         }
-                        elseif($existing_data -> role_id = 3){
+                        elseif($existing_data -> role_id == 3){
                             $image_path = "default/doctor.png";
                         }
                     }
@@ -193,13 +193,13 @@ class LoginController extends Controller
                         $image_path = $image -> path;
                     }
                     else{
-                        if($existing_data -> role_id = 1){
+                        if($existing_data -> role_id == 1){
                             $image_path = "default/user.png";
                         }
-                        elseif($existing_data -> role_id = 2){
+                        elseif($existing_data -> role_id == 2){
                             $image_path = "default/pharmacy.png";
                         }
-                        elseif($existing_data -> role_id = 3){
+                        elseif($existing_data -> role_id == 3){
                             $image_path = "default/doctor.png";
                         }
                     }
