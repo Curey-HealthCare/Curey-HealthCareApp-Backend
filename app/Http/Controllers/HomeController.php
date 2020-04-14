@@ -36,7 +36,7 @@ class HomeController extends Controller
         if ($user == null){
             $isFailed = true;
             $errors += [
-                'api_token' => 'this token does not match'
+                'auth' => 'authentication failed'
             ];
         }
         else{
@@ -75,7 +75,7 @@ class HomeController extends Controller
         if ($user == null){
             $isFailed = true;
             $errors += [
-                'api_token' => 'this token does not match'
+                'auth' => 'authentication failed'
             ];
         }
         else{
@@ -95,7 +95,7 @@ class HomeController extends Controller
             ];
 
             // get top 8 doctors
-            $doctors = User::where(['role_id', '=', 3], ['city_id', '!=', null])->take(8)->get();
+            $doctors = User::where(['role_id', '=', 3], ['city_id', '!=', null])->random(8)->get();
 
             if($doctors == null){
                 $isFailed = true;
@@ -175,7 +175,7 @@ class HomeController extends Controller
             }
             // get top 8 medications
             $city_id = $user -> city_id;
-            $pharmacies = User::where('city_id', $city_id)->where('role_id', '2')->take(8)->get();
+            $pharmacies = User::where('city_id', $city_id)->where('role_id', '2')->random(8)->get();
 
             if($pharmacies != []){
                 foreach($pharmacies as $pharmacy){
@@ -217,7 +217,6 @@ class HomeController extends Controller
                     }
                 }
             }
-
 
             $data = [
                 'user_data' => $user_data,
