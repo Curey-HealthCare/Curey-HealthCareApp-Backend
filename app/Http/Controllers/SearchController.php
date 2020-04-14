@@ -36,7 +36,9 @@ class SearchController extends Controller
         $specs = [];
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $spec_filter = $request -> speciality_id;
@@ -188,10 +190,11 @@ class SearchController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
-
-        if($isFailed == false){
+        else{
             $skip = $request -> skip;
             $limit = $request -> limit;
             $keywords_filter = $request -> keywords;
@@ -343,7 +346,9 @@ class SearchController extends Controller
         $specs = [];
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $spec_filter = $request -> speciality_id;
@@ -495,10 +500,11 @@ class SearchController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
-
-        if($isFailed == false){
+        else{
             $skip = $request -> skip;
             $limit = $request -> limit;
             $keywords_filter = $request -> keywords;
@@ -601,7 +607,6 @@ class SearchController extends Controller
                         $products_response[] = $final_product;
                     }
                 }
-
             }
         }
         // get keywords for filters
