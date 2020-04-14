@@ -37,13 +37,11 @@ class MedicationsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-
-        if($isFailed == false){
+        else{
             $city_id = $user -> city_id;
             $skip = $request -> skip;
             $limit = $request -> limit;
             $pharmacies = User::where('city_id', $city_id)->where('role_id', '2')->get();
-
 
             if($pharmacies != []){
                 foreach($pharmacies as $pharmacy){
@@ -99,15 +97,11 @@ class MedicationsController extends Controller
                                 else{
                                     $products_response[] = $final_product;
                                 }
-                                // $products_response[] = $final_product;
-
-
                             }
                         }
                     }
                 }
             }
-            // echo count($products_response);
             // get keywords for filters
             $keywords = Keyword::all();
 
@@ -120,7 +114,7 @@ class MedicationsController extends Controller
 
             $pro_res = [];
             if($skip >= count($products_response)){
-
+                $pro_res = [];
             }
             else{
                 $end = 0;
@@ -167,8 +161,7 @@ class MedicationsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-
-        if($isFailed == false){
+        else{
             $product_id = $request -> id;
             $pro = Product::where('id', $product_id)->first();
             if($pro == null){
@@ -217,7 +210,7 @@ class MedicationsController extends Controller
                             $pharmacy_userid = $pharmacies -> user_id;
                             $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id, 'role_id' => 2])->first();
                             if($pharmacy == null){
-
+                                continue;
                             }
                             else{
                                 $image_id = $pharmacy -> image_id;
@@ -234,10 +227,7 @@ class MedicationsController extends Controller
                                 $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
                                 $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                                 $ratings = [];
-                                if($orders == null || $orders_count == 0){
-                                    // continue
-                                }
-                                else{
+                                if($orders != null || $orders_count != 0){
                                     foreach($orders as $order)
                                     {
                                         $order_id = $order -> id;
@@ -253,7 +243,7 @@ class MedicationsController extends Controller
                                     $overall_rating = $rate / $orders_count;
                                 }
 
-                                // buid response for each pharmacy
+                                // build response for each pharmacy
                                 $pharma = [
                                     'id' => $pharmacy -> id,
                                     'name' => $pharmacy -> full_name,
@@ -328,8 +318,7 @@ class MedicationsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-
-        if($isFailed == false){
+        else{
             $city_id = $user -> city_id;
             $skip = $request -> skip;
             $limit = $request -> limit;
@@ -410,7 +399,7 @@ class MedicationsController extends Controller
             }
             $pro_res = [];
             if($skip >= count($products_response)){
-
+                $pro_res = [];
             }
             else{
                 $end = 0;
@@ -430,7 +419,6 @@ class MedicationsController extends Controller
                 'keywords' => $keywords_response,
             ];
         }
-
 
         $response = [
             'isFailed' => $isFailed,
@@ -457,8 +445,7 @@ class MedicationsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-
-        if($isFailed == false){
+        else{
             $product_id = $request -> id;
             $pro = Product::where('id', $product_id)->first();
             if($pro == null){
@@ -507,7 +494,7 @@ class MedicationsController extends Controller
                             $pharmacy_userid = $pharmacies -> user_id;
                             $pharmacy = User::where(['id' => $pharmacy_userid, 'city_id' => $user -> city_id, 'role_id' => 2])->first();
                             if($pharmacy == null){
-
+                                continue;
                             }
                             else{
                                 $image_id = $pharmacy -> image_id;
@@ -524,10 +511,7 @@ class MedicationsController extends Controller
                                 $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
                                 $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                                 $ratings = [];
-                                if($orders == null || $orders_count == 0){
-                                    // continue
-                                }
-                                else{
+                                if($orders != null || $orders_count != 0){
                                     foreach($orders as $order)
                                     {
                                         $order_id = $order -> id;
@@ -543,7 +527,7 @@ class MedicationsController extends Controller
                                     $overall_rating = $rate / $orders_count;
                                 }
 
-                                // buid response for each pharmacy
+                                // build response for each pharmacy
                                 $pharma = [
                                     'id' => $pharmacy -> id,
                                     'name' => $pharmacy -> full_name,
