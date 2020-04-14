@@ -28,16 +28,18 @@ class AppointmentsController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
-        if ($isFailed == false){
-            //userid
-            $appointments = Appointment::where('user_id',$user -> id )->get();
-            $appointment = [];
+        else{
+            $appointments = Appointment::where('user_id',$user -> id )->orderBy('appointment_time', 'desc')->get();
 
-            if($appointments->isEmpty()){
+            if($appointments -> isEmpty()){
                 $isFailed = true;
-                $errors[] = ['error' => 'no appointments yet'];
+                $errors+= [
+                    'error' => 'no appointments yet'
+                ];
             }
             else{
                 foreach($appointments as $app)
@@ -47,27 +49,24 @@ class AppointmentsController extends Controller
                     //get the doctor_id
                     $doc_id = $app->doctor_id;
                     $doc = Doctor::where('id',$doc_id)->first();
-                    //diplay doctor address
+                    //display doctor address
                     $add = $doc->address;
-                    //check if the doctor has callup or not
+                    //check if the doctor has callUp or not
                     $isCallUp = $app ->is_callup;
                     if($isCallUp == 1)
                     {
-                        //callup fees
+//                        show callup fees
                         $fees = $doc ->callup_fees;
-
                     }
-                    else {
-
-                        //fees
+                    else{
+//                        show booking fees
                         $fees = $doc ->fees;
-
                     }
-                    //check if there is re-examin or not
+                    //check if there is re-examination or not
                     $reExamine = $app ->re_examination;
                     if($reExamine==1)
                     {
-                    $checkup = $app->last_checkup;
+                        $checkup = $app->last_checkup;
                     }
                     //display doctor speciality
                     $spec_id = $doc ->speciality_id;
@@ -94,7 +93,7 @@ class AppointmentsController extends Controller
                         'app_time' => $app -> appointment_time,
                         'duration' => $app -> duration,
                         'fees' => $fees,
-                        'last_checkup' => $app -> last_checkup,
+                        'last_checkup' => $checkup,
                         'is_callup' => $app -> is_callup,
                         're_exam' => $app -> re_examination,
 
@@ -124,7 +123,9 @@ class AppointmentsController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $doctor_id = $request -> doctor_id;
@@ -139,12 +140,22 @@ class AppointmentsController extends Controller
                 $appointment -> appointment_time = $appointment_time;
                 $appointment -> is_callup = $is_callup;
                 $appointment -> duration = $duration;
-                $appointment -> save();
 
-                $data += [
-                    'message' => 'appointment booked successfully',
-                ];
-            } else {
+                if($appointment -> save()){
+                    $data += [
+                        'success' => 'appointment booked successfully',
+                    ];
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'could not register your appointment',
+                    ];
+                }
+
+            }
+            else{
+                $isFailed = true;
                 $errors += [
                     'error' => 'an appointment already exists at this time',
                 ];
@@ -179,7 +190,9 @@ class AppointmentsController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             // Get the doctor's ID
@@ -193,7 +206,7 @@ class AppointmentsController extends Controller
                 if($doctor_timetables -> isEmpty()){
                     $isFailed = true;
                     $errors += [
-                        'message' => 'this doctor do not have a schedule yet',
+                        'error' => 'this doctor do not have a schedule yet',
                     ];
                 }
                 else{
@@ -333,7 +346,7 @@ class AppointmentsController extends Controller
             else{
                 $isFailed = true;
                 $errors += [
-                    'message' => 'this is not a doctor, ya 3omar ya "ZAKI"',
+                    'error' => 'this is not a doctor, ya 3omar ya "ZAKI"',
                 ];
             }
         }
@@ -395,16 +408,20 @@ class AppointmentsController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
-        if ($isFailed == false){
+        else{
             //userid
-            $appointments = Appointment::where('user_id',$user -> id )->get();
+            $appointments = Appointment::where('user_id',$user -> id )->orderBy('appointment_time', 'desc')->get();
             $appointment = [];
 
             if($appointments->isEmpty()){
                 $isFailed = true;
-                $errors[] = ['error' => 'no appointments yet'];
+                $errors+= [
+                    'error' => 'no appointments yet'
+                ];
             }
             else{
                 foreach($appointments as $app)
@@ -414,7 +431,7 @@ class AppointmentsController extends Controller
                     //get the doctor_id
                     $doc_id = $app->doctor_id;
                     $doc = Doctor::where('id',$doc_id)->first();
-                    //diplay doctor address
+                    //display doctor address
                     $add = $doc->address;
                     //check if the doctor has callup or not
                     $isCallUp = $app ->is_callup;
@@ -422,13 +439,10 @@ class AppointmentsController extends Controller
                     {
                         //callup fees
                         $fees = $doc ->callup_fees;
-
                     }
                     else {
-
                         //fees
                         $fees = $doc ->fees;
-
                     }
                     //check if there is re-examin or not
                     $reExamine = $app ->re_examination;
@@ -490,7 +504,9 @@ class AppointmentsController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $doctor_id = $request -> doctor_id;
@@ -505,12 +521,21 @@ class AppointmentsController extends Controller
                 $appointment -> appointment_time = $appointment_time;
                 $appointment -> is_callup = $is_callup;
                 $appointment -> duration = $duration;
-                $appointment -> save();
 
-                $data += [
-                    'message' => 'appointment booked successfully',
-                ];
-            } else {
+                if($appointment -> save()){
+                    $data += [
+                        'success' => 'appointment booked successfully',
+                    ];
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'an appointment already exists at this time',
+                    ];
+                }
+            }
+            else {
+                $isFailed = true;
                 $errors += [
                     'error' => 'an appointment already exists at this time',
                 ];
@@ -544,7 +569,9 @@ class AppointmentsController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             // Get the doctor's ID
