@@ -153,6 +153,18 @@ class SignupController extends Controller
                             'success' => 'Registeration successful'
                         ];
                     }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'error signing up, please try again'
+                        ];
+                    }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'error signing up, please try again'
+                    ];
                 }
             }
             elseif ($role == '3'){
@@ -172,6 +184,18 @@ class SignupController extends Controller
                             'success' => 'Registeration successful'
                         ];
                     }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'error signing up, please try again'
+                        ];
+                    }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'error signing up, please try again'
+                    ];
                 }
             }
         }
@@ -459,6 +483,18 @@ class SignupController extends Controller
                             'success' => 'Registeration successful'
                         ];
                     }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'error signing up, please try again'
+                        ];
+                    }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'error signing up, please try again'
+                    ];
                 }
             }
             elseif ($role == '3'){
@@ -478,6 +514,18 @@ class SignupController extends Controller
                             'success' => 'Registeration successful'
                         ];
                     }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'error signing up, please try again'
+                        ];
+                    }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'error signing up, please try again'
+                    ];
                 }
             }
         }
