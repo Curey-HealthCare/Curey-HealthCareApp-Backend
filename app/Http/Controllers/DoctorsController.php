@@ -19,14 +19,11 @@ class DoctorsController extends Controller
 {
     // for mobile
     public function mobileShowAll(Request $request){
-        // TO DO
-        // Hash IDs
+
 
         $isFailed = false;
         $data = [];
         $errors =  [];
-
-        // $headers = $request ->header()->all();
 
         $api_token = $request -> api_token;
         $user = null;
@@ -38,9 +35,7 @@ class DoctorsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-
-
-        if ($isFailed == false){
+        else{
             $skip = $request -> skip;
             $limit = $request -> limit;
             $city = $user -> city_id;
@@ -49,14 +44,12 @@ class DoctorsController extends Controller
             if($doctors == null){
                 $isFailed = true;
                 $errors += [
-                    'doctors' => 'no available doctors in your area yet'
+                    'doctors' => 'no available doctors'
                 ];
             }
             else{
-                $doctor = [];
                 $doctors_response = [];
                 foreach ($doctors as $doc){
-
                     $id = $doc -> id;
                     $doc2 = Doctor::where('user_id', $id)->first();
                     // if the doctor's profile isn't complete skip this doctor
@@ -78,19 +71,15 @@ class DoctorsController extends Controller
                         $image_path = "default/doctor.png";
                     }
 
-                    // TO DO
-                    // show overall rating
                     $doc_id = $doc2 -> id;
                     $appointments = Appointment::where('doctor_id', $doc_id)->get();
                     $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
-                    $ratings = [];
                     $overall_rating = 0;
                     if($appointments != null && $appointments_count != 0){
                         $overall_rate = 0;
                         foreach($appointments as $appointment){
                             $appointment_id = $appointment -> id;
                             $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
-                            // $appointment_rating = 0;
 
                             if($rating != null){
                                 $behavior = $rating -> behavior;
@@ -100,17 +89,12 @@ class DoctorsController extends Controller
                                 $overall_rate += $appointment_rating;
                             }
                         }
-                        if ($appointments_count != 0){
+                        if ($appointments_count != 0) {
                             $overall_rating = $overall_rate / $appointments_count;
                         }
-                        $ratings = [
-                            'rating' => $overall_rating
-                        ];
                     }
                     else{
-                        $ratings = [
-                            'error' => 'no available ratings yet'
-                        ];
+                        $overall_rating = 0;
                     }
 
                     // build response
@@ -176,14 +160,14 @@ class DoctorsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-        if($isFailed == false){
+        else{
             $id = $request -> id;
             // get basic information of doctor
             $doc = Doctor::where('id', $id)->first();
             if($doc == null){
                 $isFailed = true;
                 $errors += [
-                    'null' => 'can not find this doctor'
+                    'doctor' => 'can not find this doctor'
                 ];
             }
             else{
@@ -253,7 +237,6 @@ class DoctorsController extends Controller
                         $overall_rating = $overall_rate / $appointments_count;
                     }
                 }
-
                 // Get doctor degrees
                 $degrees = Degree::where('doctor_id', $doc -> id)->get();
                 $degrees_response = [];
@@ -317,14 +300,9 @@ class DoctorsController extends Controller
 
     //for web
     public function webShowAll(Request $request){
-        // TO DO
-        // Hash IDs
-
         $isFailed = false;
         $data = [];
         $errors =  [];
-
-        // $headers = $request ->header()->all();
 
         $api_token = $request -> api_token;
         $user = null;
@@ -336,9 +314,7 @@ class DoctorsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-
-
-        if ($isFailed == false){
+        else{
             $skip = $request -> skip;
             $limit  =$request -> limit;
             $city = $user -> city_id;
@@ -347,7 +323,7 @@ class DoctorsController extends Controller
             if($doctors == null){
                 $isFailed = true;
                 $errors += [
-                    'doctors' => 'no available doctors in your area yet'
+                    'doctors' => 'no available doctors'
                 ];
             }
             else{
@@ -376,9 +352,6 @@ class DoctorsController extends Controller
                     else{
                         $image_path = "default/doctor.png";
                     }
-
-                    // TO DO
-                    // show overall rating
                     $doc_id = $doc2 -> id;
                     $appointments = Appointment::where('doctor_id', $doc_id)->get();
                     $appointments_count = Appointment::where('doctor_id', $doc_id)->count();
@@ -389,7 +362,6 @@ class DoctorsController extends Controller
                         foreach($appointments as $appointment){
                             $appointment_id = $appointment -> id;
                             $rating = DoctorRating::where('appointment_id', $appointment_id)->first();
-                            // $appointment_rating = 0;
 
                             if($rating != null){
                                 $behavior = $rating -> behavior;
@@ -399,17 +371,12 @@ class DoctorsController extends Controller
                                 $overall_rate += $appointment_rating;
                             }
                         }
-                        if ($appointments_count != 0){
+                        if ($appointments_count != 0) {
                             $overall_rating = $overall_rate / $appointments_count;
                         }
-                        $ratings = [
-                            'rating' => $overall_rating
-                        ];
                     }
                     else{
-                        $ratings = [
-                            'error' => 'no available ratings yet'
-                        ];
+                        $overall_rating = 0;
                     }
 
                     // build response
@@ -475,7 +442,7 @@ class DoctorsController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-        if($isFailed == false){
+        else{
             $id = $request -> id;
             $overall_rating = 0;
             // get basic information of doctor
