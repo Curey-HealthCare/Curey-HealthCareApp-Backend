@@ -95,7 +95,7 @@ class HomeController extends Controller
             ];
 
             // get top 8 doctors
-            $doctors = User::where('role_id', '3')->take(8)->get();
+            $doctors = User::where(['role_id', '=', 3], ['city_id', '!=', null])->take(8)->get();
 
             if($doctors == null){
                 $isFailed = true;
@@ -112,7 +112,9 @@ class HomeController extends Controller
                     $doc2 = Doctor::where('user_id', $id)->first();
                     $spec_id = $doc2 -> speciality_id;
                     $speciality = Speciality::find($spec_id);
-
+                    if($speciality == null){
+                        continue;
+                    }
                     // Get the doctor's photo
                     $image_id = $doc -> image_id;
                     $image = Image::where('id', $image_id)->first();
@@ -184,7 +186,6 @@ class HomeController extends Controller
                         $products_pharmacy = ProductPharmacy::where('pharmacy_id', $pharma_id)->first();
 
                         if($products_pharmacy != null){
-                            // foreach($products_pharmacy as $pro){
                                 $product_id = $products_pharmacy -> product_id;
 
                                 $product = Product::find($product_id);
@@ -212,7 +213,6 @@ class HomeController extends Controller
                                 ];
 
                                 $products_response[] = $final_product;
-                            // }
                         }
                     }
                 }
