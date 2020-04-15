@@ -17,7 +17,7 @@ class CartController extends Controller
     public function mobileCreate(Request $request){
         $isFailed = false;
         $data = [];
-        $errors =  [];
+        $errors = [];
         $api_token = $request -> api_token;
         $user = User::where('api_token', $api_token)->first();
 
@@ -32,7 +32,7 @@ class CartController extends Controller
             if($product == null){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'can not register an empty product'
+                    'error' => 'can not register an empty product ya Hacker ya ZAKI'
                 ];
             }
             else{
@@ -43,16 +43,16 @@ class CartController extends Controller
                     $cart_item -> user_id = $user -> id;
                     $cart_item -> product_id = $product['id'];
                     $cart_item -> amount = $product['amount'];
-
-                    $cart_item -> save();
-                    $data += [
-                        'success' => 'item added to cart'
-                    ];
+                    if($cart_item -> save()){
+                        $data += [
+                            'success' => 'item added to cart'
+                        ];
+                    }
                 }
                 else{
                     $isFailed = true;
                     $errors += [
-                        'error' => 'this item already exists in your cart'
+                        'error' => 'this item already exists in your cart ya Customer'
                     ];
                 }
             }
@@ -87,17 +87,14 @@ class CartController extends Controller
             if($cart_items -> isEmpty()){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'you do not have any items'
+                    'error' => 'you do not have any items ya Fa2er'
                 ];
             }
             else{
-                // get details about each item in the cart
-
                 foreach($cart_items as $item){
                     $product_pharmacy_id = $item -> product_id;
                     $amount = $item -> amount;
                     $product = null;
-                    // get product id and pharmacy id
                     $product_pharmacy = ProductPharmacy::where('id', $product_pharmacy_id)->first();
                     if($product_pharmacy == null){
                         $isFailed = true;
@@ -108,17 +105,12 @@ class CartController extends Controller
                     else{
                         $product_id = $product_pharmacy -> product_id;
                         $pharmacy_id = $product_pharmacy -> pharmacy_id;
-                        // get all product information
                         $product = Product::where('id', $product_id)->first();
                         if($product != null){
-                            // get the pharmacy
                             $pharmacy = Pharmacy::where('id', $pharmacy_id)->first();
                             if($pharmacy != null){
-                                // get pharmacy name
                                 $pharmacy_user = User::where('id', $pharmacy -> user_id)->first();
                                 if($pharmacy_user != null){
-                                    // get all needed data and build response object
-                                    // pharmacy image
                                     $p_image = Image::where('id', $pharmacy_user -> image_id)->first();
                                     $p_image_path = null;
                                     if($p_image != null){
@@ -135,8 +127,6 @@ class CartController extends Controller
                                         'product_pharmacy_id' => $item -> product_id,
                                         'count' => $product_pharmacy -> count,
                                     ];
-
-                                    // get product image and details
                                     $image = Image::where('id', $product -> image_id)->first();
                                     $image_path = null;
                                     if($image != null){
@@ -153,8 +143,8 @@ class CartController extends Controller
                                         'image' => $image_path,
                                         'pharmacy' => $pharmacy_obj
                                     ];
-
-                                }$products[] = $product_obj;
+                                }
+                                $products[] = $product_obj;
                             }
                         }
                     }
@@ -191,7 +181,7 @@ class CartController extends Controller
             if($product == null){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'can not update an empty product'
+                    'error' => 'can not update an empty product ya Hacker ya ZAKI'
                 ];
             }
             else{
@@ -228,7 +218,7 @@ class CartController extends Controller
             if($product_id == null){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'can not delete a non existing cart item'
+                    'error' => 'can not delete a non existing cart item ya Hacker ya ZAKI'
                 ];
             }
             else{
@@ -267,7 +257,7 @@ class CartController extends Controller
             if($product == null){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'can not register an empty product'
+                    'error' => 'can not register an empty product ya Hacker ya ZAYAN'
                 ];
             }
             else{
@@ -278,11 +268,11 @@ class CartController extends Controller
                     $cart_item -> user_id = $user -> id;
                     $cart_item -> product_id = $product['id'];
                     $cart_item -> amount = $product['amount'];
-
-                    $cart_item -> save();
-                    $data += [
-                        'success' => 'item added to cart'
-                    ];
+                    if($cart_item -> save()){
+                        $data += [
+                            'success' => 'item added to cart'
+                        ];
+                    }
                 }
                 else{
                     $isFailed = true;
@@ -322,17 +312,14 @@ class CartController extends Controller
             if($cart_items -> isEmpty()){
                 $isFailed = true;
                 $errors += [
-                    'error' => 'you do not have any items'
+                    'error' => 'you do not have any items ya Fa2er'
                 ];
             }
             else{
-                // get details about each item in the cart
-
                 foreach($cart_items as $item){
                     $product_pharmacy_id = $item -> product_id;
                     $amount = $item -> amount;
                     $product = null;
-                    // get product id and pharmacy id
                     $product_pharmacy = ProductPharmacy::where('id', $product_pharmacy_id)->first();
                     if($product_pharmacy == null){
                         $isFailed = true;
@@ -343,17 +330,12 @@ class CartController extends Controller
                     else{
                         $product_id = $product_pharmacy -> product_id;
                         $pharmacy_id = $product_pharmacy -> pharmacy_id;
-                        // get all product information
                         $product = Product::where('id', $product_id)->first();
                         if($product != null){
-                            // get the pharmacy
                             $pharmacy = Pharmacy::where('id', $pharmacy_id)->first();
                             if($pharmacy != null){
-                                // get pharmacy name
                                 $pharmacy_user = User::where('id', $pharmacy -> user_id)->first();
                                 if($pharmacy_user != null){
-                                    // get all needed data and build response object
-                                    // pharmacy image
                                     $p_image = Image::where('id', $pharmacy_user -> image_id)->first();
                                     $p_image_path = null;
                                     if($p_image != null){
@@ -362,7 +344,6 @@ class CartController extends Controller
                                     else{
                                         $p_image_path = "default/pharmacy.png";
                                     }
-
                                     $pharmacy_obj = [
                                         'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
@@ -370,8 +351,6 @@ class CartController extends Controller
                                         'product_pharmacy_id' => $item -> product_id,
                                         'count' => $product_pharmacy -> count,
                                     ];
-
-                                    // get product image and details
                                     $image = Image::where('id', $product -> image_id)->first();
                                     $image_path = null;
                                     if($image != null){
@@ -388,8 +367,8 @@ class CartController extends Controller
                                         'image' => $image_path,
                                         'pharmacy' => $pharmacy_obj
                                     ];
-
-                                }$products[] = $product_obj;
+                                }
+                                $products[] = $product_obj;
                             }
                         }
                     }
