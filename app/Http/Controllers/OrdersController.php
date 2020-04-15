@@ -18,7 +18,6 @@ class OrdersController extends Controller
 {
     public function mobileShowOrders(Request $request)
     {
-         //authenticated user
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -33,10 +32,8 @@ class OrdersController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-        if ($isFailed == false){
-            // $pharmacies = Pharmacy::where('user_id' ,$user -> id)->get();
+        else{
             $orders = Order::where('user_id', $user -> id)->get();
-            // $pharmacy_response = [];
             if($orders -> isEmpty()){
                 $isFailed = true;
                 $errors += [
@@ -48,9 +45,8 @@ class OrdersController extends Controller
                 $orders_response = [];
                 foreach($orders as $order)
                 {
-                    // id of the order
                     $order_id = $order -> id ;
-                    $order_details = OrderDetail::where('order_id',$order_id)->get();
+                    $order_details = OrderDetail::where('order_id',$order_id)->orderBy('id', 'desc')->get();
                     if($order_details -> isEmpty()){
                         $isFailed = true;
                         $errors += [
@@ -63,21 +59,16 @@ class OrdersController extends Controller
                         foreach($order_details as $product){
                             $product_id = $product -> product_id;
                             $product_data = Product::find($product_id);
-                            // get the price
                             $product_price = $product_data -> price;
-                            // product name
                             $product_name = $product_data -> name;
-                            // amount of the product
                             $amount = $product -> amount;
-                            // calculate the price
                             $total_price += ($product_price * $amount);
-
                             $order_products[] = [
                                 'name' => $product_name,
-                                'amount' => $amount
+                                'amount' => $amount,
+                                'price' => $product_price,
                             ];
                         }
-                        // get the pharmacy name & photo
                         $pharmacy_id = $order -> pharmacy_id;
                         $pharmacy = Pharmacy::find($pharmacy_id);
                         $pharmacy_user = User::find($pharmacy -> user_id);
@@ -145,7 +136,6 @@ class OrdersController extends Controller
                 foreach($products_pharmacies as $product_pharmacy){
                     $pharmacy_id_request = $product_pharmacy['id'];
                     $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
-                    // echo $pharmacy_id;
                     if(in_array($pharmacy_id, $pharmacies)){
                         continue;
                     }
@@ -153,7 +143,6 @@ class OrdersController extends Controller
                         $pharmacies[] = $pharmacy_id;
                     }
                 }
-                // $data = $pharmacies;
                 $order = null;
                 for($i = 0; $i < count($pharmacies); $i++){
                     $user_id = $user -> id;
@@ -162,33 +151,35 @@ class OrdersController extends Controller
                     $order -> pharmacy_id = $pharmacy_id;
                     $order -> user_id = $user_id;
                     $order -> delivery_type = 1;
-                    $order -> save();
-                    $order_tracking = new OrderTracking;
-                    $order_tracking -> user_id = $user -> id;
-                    $order_tracking -> order_id = $order -> id;
-                    $products = [];
-                    foreach ($products_pharmacies as $product_pharmacy) {
-                        $pharmacy_id_request = $product_pharmacy['id'];
-                        $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
-                        if($pharmacy_id == $pharmacies[$i]){
-                            $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
-                            $amount = $product_pharmacy['amount'];
-                            $product = [
-                                'id' => $product_id,
-                                'amount' => $amount,
-                            ];
-                            $products[] = $product;
+                    if($order -> save()){
+                        $order_tracking = new OrderTracking;
+                        $order_tracking -> user_id = $user -> id;
+                        $order_tracking -> order_id = $order -> id;
+                        $order_tracking -> save();
+                        $products = [];
+                        foreach ($products_pharmacies as $product_pharmacy) {
+                            $pharmacy_id_request = $product_pharmacy['id'];
+                            $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
+                            if($pharmacy_id == $pharmacies[$i]){
+                                $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
+                                $amount = $product_pharmacy['amount'];
+                                $product = [
+                                    'id' => $product_id,
+                                    'amount' => $amount,
+                                ];
+                                $products[] = $product;
+                            }
+                            else{
+                                continue;
+                            }
                         }
-                        else{
-                            continue;
+                        foreach($products as $pro){
+                            $order_detail = new OrderDetail;
+                            $order_detail -> order_id = $order -> id;
+                            $order_detail -> product_id = $pro['id'];
+                            $order_detail -> amount = $pro['amount'];
+                            $order_detail -> save();
                         }
-                    }
-                    foreach($products as $pro){
-                        $order_detail = new OrderDetail;
-                        $order_detail -> order_id = $order -> id;
-                        $order_detail -> product_id = $pro['id'];
-                        $order_detail -> amount = $pro['amount'];
-                        $order_detail -> save();
                     }
                 }
                 foreach($products_pharmacies as $deproduct){
@@ -242,7 +233,7 @@ class OrdersController extends Controller
                 if($order_tracking -> is_accepted == 1){
                     $isFailed = true;
                     $errors += [
-                        'error' => 'this order is getting prepared and can not be cancelled'
+                        'error' => 'this order is getting prepared or out for delivery, can not be cancelled'
                     ];
                 }
                 else{
@@ -277,7 +268,6 @@ class OrdersController extends Controller
 
     public function webShowOrders(Request $request)
     {
-         //authenticated user
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -292,10 +282,8 @@ class OrdersController extends Controller
                 'auth' => 'authentication failed'
             ];
         }
-        if ($isFailed == false){
-            // $pharmacies = Pharmacy::where('user_id' ,$user -> id)->get();
+        else{
             $orders = Order::where('user_id', $user -> id)->get();
-            // $pharmacy_response = [];
             if($orders -> isEmpty()){
                 $isFailed = true;
                 $errors += [
@@ -307,9 +295,8 @@ class OrdersController extends Controller
                 $orders_response = [];
                 foreach($orders as $order)
                 {
-                    // id of the order
                     $order_id = $order -> id ;
-                    $order_details = OrderDetail::where('order_id',$order_id)->get();
+                    $order_details = OrderDetail::where('order_id',$order_id)->orderBy('id', 'desc')->get();
                     if($order_details -> isEmpty()){
                         $isFailed = true;
                         $errors += [
@@ -322,21 +309,16 @@ class OrdersController extends Controller
                         foreach($order_details as $product){
                             $product_id = $product -> product_id;
                             $product_data = Product::find($product_id);
-                            // get the price
                             $product_price = $product_data -> price;
-                            // product name
                             $product_name = $product_data -> name;
-                            // amount of the product
                             $amount = $product -> amount;
-                            // calculate the price
                             $total_price += ($product_price * $amount);
-
                             $order_products[] = [
                                 'name' => $product_name,
-                                'amount' => $amount
+                                'amount' => $amount,
+                                'price' => $product_price,
                             ];
                         }
-                        // get the pharmacy name & photo
                         $pharmacy_id = $order -> pharmacy_id;
                         $pharmacy = Pharmacy::find($pharmacy_id);
                         $pharmacy_user = User::find($pharmacy -> user_id);
@@ -403,7 +385,6 @@ class OrdersController extends Controller
                 foreach($products_pharmacies as $product_pharmacy){
                     $pharmacy_id_request = $product_pharmacy['id'];
                     $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
-                    // echo $pharmacy_id;
                     if(in_array($pharmacy_id, $pharmacies)){
                         continue;
                     }
@@ -411,7 +392,6 @@ class OrdersController extends Controller
                         $pharmacies[] = $pharmacy_id;
                     }
                 }
-                // $data = $pharmacies;
                 $order = null;
                 for($i = 0; $i < count($pharmacies); $i++){
                     $user_id = $user -> id;
@@ -420,33 +400,35 @@ class OrdersController extends Controller
                     $order -> pharmacy_id = $pharmacy_id;
                     $order -> user_id = $user_id;
                     $order -> delivery_type = 1;
-                    $order -> save();
-                    $order_tracking = new OrderTracking;
-                    $order_tracking -> user_id = $user -> id;
-                    $order_tracking -> order_id = $order -> id;
-                    $products = [];
-                    foreach ($products_pharmacies as $product_pharmacy) {
-                        $pharmacy_id_request = $product_pharmacy['id'];
-                        $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
-                        if($pharmacy_id == $pharmacies[$i]){
-                            $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
-                            $amount = $product_pharmacy['amount'];
-                            $product = [
-                                'id' => $product_id,
-                                'amount' => $amount,
-                            ];
-                            $products[] = $product;
+                    if($order -> save()){
+                        $order_tracking = new OrderTracking;
+                        $order_tracking -> user_id = $user -> id;
+                        $order_tracking -> order_id = $order -> id;
+                        $order_tracking -> save();
+                        $products = [];
+                        foreach ($products_pharmacies as $product_pharmacy) {
+                            $pharmacy_id_request = $product_pharmacy['id'];
+                            $pharmacy_id = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first()-> pharmacy_id;
+                            if($pharmacy_id == $pharmacies[$i]){
+                                $product_id = ProductPharmacy::select('product_id')->where('id', $pharmacy_id_request)->first()-> product_id;
+                                $amount = $product_pharmacy['amount'];
+                                $product = [
+                                    'id' => $product_id,
+                                    'amount' => $amount,
+                                ];
+                                $products[] = $product;
+                            }
+                            else{
+                                continue;
+                            }
                         }
-                        else{
-                            continue;
+                        foreach($products as $pro){
+                            $order_detail = new OrderDetail;
+                            $order_detail -> order_id = $order -> id;
+                            $order_detail -> product_id = $pro['id'];
+                            $order_detail -> amount = $pro['amount'];
+                            $order_detail -> save();
                         }
-                    }
-                    foreach($products as $pro){
-                        $order_detail = new OrderDetail;
-                        $order_detail -> order_id = $order -> id;
-                        $order_detail -> product_id = $pro['id'];
-                        $order_detail -> amount = $pro['amount'];
-                        $order_detail -> save();
                     }
                 }
                 foreach($products_pharmacies as $deproduct){
@@ -500,7 +482,7 @@ class OrdersController extends Controller
                 if($order_tracking -> is_accepted == 1){
                     $isFailed = true;
                     $errors += [
-                        'error' => 'this order is getting prepared and can not be cancelled'
+                        'error' => 'this order is getting prepared or out for delivery, can not be cancelled'
                     ];
                 }
                 else{
