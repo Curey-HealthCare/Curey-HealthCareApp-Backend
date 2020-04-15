@@ -23,7 +23,9 @@ class FavouritesController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
@@ -65,7 +67,9 @@ class FavouritesController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $product_id = $request -> product_id;
@@ -106,7 +110,9 @@ class FavouritesController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $user_favourites = Favourite::where('user_id', $user -> id)->get();
@@ -174,7 +180,9 @@ class FavouritesController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $favExist = Favourite::where('user_id', $user -> id)->where('product_id', $request -> product_id)->first();
@@ -216,7 +224,9 @@ class FavouritesController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $product_id = $request -> product_id;
@@ -255,7 +265,9 @@ class FavouritesController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $user_favourites = Favourite::where('user_id', $user -> id)->get();
@@ -290,7 +302,7 @@ class FavouritesController extends Controller
 
                     $products_response[] = $final_product;
                 }
-                $data[] = $products_response;
+                $data = $products_response;
             }
         }
 
