@@ -32,11 +32,11 @@ class FavouritesController extends Controller
                 $favourite = new Favourite;
                 $favourite -> user_id = $user -> id;
                 $favourite -> product_id = $product_id;
-                $favourite -> save();
-
-                $data += [
-                    'message' => 'added to favourites',
-                ];
+                if($favourite -> save()){
+                    $data += [
+                        'message' => 'added to favourites',
+                    ];
+                }
             }
             else{
                 $isFailed = true;
@@ -140,7 +140,7 @@ class FavouritesController extends Controller
 
                     $products_response[] = $final_product;
                 }
-                $data[] = $products_response;
+                $data = $products_response;
             }
         }
 
@@ -183,11 +183,11 @@ class FavouritesController extends Controller
                 $favourite = new Favourite;
                 $favourite -> user_id = $user -> id;
                 $favourite -> product_id = $product_id;
-                $favourite -> save();
-
-                $data += [
-                    'message' => 'added to favourites',
-                ];
+                if($favourite -> save()){
+                    $data += [
+                        'message' => 'added to favourites',
+                    ];
+                }
             }
             else{
                 $isFailed = true;
