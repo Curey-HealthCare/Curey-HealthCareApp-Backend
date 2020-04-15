@@ -104,7 +104,8 @@ Route::group(['prefix' => '/mobile'], function(){
 
 });
 
-Route::group(['prefix' => '/web'], function(){
+Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
+
     // Signup
     Route::post('/signup', 'SignupController@webSignup');
     Route::get('/signup', 'SignupController@show');
