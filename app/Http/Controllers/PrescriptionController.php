@@ -34,32 +34,26 @@ class PrescriptionController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         if ($isFailed == false){
             $prescriptions = Prescription::where('user_id',$user -> id )->get();
             $prescription = [];
 
-
             if($prescriptions->isEmpty()){
                 $isFailed = true;
-                $errors[] = ['error' => 'no prescriptions yet'];
+                $errors+= [
+                    'error' => 'no prescriptions yet'
+                ];
             }
             else {
-
                 foreach($prescriptions as $pres)
                 {
-                    //medicine_name
                     $medicine = $pres -> medicine_name;
-                    //dosage
                     $dosage = $pres -> dosage ;
-                    //start hour
-                    //$str_hour = $pres -> start_hour;
-                    //frequency
                     $freq = $pres -> frequency;
-                    //end date
-                    //$eDate = $pre -> end_date;
-                    //days in week
                     $pre_days = PresDay::where('prescription_id', $pres -> id)->get();
                     if($pre_days -> isEmpty()){
                         $errors += [
@@ -77,7 +71,6 @@ class PrescriptionController extends Controller
                             }
                         }
                     }
-
                     //dosage time
                     $id = $pres -> id ;
                     $dosage_time = Dosage::where('prescription_id' , $id)->get();
@@ -123,14 +116,24 @@ class PrescriptionController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $days = $request -> days;
             if($days == [])
             {
                 $isFailed = true;
-                $errors[] = ['error' => 'no days choosen'];
+                $errors+= [
+                    'error' => 'no days choosen'
+                ];
+            }
+            elseif ($request -> hours == []){
+                $isFailed = true;
+                $errors+= [
+                    'error' => 'no times provided'
+                ];
             }
             else {
                 $prescription = new Prescription;
@@ -140,40 +143,41 @@ class PrescriptionController extends Controller
                 $prescription -> end_date = $request -> end_date;
                 $prescription -> user_id = $user -> id;
                 $prescription -> frequency = $request -> frequency;
-                $prescription -> save();
 
-                foreach($days as $day)
-                {
+                if($prescription -> save()){
+                    foreach($days as $day)
+                    {
 
-                    $prescription_id = $prescription -> id;
-                    $prescription_day = new PresDay;
-                    $prescription_day -> prescription_id = $prescription_id;
-                    $prescription_day -> day_id = $day;
-                    $prescription_day -> save();
-                }
-
-                $process = $request -> auto;
-                if($process == '0'){
-                    $hours = $request -> hours;
-                    foreach($hours as $hour){
                         $prescription_id = $prescription -> id;
-                        $dosage = new Dosage;
-                        $dosage -> prescription_id = $prescription_id;
-                        $dosage -> dosage_time = $hour;
-                        $dosage -> save();
+                        $prescription_day = new PresDay;
+                        $prescription_day -> prescription_id = $prescription_id;
+                        $prescription_day -> day_id = $day;
+                        $prescription_day -> save();
                     }
-                }
-                elseif($process == '1'){
-                    $interval = 24 / ($request -> frequency);
-                    $h = $request -> start_hour;
-                    $hour = Carbon::parse($h);
-                    for($i = 0; $i < ($request -> frequency); $i++){
 
-                        $dosage = new Dosage;
-                        $dosage -> prescription_id = $prescription -> id;
-                        $dosage -> dosage_time = $hour;
-                        $dosage -> save();
-                        $hour -> addHour($interval);
+                    $process = $request -> auto;
+                    if($process == '0'){
+                        $hours = $request -> hours;
+                        foreach($hours as $hour){
+                            $prescription_id = $prescription -> id;
+                            $dosage = new Dosage;
+                            $dosage -> prescription_id = $prescription_id;
+                            $dosage -> dosage_time = $hour;
+                            $dosage -> save();
+                        }
+                    }
+                    elseif($process == '1'){
+                        $interval = 24 / ($request -> frequency);
+                        $h = $request -> start_hour;
+                        $hour = Carbon::parse($h);
+                        for($i = 0; $i < ($request -> frequency); $i++){
+
+                            $dosage = new Dosage;
+                            $dosage -> prescription_id = $prescription -> id;
+                            $dosage -> dosage_time = $hour;
+                            $dosage -> save();
+                            $hour -> addHour($interval);
+                        }
                     }
                 }
 
@@ -203,7 +207,9 @@ class PrescriptionController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $prescription_id = $request -> prescription_id;
@@ -257,32 +263,26 @@ class PrescriptionController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         if ($isFailed == false){
             $prescriptions = Prescription::where('user_id',$user -> id )->get();
             $prescription = [];
 
-
             if($prescriptions->isEmpty()){
                 $isFailed = true;
-                $errors[] = ['error' => 'no prescriptions yet'];
+                $errors+= [
+                    'error' => 'no prescriptions yet'
+                ];
             }
             else {
-
                 foreach($prescriptions as $pres)
                 {
-                    //medicine_name
                     $medicine = $pres -> medicine_name;
-                    //dosage
                     $dosage = $pres -> dosage ;
-                    //start hour
-                    //$str_hour = $pres -> start_hour;
-                    //frequency
                     $freq = $pres -> frequency;
-                    //end date
-                    //$eDate = $pre -> end_date;
-                    //days in week
                     $pre_days = PresDay::where('prescription_id', $pres -> id)->get();
                     if($pre_days -> isEmpty()){
                         $errors += [
@@ -300,7 +300,6 @@ class PrescriptionController extends Controller
                             }
                         }
                     }
-
                     //dosage time
                     $id = $pres -> id ;
                     $dosage_time = Dosage::where('prescription_id' , $id)->get();
@@ -346,14 +345,24 @@ class PrescriptionController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $days = $request -> days;
             if($days == [])
             {
                 $isFailed = true;
-                $errors[] = ['error' => 'no days choosen'];
+                $errors+= [
+                    'error' => 'no days choosen'
+                ];
+            }
+            elseif ($request -> hours == []){
+                $isFailed = true;
+                $errors+= [
+                    'error' => 'no times provided'
+                ];
             }
             else {
                 $prescription = new Prescription;
@@ -363,40 +372,41 @@ class PrescriptionController extends Controller
                 $prescription -> end_date = $request -> end_date;
                 $prescription -> user_id = $user -> id;
                 $prescription -> frequency = $request -> frequency;
-                $prescription -> save();
 
-                foreach($days as $day)
-                {
+                if($prescription -> save()){
+                    foreach($days as $day)
+                    {
 
-                    $prescription_id = $prescription -> id;
-                    $prescription_day = new PresDay;
-                    $prescription_day -> prescription_id = $prescription_id;
-                    $prescription_day -> day_id = $day;
-                    $prescription_day -> save();
-                }
-
-                $process = $request -> auto;
-                if($process == '0'){
-                    $hours = $request -> hours;
-                    foreach($hours as $hour){
                         $prescription_id = $prescription -> id;
-                        $dosage = new Dosage;
-                        $dosage -> prescription_id = $prescription_id;
-                        $dosage -> dosage_time = $hour;
-                        $dosage -> save();
+                        $prescription_day = new PresDay;
+                        $prescription_day -> prescription_id = $prescription_id;
+                        $prescription_day -> day_id = $day;
+                        $prescription_day -> save();
                     }
-                }
-                elseif($process == '1'){
-                    $interval = 24 / ($request -> frequency);
-                    $h = $request -> start_hour;
-                    $hour = Carbon::parse($h);
-                    for($i = 0; $i < ($request -> frequency); $i++){
 
-                        $dosage = new Dosage;
-                        $dosage -> prescription_id = $prescription -> id;
-                        $dosage -> dosage_time = $hour;
-                        $dosage -> save();
-                        $hour -> addHour($interval);
+                    $process = $request -> auto;
+                    if($process == '0'){
+                        $hours = $request -> hours;
+                        foreach($hours as $hour){
+                            $prescription_id = $prescription -> id;
+                            $dosage = new Dosage;
+                            $dosage -> prescription_id = $prescription_id;
+                            $dosage -> dosage_time = $hour;
+                            $dosage -> save();
+                        }
+                    }
+                    elseif($process == '1'){
+                        $interval = 24 / ($request -> frequency);
+                        $h = $request -> start_hour;
+                        $hour = Carbon::parse($h);
+                        for($i = 0; $i < ($request -> frequency); $i++){
+
+                            $dosage = new Dosage;
+                            $dosage -> prescription_id = $prescription -> id;
+                            $dosage -> dosage_time = $hour;
+                            $dosage -> save();
+                            $hour -> addHour($interval);
+                        }
                     }
                 }
 
@@ -425,7 +435,9 @@ class PrescriptionController extends Controller
 
         if ($user == null){
             $isFailed = true;
-            $errors []  = [ 'auth' => 'authentication failed'];
+            $errors+= [
+                'auth' => 'authentication failed'
+            ];
         }
         else{
             $prescription_id = $request -> prescription_id;
