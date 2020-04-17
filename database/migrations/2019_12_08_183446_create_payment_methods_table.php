@@ -15,7 +15,7 @@ class CreatePaymentMethodsTable extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->nullable(true);
             $table->string('card_number', 16);
             $table->string('cvc', 3);
             $table->unsignedInteger('expiry_month');
@@ -24,7 +24,8 @@ class CreatePaymentMethodsTable extends Migration
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

@@ -15,13 +15,14 @@ class CreatePharmacyRatingsTable extends Migration
     {
         Schema::create('pharmacy_ratings', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('order_id');
+            $table->unsignedInteger('order_id')->nullable(true);
             $table->text('review')->nullable(true);
             $table->unsignedInteger('rating');
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

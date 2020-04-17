@@ -15,7 +15,7 @@ class Prescriptions extends Migration
     {
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->nullable(true);
             $table->string('medicine_name', 50)->nullable(false);
             $table->string('dosage', 50);
             $table->time('start_hour');
@@ -24,7 +24,8 @@ class Prescriptions extends Migration
             $table->boolean('closed')->nullable()->default(false);
             $table->timestamps();
             // Constraints
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

@@ -15,7 +15,7 @@ class CreateDoctorRatingsTable extends Migration
     {
         Schema::create('doctor_ratings', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('appointment_id');
+            $table->unsignedInteger('appointment_id')->nullable(true);
             $table->text('review')->nullable(true);
             $table->unsignedInteger('behavior');
             $table->unsignedInteger('price');
@@ -23,7 +23,8 @@ class CreateDoctorRatingsTable extends Migration
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('appointment_id')->references('id')->on('appointments');
+            $table->foreign('appointment_id')->references('id')->on('appointments')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

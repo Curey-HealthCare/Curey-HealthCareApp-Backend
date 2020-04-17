@@ -15,14 +15,16 @@ class CreateKeywordSearchesTable extends Migration
     {
         Schema::create('keyword_searches', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('keyword_id');
+            $table->unsignedInteger('user_id')->nullable(true);
+            $table->unsignedInteger('keyword_id')->nullable(true);
             $table->text('search_query');
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('keyword_id')->references('id')->on('keywords');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+            $table->foreign('keyword_id')->references('id')->on('keywords')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

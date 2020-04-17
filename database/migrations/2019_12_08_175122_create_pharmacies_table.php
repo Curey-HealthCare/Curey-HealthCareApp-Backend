@@ -15,14 +15,15 @@ class CreatePharmaciesTable extends Migration
     {
         Schema::create('pharmacies', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id')->unique();
+            $table->unsignedInteger('user_id')->nullable(true);
             $table->decimal('benefit_delivery')->nullable(true);
             $table->decimal('benefit_pharmacy')->nullable(true);
             $table->text('address')->nullable(true);
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

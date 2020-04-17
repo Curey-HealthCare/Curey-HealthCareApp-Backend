@@ -15,15 +15,18 @@ class CreateTimetablesTable extends Migration
     {
         Schema::create('timetables', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('day_id');
+            $table->unsignedInteger('user_id')->nullable(true);
+            $table->unsignedInteger('day_id')->nullable(true);
             $table->time('from');
             $table->time('to');
+            $table->unsignedInteger('duration')->default(60);
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('day_id')->references('id')->on('days');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+            $table->foreign('day_id')->references('id')->on('days')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

@@ -15,14 +15,16 @@ class CreateOrderDetailsTable extends Migration
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('order_id');
-            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('order_id')->nullable(true);
+            $table->unsignedInteger('product_id')->nullable(true);
             $table->unsignedInteger('amount')->default('1');
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('order_id')->references('id')->on('orders');
-            $table->foreign('product_id')->references('id')->on('products_pharmacies');
+            $table->foreign('order_id')->references('id')->on('orders')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+            $table->foreign('product_id')->references('id')->on('products_pharmacies')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

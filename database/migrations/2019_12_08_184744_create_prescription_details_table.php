@@ -15,14 +15,17 @@ class CreatePrescriptionDetailsTable extends Migration
     {
         Schema::create('prescription_details', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('prescription_id');
-            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('prescription_id')->nullable(true);
+            $table->unsignedInteger('product_id')->nullable(true);
             $table->text('dosage');
+            $table->boolean('per_week');
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('prescription_id')->references('id')->on('doctor_prescriptions');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('prescription_id')->references('id')->on('doctor_prescriptions')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+            $table->foreign('product_id')->references('id')->on('products')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

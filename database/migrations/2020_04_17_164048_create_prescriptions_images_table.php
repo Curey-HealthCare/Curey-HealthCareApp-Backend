@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsKeywordsTable extends Migration
+class CreatePrescriptionsImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateProductsKeywordsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products_keywords', function (Blueprint $table) {
+        Schema::create('prescriptions_images', function (Blueprint $table){
             $table->Increments('id');
-            $table->unsignedInteger('product_id')->nullable(true);
-            $table->unsignedInteger('keyword_id')->nullable(true);
+            $table->unsignedInteger('image_id')->nullable(true);
+            $table->unsignedInteger('user_id')->nullable(true);
+            $table->string('name');
             $table->timestamps();
 
-//            Constraints
-            $table->foreign('keyword_id')->references('id')->on('keywords')
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
-            $table->foreign('product_id')->references('id')->on('products')
+            $table->foreign('image_id')->references('id')->on('images')
                 ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
@@ -34,6 +34,6 @@ class CreateProductsKeywordsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products_keywords');
+        Schema::dropIfExists('prescriptions_images');
     }
 }

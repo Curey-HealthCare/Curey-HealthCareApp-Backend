@@ -15,12 +15,14 @@ class PresDay extends Migration
     {
         Schema::create('pres_day', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('prescription_id');
-            $table->unsignedInteger('day_id');
+            $table->unsignedInteger('prescription_id')->nullable(true);
+            $table->unsignedInteger('day_id')->nullable(true);
             $table->timestamps();
 //            Constraints
-            $table->foreign('prescription_id')->references('id')->on('prescriptions');
-            $table->foreign('day_id')->references('id')->on('days');
+            $table->foreign('prescription_id')->references('id')->on('prescriptions')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+            $table->foreign('day_id')->references('id')->on('days')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

@@ -15,7 +15,7 @@ class CreateDoctorsTable extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id')->unique();
+            $table->unsignedInteger('user_id')->nullable(true);
             $table->text('qualifications')->nullable(true);
             $table->unsignedInteger('speciality_id')->nullable(true);
             $table->text('address')->nullable(true);
@@ -27,7 +27,8 @@ class CreateDoctorsTable extends Migration
             $table->timestamps();
 
 //            constraints
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
 
             $table->foreign('speciality_id')->references('id')->on('specialities')
                 ->onUpdate('CASCADE')->onDelete('SET NULL');

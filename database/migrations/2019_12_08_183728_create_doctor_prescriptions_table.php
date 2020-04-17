@@ -15,11 +15,12 @@ class CreateDoctorPrescriptionsTable extends Migration
     {
         Schema::create('doctor_prescriptions', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('appointment_id');
+            $table->unsignedInteger('appointment_id')->nullable(true);
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('appointment_id')->references('id')->on('appointments');
+            $table->foreign('appointment_id')->references('id')->on('appointments')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

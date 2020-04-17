@@ -15,8 +15,8 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('doctor_id');
+            $table->unsignedInteger('user_id')->nullable(true);
+            $table->unsignedInteger('doctor_id')->nullable(true);
             $table->boolean('is_callup');
             $table->dateTime('appointment_time');
             $table->text('diagnosis')->nullable(true);
@@ -26,8 +26,10 @@ class CreateAppointmentsTable extends Migration
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('doctor_id')->references('id')->on('doctors');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+            $table->foreign('doctor_id')->references('id')->on('doctors')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

@@ -30,8 +30,10 @@ class CreateOrderTrackingsTable extends Migration
             $table->timestamps();
 
 //            Constraints
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+            $table->foreign('order_id')->references('id')->on('orders')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
         });
     }
 

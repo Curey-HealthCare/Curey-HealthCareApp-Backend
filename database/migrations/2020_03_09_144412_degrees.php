@@ -15,12 +15,13 @@ class Degrees extends Migration
     {
         Schema::create('degrees', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('doctor_id');
+            $table->unsignedInteger('doctor_id')->nullable(true);
             $table->string('degree');
             $table->timestamps();
             // Constraints
-            $table->foreign('doctor_id')->references('id')->on('doctors');
-           
+            $table->foreign('doctor_id')->references('id')->on('doctors')
+                ->onDelete('SET NULL')->onUpdate('CASCADE');
+
         });
     }
 
