@@ -264,13 +264,22 @@ class CartController extends Controller
                 $item_id = $product['id'];
                 $existing = Cart::where(['user_id' => $user -> id, 'product_id' => $item_id])->get();
                 if($existing -> isEmpty()){
-                    $cart_item = new Cart;
-                    $cart_item -> user_id = $user -> id;
-                    $cart_item -> product_id = $product['id'];
-                    $cart_item -> amount = $product['amount'];
-                    if($cart_item -> save()){
-                        $data += [
-                            'success' => 'item added to cart'
+                    $product = ProductPharmacy::where('id', $item_id)->first();
+                    if($product -> count > $product['amount']){
+                        $cart_item = new Cart;
+                        $cart_item -> user_id = $user -> id;
+                        $cart_item -> product_id = $product['id'];
+                        $cart_item -> amount = $product['amount'];
+                        if($cart_item -> save()){
+                            $data += [
+                                'success' => 'item added to cart'
+                            ];
+                        }
+                    }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'error' => 'not enough stock at pharmacy'
                         ];
                     }
                 }

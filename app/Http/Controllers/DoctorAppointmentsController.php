@@ -173,6 +173,7 @@ class DoctorAppointmentsController extends Controller
                     $appointment -> user_id = $user_id;
                     $appointment -> doctor_id = $doctor_id;
                     $appointment -> appointment_time = $appointment_time;
+                    $appointment -> re_examination = 1;
                     $appointment -> is_callup = $is_callup;
                     $appointment -> duration = $duration;
                     $appointment -> save();

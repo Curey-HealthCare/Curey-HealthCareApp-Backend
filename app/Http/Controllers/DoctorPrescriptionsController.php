@@ -72,6 +72,7 @@ class DoctorPrescriptionsController extends Controller
                                                     'name' => $product -> name,
                                                     'image' => $image_path,
                                                     'dosage' => $pro -> dosage,
+                                                    'per_week' => $pro -> per_week
                                                 ];
 
                                                 $details[] = $item;
@@ -153,6 +154,7 @@ class DoctorPrescriptionsController extends Controller
                                 $pres_detail -> prescription_id = $prescription -> id;
                                 $pres_detail -> product_id = $item['product_id'];
                                 $pres_detail -> dosage = $item['dosage'];
+                                $pres_detail -> per_week = $item['per_week'];
                                 $pres_detail -> save();
                             }
                         }
