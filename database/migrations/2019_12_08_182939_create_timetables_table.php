@@ -19,7 +19,6 @@ class CreateTimetablesTable extends Migration
             $table->unsignedInteger('day_id')->nullable(true);
             $table->time('from');
             $table->time('to');
-            $table->unsignedInteger('duration')->default(60);
             $table->timestamps();
 
 //            Constraints

@@ -20,7 +20,6 @@ class CreateAppointmentsTable extends Migration
             $table->boolean('is_callup');
             $table->dateTime('appointment_time');
             $table->text('diagnosis')->nullable(true);
-            $table->float('duration');
             $table->dateTime('last_checkup')->nullable(true);
             $table->boolean('re_examination')->default(false);
             $table->timestamps();

@@ -19,6 +19,7 @@ class CreateDoctorsTable extends Migration
             $table->text('qualifications')->nullable(true);
             $table->unsignedInteger('speciality_id')->nullable(true);
             $table->text('address')->nullable(true);
+            $table->unsignedInteger('duration');
             $table->boolean('offers_callup')->nullable(true);
             $table->float('fees')->nullable(true);
             $table->float('callup_fees')->nullable(true);

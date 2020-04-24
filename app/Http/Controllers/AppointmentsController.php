@@ -17,7 +17,6 @@ class AppointmentsController extends Controller
 {
     public function mobileAppShowAll(Request $request)
     {
-        //authenticated user
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -44,39 +43,29 @@ class AppointmentsController extends Controller
             else{
                 foreach($appointments as $app)
                 {
-                    //get id of the appointment
                     $id = $app->id;
-                    //get the doctor_id
-                    $doc_id = $app->doctor_id;
+                    $doc_id = $app -> doctor_id;
                     $doc = Doctor::where('id',$doc_id)->first();
-                    //display doctor address
-                    $add = $doc->address;
-                    //check if the doctor has callUp or not
-                    $isCallUp = $app ->is_callup;
+                    $add = $doc -> address;
+                    $isCallUp = $app -> is_callup;
                     if($isCallUp == 1)
                     {
-//                        show callup fees
-                        $fees = $doc ->callup_fees;
+                        $fees = $doc -> callup_fees;
                     }
                     else{
-//                        show booking fees
-                        $fees = $doc ->fees;
+                        $fees = $doc -> fees;
                     }
-                    //check if there is re-examination or not
-                    $reExamine = $app ->re_examination;
+                    $reExamine = $app -> re_examination;
                     if($reExamine==1)
                     {
-                        $checkup = $app->last_checkup;
+                        $checkup = $app -> last_checkup;
                     }
-                    //display doctor speciality
-                    $spec_id = $doc ->speciality_id;
+                    $spec_id = $doc -> speciality_id;
                     $spec= Speciality::find($spec_id);
-                    //to get name of the doctor
-                    $Uid = $doc ->user_id;
-                    $user = User::find($Uid);
-                    //display doctor image
-                    $img_id = $user->image_id;
-                    $image = Image::where('id',$img_id)->first();
+                    $Uid = $doc -> user_id;
+                    $user_doc = User::find($Uid);
+                    $img_id = $user_doc -> image_id;
+                    $image = Image::where('id' ,$img_id)->first();
                     if($image != null){
                         $image_path = $image -> path;
                     }
@@ -86,17 +75,16 @@ class AppointmentsController extends Controller
                     //response
                     $appointment=[
                         'id' => $id ,
-                        'full_name'=> $user -> full_name,
+                        'full_name'=> $user_doc -> full_name,
                         'address' => $add,
                         'image' => $image_path,
                         'speciality'=> $spec -> name,
                         'app_time' => $app -> appointment_time,
-                        'duration' => $app -> duration,
+                        'duration' => $doc -> duration,
                         'fees' => $fees,
                         'last_checkup' => $checkup,
                         'is_callup' => $app -> is_callup,
                         're_exam' => $app -> re_examination,
-
                     ];
                     $data [] = $appointment;
 
@@ -133,13 +121,14 @@ class AppointmentsController extends Controller
             $appointment_time = $request -> appointment_time;
             $is_callup = $request -> is_callup;
             $duration = 1;
+            $doc = Doctor::where('id', $doctor_id)->first();
             if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
                 $appointment = new Appointment;
                 $appointment -> user_id = $user_id;
                 $appointment -> doctor_id = $doctor_id;
                 $appointment -> appointment_time = $appointment_time;
                 $appointment -> is_callup = $is_callup;
-                $appointment -> duration = $duration;
+                $appointment -> duration = $doc -> duration;
 
                 if($appointment -> save()){
                     $data += [
@@ -230,8 +219,10 @@ class AppointmentsController extends Controller
                                     $this_day_appointments_no = $this_day_appointments->count();
                                     $from = Carbon::parse( $doctor_timetable -> from);
                                     $to = Carbon::parse( $doctor_timetable -> to);
+//                                    get duration in hours
+                                    $hour_duration = ($doctor_data -> duration) / 60;
                                     // each appointment is estimated to last 1 Hour
-                                    $appointments_no = $to->diffInHours($from);
+                                    $appointments_no = $to->diffInHours($from) / $hour_duration;
                                     if($this_day_appointments -> isNotEmpty()){
                                         if($this_day_appointments_no < $appointments_no){
                                             $time = $this_day1->addHours($from -> hour);
@@ -240,7 +231,7 @@ class AppointmentsController extends Controller
                                                 if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time])->count() == 0){
                                                     $first_day_app[] = $time -> toTimeString();
                                                 }
-                                                ($time)->addHours(1);
+                                                ($time)->addMinutes($doctor_data -> duration);
                                             }
                                             $first_day = $doctor_timetable;
                                             $day_1 = $this_day1;
@@ -255,7 +246,7 @@ class AppointmentsController extends Controller
                                         $time = $this_day1->addHours($from -> hour);
                                         for ($i = 0; $i < $appointments_no; $i++){
                                             $first_day_app[] = $time -> toTimeString();
-                                            ($time)->addHours(1);
+                                            ($time)->addMinutes($doctor_data -> duration);
                                         }
                                         $first_day = $doctor_timetable;
                                         $day_1 = $this_day1;
@@ -296,7 +287,8 @@ class AppointmentsController extends Controller
                                     $from2 = Carbon::parse( $doctor_timetable2 -> from);
                                     $to2 = Carbon::parse( $doctor_timetable2 -> to);
                                     // each appointment is estimated to last 1 Hour
-                                    $appointments_no2 = $to2->diffInHours($from2);
+                                    $hour_duration = ($doctor_data -> duration) / 60;
+                                    $appointments_no2 = $to2->diffInHours($from2) / $hour_duration;
                                     if($this_day_appointments2 -> isNotEmpty()){
                                         if($this_day_appointments_no2 < $appointments_no2){
                                             $time2 = $this_day2->addHours($from2 -> hour);
@@ -305,7 +297,7 @@ class AppointmentsController extends Controller
                                                 if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time2])->count() == 0){
                                                     $second_day_app[] = $time2 -> toTimeString();
                                                 }
-                                                ($time2)->addHours(1);
+                                                ($time2)->addMinutes($doctor_data -> duration);
                                             }
                                             $second_day = $doctor_timetable2;
                                             $day_2 = $this_day2;
@@ -320,7 +312,7 @@ class AppointmentsController extends Controller
                                         $time2 = $this_day2->addHours($from2 -> hour);
                                         for ($i = 0; $i < $appointments_no2; $i++){
                                             $second_day_app[] = $time2 -> toTimeString();
-                                            ($time2)->addHours(1);
+                                            ($time2)->addMinutes($doctor_data -> duration);
                                         }
                                         $second_day = $doctor_timetable2;
                                         $day_2 = $this_day2;
@@ -397,7 +389,6 @@ class AppointmentsController extends Controller
 
     public function webShowAll(Request $request)
     {
-        //authenticated user
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -413,11 +404,9 @@ class AppointmentsController extends Controller
             ];
         }
         else{
-            //userid
             $appointments = Appointment::where('user_id',$user -> id )->orderBy('appointment_time', 'desc')->get();
-            $appointment = [];
 
-            if($appointments->isEmpty()){
+            if($appointments -> isEmpty()){
                 $isFailed = true;
                 $errors+= [
                     'error' => 'no appointments yet'
@@ -426,39 +415,29 @@ class AppointmentsController extends Controller
             else{
                 foreach($appointments as $app)
                 {
-                    //get id of the appointment
                     $id = $app->id;
-                    //get the doctor_id
-                    $doc_id = $app->doctor_id;
+                    $doc_id = $app -> doctor_id;
                     $doc = Doctor::where('id',$doc_id)->first();
-                    //display doctor address
-                    $add = $doc->address;
-                    //check if the doctor has callup or not
-                    $isCallUp = $app ->is_callup;
+                    $add = $doc -> address;
+                    $isCallUp = $app -> is_callup;
                     if($isCallUp == 1)
                     {
-                        //callup fees
-                        $fees = $doc ->callup_fees;
+                        $fees = $doc -> callup_fees;
                     }
-                    else {
-                        //fees
-                        $fees = $doc ->fees;
+                    else{
+                        $fees = $doc -> fees;
                     }
-                    //check if there is re-examin or not
-                    $reExamine = $app ->re_examination;
+                    $reExamine = $app -> re_examination;
                     if($reExamine==1)
                     {
-                    $checkup = $app->last_checkup;
+                        $checkup = $app -> last_checkup;
                     }
-                    //display doctor speciality
-                    $spec_id = $doc ->speciality_id;
+                    $spec_id = $doc -> speciality_id;
                     $spec= Speciality::find($spec_id);
-                    //to get name of the doctor
-                    $Uid = $doc ->user_id;
-                    $user = User::find($Uid);
-                    //display doctor image
-                    $img_id = $user->image_id;
-                    $image = Image::where('id',$img_id)->first();
+                    $Uid = $doc -> user_id;
+                    $user_doc = User::find($Uid);
+                    $img_id = $user_doc -> image_id;
+                    $image = Image::where('id' ,$img_id)->first();
                     if($image != null){
                         $image_path = $image -> path;
                     }
@@ -468,17 +447,16 @@ class AppointmentsController extends Controller
                     //response
                     $appointment=[
                         'id' => $id ,
-                        'full_name'=> $user -> full_name,
+                        'full_name'=> $user_doc -> full_name,
                         'address' => $add,
                         'image' => $image_path,
                         'speciality'=> $spec -> name,
                         'app_time' => $app -> appointment_time,
-                        'duration' => $app -> duration,
+                        'duration' => $doc -> duration,
                         'fees' => $fees,
-                        'last_checkup' => $app -> last_checkup,
+                        'last_checkup' => $checkup,
                         'is_callup' => $app -> is_callup,
                         're_exam' => $app -> re_examination,
-
                     ];
                     $data [] = $appointment;
 
@@ -514,13 +492,14 @@ class AppointmentsController extends Controller
             $appointment_time = $request -> appointment_time;
             $is_callup = $request -> is_callup;
             $duration = 1;
+            $doc = Doctor::where('id', $doctor_id)->first();
             if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
                 $appointment = new Appointment;
                 $appointment -> user_id = $user_id;
                 $appointment -> doctor_id = $doctor_id;
                 $appointment -> appointment_time = $appointment_time;
                 $appointment -> is_callup = $is_callup;
-                $appointment -> duration = $duration;
+                $appointment -> duration = $doc -> duration;
 
                 if($appointment -> save()){
                     $data += [
@@ -530,11 +509,12 @@ class AppointmentsController extends Controller
                 else{
                     $isFailed = true;
                     $errors += [
-                        'error' => 'an appointment already exists at this time',
+                        'error' => 'could not register your appointment',
                     ];
                 }
+
             }
-            else {
+            else{
                 $isFailed = true;
                 $errors += [
                     'error' => 'an appointment already exists at this time',
@@ -585,7 +565,7 @@ class AppointmentsController extends Controller
                 if($doctor_timetables -> isEmpty()){
                     $isFailed = true;
                     $errors += [
-                        'message' => 'this doctor do not have a schedule yet',
+                        'error' => 'this doctor do not have a schedule yet',
                     ];
                 }
                 else{
@@ -609,8 +589,10 @@ class AppointmentsController extends Controller
                                     $this_day_appointments_no = $this_day_appointments->count();
                                     $from = Carbon::parse( $doctor_timetable -> from);
                                     $to = Carbon::parse( $doctor_timetable -> to);
+//                                    get duration in hours
+                                    $hour_duration = ($doctor_data -> duration) / 60;
                                     // each appointment is estimated to last 1 Hour
-                                    $appointments_no = $to->diffInHours($from);
+                                    $appointments_no = $to->diffInHours($from) / $hour_duration;
                                     if($this_day_appointments -> isNotEmpty()){
                                         if($this_day_appointments_no < $appointments_no){
                                             $time = $this_day1->addHours($from -> hour);
@@ -619,14 +601,14 @@ class AppointmentsController extends Controller
                                                 if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time])->count() == 0){
                                                     $first_day_app[] = $time -> toTimeString();
                                                 }
-                                                ($time)->addHours(1);
+                                                ($time)->addMinutes($doctor_data -> duration);
                                             }
                                             $first_day = $doctor_timetable;
                                             $day_1 = $this_day1;
-                                        break 2;
+                                            break 2;
                                         }
                                         else{
-                                        break;
+                                            break;
                                         }
                                     }
                                     else{
@@ -634,18 +616,18 @@ class AppointmentsController extends Controller
                                         $time = $this_day1->addHours($from -> hour);
                                         for ($i = 0; $i < $appointments_no; $i++){
                                             $first_day_app[] = $time -> toTimeString();
-                                            ($time)->addHours(1);
+                                            ($time)->addMinutes($doctor_data -> duration);
                                         }
                                         $first_day = $doctor_timetable;
                                         $day_1 = $this_day1;
-                                    break 2;
+                                        break 2;
                                     }
                                 }
                             }
                             $this_day1->addDays(1);
                         }
                         if($first_day_app != []){
-                        break;
+                            break;
                         }
                         $m++;
                     }
@@ -675,7 +657,8 @@ class AppointmentsController extends Controller
                                     $from2 = Carbon::parse( $doctor_timetable2 -> from);
                                     $to2 = Carbon::parse( $doctor_timetable2 -> to);
                                     // each appointment is estimated to last 1 Hour
-                                    $appointments_no2 = $to2->diffInHours($from2);
+                                    $hour_duration = ($doctor_data -> duration) / 60;
+                                    $appointments_no2 = $to2->diffInHours($from2) / $hour_duration;
                                     if($this_day_appointments2 -> isNotEmpty()){
                                         if($this_day_appointments_no2 < $appointments_no2){
                                             $time2 = $this_day2->addHours($from2 -> hour);
@@ -684,14 +667,14 @@ class AppointmentsController extends Controller
                                                 if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $time2])->count() == 0){
                                                     $second_day_app[] = $time2 -> toTimeString();
                                                 }
-                                                ($time2)->addHours(1);
+                                                ($time2)->addMinutes($doctor_data -> duration);
                                             }
                                             $second_day = $doctor_timetable2;
                                             $day_2 = $this_day2;
-                                        break 2;
+                                            break 2;
                                         }
                                         else{
-                                        break;
+                                            break;
                                         }
                                     }
                                     else{
@@ -699,18 +682,18 @@ class AppointmentsController extends Controller
                                         $time2 = $this_day2->addHours($from2 -> hour);
                                         for ($i = 0; $i < $appointments_no2; $i++){
                                             $second_day_app[] = $time2 -> toTimeString();
-                                            ($time2)->addHours(1);
+                                            ($time2)->addMinutes($doctor_data -> duration);
                                         }
                                         $second_day = $doctor_timetable2;
                                         $day_2 = $this_day2;
-                                    break 2;
+                                        break 2;
                                     }
                                 }
                             }
                             $this_day2->addDays(1);
                         }
                         if($second_day_app != []){
-                        break;
+                            break;
                         }
                         $n++;
                     }
@@ -725,7 +708,7 @@ class AppointmentsController extends Controller
             else{
                 $isFailed = true;
                 $errors += [
-                    'message' => 'this is not a doctor, ya Nahla OR ya Zayan',
+                    'error' => 'this is not a doctor, ya 3omar ya "ZAKI"',
                 ];
             }
         }

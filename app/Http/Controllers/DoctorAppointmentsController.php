@@ -167,7 +167,7 @@ class DoctorAppointmentsController extends Controller
                 $user_id = $request -> user_id;
                 $appointment_time = $request -> appointment_time;
                 $is_callup = $request -> is_callup;
-                $duration = 1;
+                $duration = $doctor -> duration;
                 if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
                     $appointment = new Appointment;
                     $appointment -> user_id = $user_id;
