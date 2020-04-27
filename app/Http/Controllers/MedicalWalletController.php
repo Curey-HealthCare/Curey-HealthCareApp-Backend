@@ -42,8 +42,10 @@ class MedicalWalletController extends Controller
                 foreach ($radiologies as $radiology) {
                     $radiology_image = Image::where('id', $radiology -> image_id)->first();
                     if($radiology_image != null){
-                        $image_path = $radiology_image -> path . $radiology_image -> extension;
-                        $image_url = asset($image_path);
+                        $image_path = $radiology_image -> path . '.' .$radiology_image -> extension;
+                        $path = public_path($image_path);
+                        echo asset($path) . "\n";
+                        $image_url = asset($path);
                         $image = [
                             'id' => $radiology -> id,
                             'image' => $image_url,
@@ -133,12 +135,12 @@ class MedicalWalletController extends Controller
         else{
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
-            $imageName = sha1(time());
-//            $file = Storage::disk('public')->put('/radiology/' . $imageName . '.' . $extension, File::get($image));
-            $file = $request->file('image')->store('radiology/');
+            $imageName = 'IMG_' . time();
+            $file = Storage::disk('local')->put('/radiology/' . $imageName . '.' . $extension, File::get($image));
+//            $file = $request->file('image')->storeAs('radiology/', $imageName . '.' . $extension);
 //            store image path in database
             $image_path  = new Image;
-            $image_path -> path = '/radiology/' . $imageName . '.' . $extension;
+            $image_path -> path = 'radiology/' . $imageName;
             $image_path -> extension = $extension;
             if($image_path -> save()){
 //                link the image to the user who owns it

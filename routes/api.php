@@ -210,4 +210,5 @@ Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
 
 //    Medical Wallet
     Route::post('/upload_radiology', 'MedicalWalletController@webSaveRadiology');
+    Route::get('/radiology', 'MedicalWalletController@webReadRadiology');
 });

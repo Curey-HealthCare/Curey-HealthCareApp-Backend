@@ -17,7 +17,7 @@ class CreatePrescriptionsImagesTable extends Migration
             $table->Increments('id');
             $table->unsignedInteger('image_id')->nullable(true);
             $table->unsignedInteger('user_id')->nullable(true);
-            $table->string('name');
+            $table->string('name')->nullable(true);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')
