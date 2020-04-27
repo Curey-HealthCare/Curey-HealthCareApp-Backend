@@ -43,8 +43,8 @@ class AppointmentSeeder extends Seeder
             
             //  Assign random IDs in every iteration
             $user = DB::table('users')->inRandomOrder()->where('role_id', 1)->first() -> id;
-            $doctor = DB::table('doctors')->inRandomOrder()->first() -> id;
-            $timetable = DB::table('timetables')->where(['user_id' => $doctor])->inRandomOrder()->first();
+            $doctor = DB::table('doctors')->inRandomOrder()->first();
+            $timetable = DB::table('timetables')->where(['user_id' => $doctor -> user_id])->inRandomOrder()->first();
 
             // Before doing anything, check if the timetable for the doctor exists, if not, reset the iteration
             if ($timetable == []){
@@ -66,10 +66,10 @@ class AppointmentSeeder extends Seeder
             // Iterate through the appointments, adding the record
             for ($i = 0; $i < $appointments_no; $i++){
                 //  Check if the doctor ID exists in the database alongside with the time specified, if not, adds the record
-                if (Appointment::where(['doctor_id' => $doctor, 'appointment_time' => $time])->count() == 0){
+                if (Appointment::where(['doctor_id' => $doctor  -> id, 'appointment_time' => $time])->count() == 0){
                     factory(Appointment::class)->create([
                         'user_id' => $user,
-                        'doctor_id' => $doctor,
+                        'doctor_id' => $doctor  -> id,
                         'appointment_time' => $time
                     ]);
                     break;
@@ -80,7 +80,7 @@ class AppointmentSeeder extends Seeder
                         $time->next($timetable_day)->addHours($timetable_from -> hour);
                         $i = 0;
                     } else {
-                        $time->addHours(1);
+                        $time->addMinutes($doctor -> duration);
                     }
                 }
             }
