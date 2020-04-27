@@ -17,8 +17,8 @@ class CreateImagesTable extends Migration
             $table->Increments('id');
             $table->text('path')->nullable(false);
             $table->string('extension', "15");
-            $table->string('image_code', "15");
-            $table->integer('size');
+            $table->string('image_code', "15")->nullable(true);
+            $table->integer('size')->nullable(true);
             $table->timestamps();
         });
     }

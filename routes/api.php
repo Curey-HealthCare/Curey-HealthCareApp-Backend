@@ -206,4 +206,8 @@ Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
     // doctor prescriptions
     Route::get('/doctor/prescriptions', 'DoctorPrescriptionsController@webReadAll');
     Route::post('/doctor/send_prescription', 'DoctorPrescriptionsController@webCreate');
+
+
+//    Medical Wallet
+    Route::post('/upload_radiology', 'MedicalWalletController@webSaveRadiology');
 });
