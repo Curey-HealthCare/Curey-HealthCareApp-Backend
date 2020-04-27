@@ -12,6 +12,7 @@ $factory->define(Doctor::class, function (Faker $faker) {
     return [
         'qualifications' => $faker->catchPhrase,
         'address' => $faker->address,
+        'duration' => $faker->numberBetween($min = 10, $max = 60),
         'offers_callup' => $callup,
         'fees' => $faker->numberBetween($min = 100, $max = 500),
         'callup_fees' => $callup == 0 ? null : $faker->numberBetween($min = 100, $max = 500),
