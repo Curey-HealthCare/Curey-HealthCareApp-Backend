@@ -76,3 +76,6 @@
    uncomment the line "'default' => env('DB_CONNECTION', 'pgsql'),"
    and comment the line "'default' => env('DB_CONNECTION', 'mysql'),"
    and if you want to go back to work offline, vice versa ..
+
+-> To make a link from 'storage/app/public' to 'public/storage' on server
+   Run php artisan storage:link
