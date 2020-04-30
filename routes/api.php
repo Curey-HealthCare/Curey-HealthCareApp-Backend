@@ -211,4 +211,10 @@ Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
 //    Medical Wallet
     Route::post('/upload_radiology', 'MedicalWalletController@webSaveRadiology');
     Route::get('/radiology', 'MedicalWalletController@webReadRadiology');
+    Route::post('/remove_radiology', 'MedicalWalletController@webDeleteRadiology');
+
+    Route::post('/upload_prescription', 'MedicalWalletController@webSavePrescription');
+    Route::get('/my_prescriptions', 'MedicalWalletController@webReadPrescriptions');
+    oute::post('/remove_prescription', 'MedicalWalletController@webDeletePrescription');
+
 });
