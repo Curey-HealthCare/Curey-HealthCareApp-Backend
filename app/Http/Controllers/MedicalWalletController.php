@@ -160,4 +160,49 @@ class MedicalWalletController extends Controller
 
         return response()->json($response);
     }
+
+    public function webSavePrescription(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+            $imageName = 'IMG_' . time();
+            $file = Storage::disk('public')->put('prescription/' . $imageName . '.' . $extension, File::get($image));
+            $image_path  = new Image;
+            $image_path -> path = 'prescription/' . $imageName;
+            $image_path -> extension = $extension;
+            if($image_path -> save()){
+//                link the image to the user who owns it
+                $radiology = new Radiology;
+                $radiology -> image_id = $image_path -> id;
+                $radiology -> user_id = $user -> id;
+                if($radiology -> save()){
+                    $data = [
+                        'success' => 'image uploaded successfully'
+                    ];
+                }
+            }
+        }
+
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
 }
