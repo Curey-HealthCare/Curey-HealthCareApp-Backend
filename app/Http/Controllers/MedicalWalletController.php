@@ -112,7 +112,7 @@ class MedicalWalletController extends Controller
         return response()->json($response);
     }
 
-    public  function webDeleteRadiology(Request $request){
+    public function webDeleteRadiology(Request $request){
         $isFailed = false;
         $data = [];
         $errors =  [];
@@ -134,12 +134,10 @@ class MedicalWalletController extends Controller
                 $image_id = $radiology -> image_id;
                 Radiology::where('id', $id)->delete();
                 $image = Image::where('id', $image_id)->first();
-                if(is_file($image -> path . $image -> extension))
-                {
-                    Storage::delete($image -> path . $image -> extension);
+                if(is_file($image -> path . $image -> extension)){
+                    Storage::delete($image -> path);
                 }
-                else
-                {
+                else{
 
                 }
             }
