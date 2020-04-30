@@ -134,11 +134,18 @@ class MedicalWalletController extends Controller
                 $image_id = $radiology -> image_id;
                 Radiology::where('id', $id)->delete();
                 $image = Image::where('id', $image_id)->first();
-                if(is_file($image -> path . $image -> extension)){
+                if(is_file($image -> path)){
                     Storage::delete($image -> path);
+                    Image::where('id', $image_id)->delete();
+                    $data = [
+                        'success' => 'image deleted successfully'
+                    ];
                 }
                 else{
-
+                    $isFailed = true;
+                    $errors += [
+                        'image' => 'file does not exist'
+                    ];
                 }
             }
         }
@@ -271,7 +278,19 @@ class MedicalWalletController extends Controller
                 $image_id = $prescription -> image_id;
                 PrescriptionImage::where('id', $id)->delete();
                 $image = Image::where('id', $image_id)->first();
-
+                if(is_file($image -> path)){
+                    Storage::delete($image -> path);
+                    Image::where('id', $image_id)->delete();
+                    $data = [
+                        'success' => 'image deleted successfully'
+                    ];
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'image' => 'file does not exist'
+                    ];
+                }
             }
         }
 
