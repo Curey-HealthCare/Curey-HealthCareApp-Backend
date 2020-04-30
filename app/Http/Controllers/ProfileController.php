@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Doctor;
 use App\ForgetPassword;
 use App\Pharmacy;
+use App\Speciality;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -14,9 +16,103 @@ use App\Image;
 use App\User;
 use App\City;
 use App\Gender;
+use function Sodium\add;
 
 class ProfileController extends Controller
 {
+    public function webGetData(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            $specialities = [];
+            $spec = 0;
+            $image = Image::where('id', $user -> image_id)->first();
+            if($image != null){
+                $image_path = Storage::url($image -> path . '.' . $image -> extension);
+                $image_url = asset($image_path);
+                $address = null;
+            }
+            $cities = [];
+            $city = City::all();
+            foreach ($city as $item){
+                $cities[] = [
+                    'id' => $item -> id,
+                    'name' => $item -> name,
+                ];
+            }
+            if($user -> role_id == 1){
+                $address = $user -> address;
+            }
+            elseif ($user -> role_id == 2){
+                $pharmacy = Pharmacy::where('user_id', $user -> id)->first();
+                if($pharmacy != null){
+                    $address = $pharmacy -> address;
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'unexpected failure'
+                    ];
+                }
+            }
+            elseif ($user -> role_id == 3){
+                $doctor = Doctor::where('user_id', $user -> id)->first();
+                if($doctor != null){
+                    $address = $doctor -> address;
+                    $spec = $doctor -> speciality_id;
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'unexpected failure'
+                    ];
+                }
+                $specs = Speciality::all();
+
+                foreach ($specs as $speciality){
+                    $specialities[] = [
+                        'id' => $speciality -> id,
+                        'name' => $speciality -> name,
+                    ];
+                }
+            }
+            $profile = [
+                'name' => $user -> full_name,
+                'email' => $user -> email,
+                'image' => $image_url,
+                'address' => $address,
+                'phone' => $user -> phone,
+                'speciality' => $spec,
+            ];
+
+            $data = [
+                'profile' => $profile,
+                'cities' => $cities,
+                'specialities' => $specialities
+            ];
+
+        }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
     public function webChangeName(Request $request){
         $isFailed = false;
         $data = [];
