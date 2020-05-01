@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Degree;
 use App\Doctor;
 use App\ForgetPassword;
 use App\Pharmacy;
@@ -37,6 +38,7 @@ class ProfileController extends Controller
         }
         else{
             $specialities = [];
+            $degrees = [];
             $spec = 0;
             $image = Image::where('id', $user -> image_id)->first();
             if($image != null){
@@ -87,6 +89,16 @@ class ProfileController extends Controller
                         'name' => $speciality -> name,
                     ];
                 }
+
+                $degree = Degree::where('doctor_id', $doctor -> id)->get();
+                if($degree -> isNotEmpty()){
+                    foreach ($degree as $item){
+                        $degrees[] = [
+                            'id' => $item -> id,
+                            'name' => $item -> degree,
+                        ];
+                    }
+                }
             }
             $profile = [
                 'name' => $user -> full_name,
@@ -94,8 +106,17 @@ class ProfileController extends Controller
                 'image' => $image_url,
                 'address' => $address,
                 'phone' => $user -> phone,
-                'speciality' => $spec,
             ];
+            if($user -> role_id == 3){
+                $profile += [
+                    'speciality' => $spec,
+                    'fees' => $doctor -> fees,
+                    'duration' => $doctor -> duration,
+                    'callup' => $doctor -> offers_callup,
+                    'callup_fees' => $doctor -> callup_fees,
+                    'degrees' => $degrees,
+                ];
+            }
 
             $data = [
                 'profile' => $profile,
