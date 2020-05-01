@@ -40,6 +40,8 @@ class ProfileController extends Controller
             $specialities = [];
             $degrees = [];
             $spec = 0;
+            $image_url = null;
+            $address = null;
             $image = Image::where('id', $user -> image_id)->first();
             if($image != null){
                 $image_path = Storage::url($image -> path . '.' . $image -> extension);
@@ -56,6 +58,9 @@ class ProfileController extends Controller
             }
             if($user -> role_id == 1){
                 $address = $user -> address;
+                if($image == null){
+                    $image_url = asset('default/user.png');
+                }
             }
             elseif ($user -> role_id == 2){
                 $pharmacy = Pharmacy::where('user_id', $user -> id)->first();
@@ -67,6 +72,9 @@ class ProfileController extends Controller
                     $errors += [
                         'error' => 'unexpected failure'
                     ];
+                }
+                if($image == null){
+                    $image_url = asset('default/pharmacy.png');
                 }
             }
             elseif ($user -> role_id == 3){
@@ -89,7 +97,9 @@ class ProfileController extends Controller
                         'name' => $speciality -> name,
                     ];
                 }
-
+                if($image == null){
+                    $image_url = asset('default/doctor.png');
+                }
                 $degree = Degree::where('doctor_id', $doctor -> id)->get();
                 if($degree -> isNotEmpty()){
                     foreach ($degree as $item){
@@ -106,6 +116,7 @@ class ProfileController extends Controller
                 'image' => $image_url,
                 'address' => $address,
                 'phone' => $user -> phone,
+                'role' => $user -> role_id,
             ];
             if($user -> role_id == 3){
                 $profile += [
@@ -430,6 +441,82 @@ class ProfileController extends Controller
             }
         }
 
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
+    public function webChangeSpeciality(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            if($request -> speciality != null || $request -> speciality != ''){
+                Doctor::where('user_id', $user -> id)->update(['speciality_id' => $request -> speciality]);
+                $data += [
+                    'success' => 'speciality changed successfully'
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'speciality' => 'speciality is empty'
+                ];
+            }
+        }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
+    public function webUpdateFees(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            if($request -> fees != null || $request -> fees != ''){
+                Doctor::where('user_id', $user -> id)->update(['fees' => $request -> fees]);
+                $data += [
+                    'success' => 'fees changed successfully'
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'fees' => 'fees empty'
+                ];
+            }
+        }
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,
