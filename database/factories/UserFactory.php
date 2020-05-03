@@ -22,7 +22,7 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => '1',
         'created_at' => now(),
         'updated_at' => now(),
-        'is_confirmed' => '1'
+        'is_complete' => '1'
         // randomElement($array = array ('a','b','c'))
     ];
 });

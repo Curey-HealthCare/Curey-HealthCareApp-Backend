@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Image;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -14,6 +17,7 @@ use App\Doctor;
 use App\Pharmacy;
 use App\Speciality;
 use App\UserRole;
+use PhpParser\Comment\Doc;
 
 class SignupController extends Controller
 {
@@ -209,128 +213,32 @@ class SignupController extends Controller
         return response()->json($response);
     }
 
-//    Will be moved to settings / Edit profile
-/*
-    public function show2(){
-        $countries = Country::all();
-        $cities = City::all();
-        $genders = Gender::all();
-        $specialities = Speciality::all();
-
+    public function completeSignupData(Request $request){
         $isFailed = false;
         $data = [];
         $errors =  [];
 
-        $data = [
-            'countries' => $countries,
-            'cities' => $cities,
-            'genders' => $genders,
-            'specialites' => $specialities,
-        ];
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
 
-
-        $response = [
-            'isFailed' => $isFailed,
-            'data' => $data,
-            'errors' => $errors,
-        ];
-
-        return response()->json($response);
-    }
-
-    public function signup2(Request $request){
-        $complete_user = new User;
-
-        $isFailed = false;
-        $data = [];
-        $errors =  [];
-
-        $complete_user -> id = $request -> id;
-        $complete_user -> role_id = $request -> role_id;
-        $complete_user -> first_name = $request -> first_name;
-        $complete_user -> country_id = $request -> country_id;
-        $complete_user -> city_id = $request -> city_id;
-        $complete_user -> phone = $request -> phone;
-
-        if ($complete_user -> role_id == '1'){
-            $complete_user -> last_name = $request -> last_name;
-            $complete_user -> address = $request -> address;
-            $complete_user -> gender_id = $request -> gender_id;
-
-            $complete_user -> where('id', $complete_user -> id)
-                -> update(
-                    ['first_name' => $complete_user -> first_name,
-                    'last_name' => $complete_user -> last_name,
-                    'phone' => $complete_user -> phone,
-                    'gender_id' => $complete_user -> gender_id,
-                    'country_id' => $complete_user -> country_id,
-                    'city_id' => $complete_user -> city_id,
-                    'address' => $complete_user -> address]
-                );
-
-            $user = User::where('id', $complete_user -> id)->first();
-
-            $data = [
-                'user' => $user
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
             ];
         }
-        elseif ($complete_user -> role_id == '2'){
-            $pharmacy = new Pharmacy;
-            $pharmacy -> address = $request -> address;
+        else{
+            $cities = City::all();
+            $specialities = Speciality::all();
 
-            $complete_user -> where('id', $complete_user -> id)
-                -> update(
-                    ['first_name' => $complete_user -> first_name,
-                        'phone' => $complete_user -> phone,
-                        'country_id' => $complete_user -> country_id,
-                        'city_id' => $complete_user -> city_id]);
-
-            $user = User::where('id', $complete_user -> id)->first();
-
-            $pharmacy -> where('user_id', $complete_user -> id)
-                -> update([
-                    'address' => $pharmacy -> address
-                ]);
-
-            $pharmacy = Pharmacy::where('user_id', $complete_user -> id)->first();
+            $isFailed = false;
+            $data = [];
+            $errors =  [];
 
             $data = [
-                'user' => $user,
-                'pharmacy' => $pharmacy
-            ];
-
-        }
-        elseif ($complete_user -> role_id == '3'){
-            $doctor = new Doctor;
-            $doctor -> last_name = $request -> last_name;
-            $doctor -> speciality_id = $request -> speciality_id;
-            $doctor -> qualifications = $request -> qualifications;
-            $doctor -> address = $request -> address;
-
-            $complete_user -> where('id', $complete_user -> id)
-                -> update(
-                    ['first_name' => $complete_user -> first_name,
-                        'last_name' => $doctor -> last_name,
-                        'phone' => $complete_user -> phone,
-                        'gender_id' => $complete_user -> gender_id,
-                        'country_id' => $complete_user -> country_id,
-                        'city_id' => $complete_user -> city_id]
-                );
-
-            $user = User::where('id', $complete_user -> id)->first();
-
-            $doctor -> where('user_id', $complete_user -> id)
-                -> update([
-                    'speciality_id' => $doctor -> speciality_id,
-                    'qualifications' => $doctor -> qualifications,
-                    'address' => $doctor -> address
-                ]);
-
-            $doctor = Doctor::where('user_id', $complete_user -> id)->first();
-
-            $data = [
-                'user' => $user,
-                'doctor' => $doctor
+                'cities' => $cities,
+                'specialites' => $specialities,
             ];
         }
 
@@ -342,8 +250,148 @@ class SignupController extends Controller
 
         return response()->json($response);
     }
-*/
-// End of edited code
+
+    public function completeSignupSubmit(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where('api_token', $api_token)->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            if($user -> role_id == 2){
+//                the case of a pharmacy type user
+                if($request -> city_id != null || $request -> address != null || $request -> phone != null){
+                    $is_complete = 0;
+                    if($request -> city_id != null && $request -> address != null && $request -> phone != null){
+                        $is_complete = 1;
+                    }
+                    if($request -> hasFile('image')){
+                        $image = $request->file('image');
+                        $extension = $image->getClientOriginalExtension();
+                        $imageName = 'IMG_' . time();
+                        $file = Storage::disk('public')->put('pharmacy/' . $imageName . '.' . $extension, File::get($image));
+                        $image_path  = new Image;
+                        $image_path -> path = 'pharmacy/' . $imageName;
+                        $image_path -> extension = $extension;
+                        $image_path -> save();
+                        $image_id = $image_path -> id;
+                    }
+                    else{
+                        $image_id = null;
+                    }
+                    User::where('id', $user -> id)->update([
+                        'city_id' => $request -> city_id,
+                        'image_id' => $image_id,
+                        'is_complete' => $is_complete,
+                        'phone' => $request -> phone,
+                    ]);
+                    Pharmacy::where('user_id', $user -> id)->update([
+                        'address' => $request -> address,
+                    ]);
+                    $data = [
+                        'success' => 'data entered successfully'
+                    ];
+                }
+                else{
+                    if($request -> city_id == null && $request -> address == null && $request -> phone == null){
+                        $isFailed = true;
+                        $errors += [
+                            'data' => 'request is empty'
+                        ];
+                    }
+                }
+            }
+            elseif ($user -> role_id == 3){
+//                the case of a doctor type user
+//                we have some data can be nullable such as homevisit(callup) fees and degrees
+                $is_complete = 0;
+                $null_count = 0;
+                $image_id = null;
+                if($request -> speciality_id == null){
+                    $null_count += 1;
+                }
+                if($request -> city_id == null){
+                    $null_count += 1;
+                }
+                if($request -> address == null){
+                    $null_count += 1;
+                }
+                if($request -> fees == null){
+                    $null_count += 1;
+                }
+                if($request -> duration == null){
+                    $null_count += 1;
+                }
+                if($request -> phone == null){
+                    $null_count += 1;
+                }
+                if(!($request -> hasFile('image'))){
+                    $null_count += 1;
+                }
+                else{
+                    $image = $request->file('image');
+                    $extension = $image->getClientOriginalExtension();
+                    $imageName = 'IMG_' . time();
+                    $file = Storage::disk('public')->put('pharmacy/' . $imageName . '.' . $extension, File::get($image));
+                    $image_path  = new Image;
+                    $image_path -> path = 'pharmacy/' . $imageName;
+                    $image_path -> extension = $extension;
+                    $image_path -> save();
+                    $image_id = $image_path -> id;
+                }
+//                check to point to a complete profile or not
+                if($null_count == 0){
+                    $is_complete = 1;
+                }
+                elseif($null_count == 7){
+                    $isFailed = true;
+                    $errors += [
+                        'data' => 'request is empty'
+                    ];
+                }
+
+                if($isFailed == false){
+                    $offers_callup = 0;
+                    if($request -> offers_callup == 1){
+                        $offers_callup = 1;
+                    }
+
+                    User::where('id', $user -> id)->update([
+                        'city_id' => $request -> city_id,
+                        'image_id' => $image_id,
+                        'phone' => $request -> phone,
+                    ]);
+                    Doctor::where('user_id', $user -> id)->update([
+                        'speciality_id' => $request -> speciality_id,
+                        'address' => $request -> address,
+                        'fees' => $request -> fees,
+                        'duration' => $request -> duration,
+                        'offers_callup' => $offers_callup,
+                        'callup_fees' => $request -> callup_fees,
+                    ]);
+                    $data = [
+                        'success' => 'data entered successfully'
+                    ];
+                }
+            }
+        }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors,
+        ];
+
+        return response()->json($response);
+    }
 
     public function mobileValidateToken(request $request){
         $user = User::where('api_token', $request -> api_token)->first();

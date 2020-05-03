@@ -209,6 +209,7 @@ class LoginController extends Controller
                         'image' => $image_path,
                         'email' => $existing_data -> email,
                         'role' => $existing_data -> role_id,
+                        'is_complete' => $existing_data -> is_complete,
                     ];
                 }
                 else{
