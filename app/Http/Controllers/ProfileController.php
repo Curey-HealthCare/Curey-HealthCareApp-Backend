@@ -525,4 +525,83 @@ class ProfileController extends Controller
 
         return response()->json($response);
     }
+
+    public function webChangeHomeVisit(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            if($request -> offers_callup != null && $request -> callup_fees != null){
+                Doctor::where('user_id', $user -> id)->update([
+                    'offers_callup' => $request -> offers_callup,
+                    'callup_fees' => $request -> callup_fees
+                ]);
+                $data += [
+                    'success' => 'data changed successfully'
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'home_visit' => 'missing data in request'
+                ];
+            }
+        }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
+
+    public function webUpdateDuration(Request $request){
+        $isFailed = false;
+        $data = [];
+        $errors =  [];
+
+        $api_token = $request -> api_token;
+        $user = null;
+        $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
+
+        if ($user == null){
+            $isFailed = true;
+            $errors += [
+                'auth' => 'authentication failed'
+            ];
+        }
+        else{
+            if($request -> duration != null || $request -> duration != ''){
+                Doctor::where('user_id', $user -> id)->update(['fees' => $request -> duration]);
+                $data += [
+                    'success' => 'duration changed successfully'
+                ];
+            }
+            else{
+                $isFailed = true;
+                $errors += [
+                    'duration' => 'duration cannot be zero'
+                ];
+            }
+        }
+        $response = [
+            'isFailed' => $isFailed,
+            'data' => $data,
+            'errors' => $errors
+        ];
+
+        return response()->json($response);
+    }
 }
