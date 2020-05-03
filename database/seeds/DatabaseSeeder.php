@@ -66,7 +66,6 @@ class DatabaseSeeder extends Seeder
                 ['id' => '1', 'name' => 'Customer', 'created_at' => NULL, 'updated_at' => NULL],
                 ['id' => '2', 'name' => 'Pharmacy', 'created_at' => NULL, 'updated_at' => NULL],
                 ['id' => '3', 'name' => 'Doctor', 'created_at' => NULL, 'updated_at' => NULL],
-                ['id' => '4', 'name' => 'Delivery', 'created_at' => NULL, 'updated_at' => NULL]
             ]);
         }
         if (DB::table('cities')->get()->count() == 0){

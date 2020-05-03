@@ -341,7 +341,7 @@ class SignupController extends Controller
                     $image = $request->file('image');
                     $extension = $image->getClientOriginalExtension();
                     $imageName = 'IMG_' . time();
-                    $file = Storage::disk('public')->put('pharmacy/' . $imageName . '.' . $extension, File::get($image));
+                    $file = Storage::disk('public')->put('doctor/' . $imageName . '.' . $extension, File::get($image));
                     $image_path  = new Image;
                     $image_path -> path = 'pharmacy/' . $imageName;
                     $image_path -> extension = $extension;
