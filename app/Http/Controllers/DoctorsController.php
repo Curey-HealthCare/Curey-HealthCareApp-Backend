@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\City;
@@ -65,10 +66,11 @@ class DoctorsController extends Controller
                     $image_id = $doc -> image_id;
                     $image = Image::where('id', $image_id)->first();
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
-                        $image_path = "default/doctor.png";
+                        $image_url = asset(Storage::url('default/doctor.png'));
                     }
 
                     $doc_id = $doc2 -> id;
@@ -102,7 +104,7 @@ class DoctorsController extends Controller
                         'id' => $doc2 -> id,
                         'full_name' => $doc -> full_name,
                         'speciality' => $speciality -> name,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'city_id' => $doc -> city_id,
                         'offers_callup' => $doc2 -> offers_callup,
                         'fees' => $doc2 -> fees,
@@ -180,10 +182,11 @@ class DoctorsController extends Controller
                 $image_id = $doc_user -> image_id;
                 $image = Image::where('id', $image_id)->first();
                 if($image != null){
-                    $image_path = $image -> path;
+                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                    $image_url = asset($image_path);
                 }
                 else{
-                    $image_path = "default/doctor.png";
+                    $image_url = asset(Storage::url('default/doctor.png'));
                 }
 
                 // Get Reviews
@@ -219,16 +222,17 @@ class DoctorsController extends Controller
                             $image_id = $user -> image_id;
                             $image = Image::where('id', $image_id)->first();
                             if($image != null){
-                                $image_path = $image -> path;
+                                $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                $image_url = asset($image_path);
                             }
                             else{
-                                $image_path = "default/user.png";
+                                $image_url = asset(Storage::url('default/user.png'));
                             }
                             $rate = [
                                 'rating' => $appointment_rating,
                                 'full_name' => $full_name,
                                 'review' => $review,
-                                'image' => $image_path
+                                'image' => $image_url
                             ];
                             $ratings[] = $rate;
                         }
@@ -257,7 +261,7 @@ class DoctorsController extends Controller
                     'id' => $id,
                     'full_name' => $doc_user -> full_name,
                     'speciality' => $spec -> name,
-                    'image' => $image_path,
+                    'image' => $image_url,
                     'qualifications' => $doc -> qualifications,
                     'fees' => $doc -> fees,
                     'offers_callup' => $doc -> offers_callup,
@@ -347,10 +351,11 @@ class DoctorsController extends Controller
                     $image_id = $doc -> image_id;
                     $image = Image::where('id', $image_id)->first();
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
-                        $image_path = "default/doctor.png";
+                        $image_url = asset(Storage::url('default/doctor.png'));
                     }
                     $doc_id = $doc2 -> id;
                     $appointments = Appointment::where('doctor_id', $doc_id)->get();
@@ -384,7 +389,7 @@ class DoctorsController extends Controller
                         'id' => $doc2 -> id,
                         'full_name' => $doc -> full_name,
                         'speciality' => $speciality -> name,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'city_id' => $doc -> city_id,
                         'offers_callup' => $doc2 -> offers_callup,
                         'fees' => $doc2 -> fees,
@@ -463,10 +468,11 @@ class DoctorsController extends Controller
                 $image_id = $doc_user -> image_id;
                 $image = Image::where('id', $image_id)->first();
                 if($image != null){
-                    $image_path = $image -> path;
+                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                    $image_url = asset($image_path);
                 }
                 else{
-                    $image_path = "default/doctor.png";
+                    $image_url = asset(Storage::url('default/doctor.png'));
                 }
 
                 // Get Reviews
@@ -509,16 +515,17 @@ class DoctorsController extends Controller
                             $image_id = $user -> image_id;
                             $image = Image::where('id', $image_id)->first();
                             if($image != null){
-                                $image_path = $image -> path;
+                                $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                $image_url = asset($image_path);
                             }
                             else{
-                                $image_path = "default/user.png";
+                                $image_url = asset(Storage::url('default/user.png'));
                             }
                             $rate = [
                                 'rating' => $appointment_rating,
                                 'full_name' => $full_name,
                                 'review' => $review,
-                                'image' => $image_path
+                                'image' => $image_url
                             ];
                             $ratings[] = $rate;
                         }
@@ -549,7 +556,7 @@ class DoctorsController extends Controller
                     'id' => $id,
                     'full_name' => $doc_user -> full_name,
                     'speciality' => $spec -> name,
-                    'image' => $image_path,
+                    'image' => $image_url,
                     'qualifications' => $doc -> qualifications,
                     'fees' => $doc -> fees,
                     'offers_callup' => $doc -> offers_callup,
