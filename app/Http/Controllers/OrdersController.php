@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 use App\User;
 use App\Order;
 use App\OrderDetail;
@@ -75,15 +77,16 @@ class OrdersController extends Controller
                         $image_id = $pharmacy_user -> image_id;
                         $image = Image::where('id',$image_id)->first();
                         if($image != null){
-                            $image_path = $image -> path;
+                            $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                            $image_url = asset($image_path);
                         }
                         else{
-                            $image_path = "default/pharmacy.png";
+                            $image_url = asset(Storage::url('default/pharmacy.png'));
                         }
                         $order_response = [
                             'id' => $order_id,
                             'pharmacy' => $pharmacy_user -> full_name,
-                            'image' => $image_path,
+                            'image' => $image_url,
                             'total_price' => $total_price,
                             'products' => $order_products
                         ];
@@ -358,15 +361,16 @@ class OrdersController extends Controller
                         $image_id = $pharmacy_user -> image_id;
                         $image = Image::where('id',$image_id)->first();
                         if($image != null){
-                            $image_path = $image -> path;
+                            $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                            $image_url = asset($image_path);
                         }
                         else{
-                            $image_path = "default/pharmacy.png";
+                            $image_url = asset(Storage::url('default/pharmacy.png'));
                         }
                         $order_response = [
                             'id' => $order_id,
                             'pharmacy' => $pharmacy_user -> full_name,
-                            'image' => $image_path,
+                            'image' => $image_url,
                             'total_price' => $total_price,
                             'products' => $order_products
                         ];
