@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\Favourite;
@@ -132,15 +133,16 @@ class FavouritesController extends Controller
                     $image = Image::where('id', $image_id)->first();
 
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
-                        $image_path = "default/product.png";
+                        $image_url = asset(Storage::url('default/product.png'));
                     }
                     $final_product = [
                         'id' => $product -> id,
                         'name' => $product -> name,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'price' => $product -> price
                     ];
 
@@ -287,15 +289,16 @@ class FavouritesController extends Controller
                     $image = Image::where('id', $image_id)->first();
 
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
-                        $image_path = "default/product.png";
+                        $image_url = asset(Storage::url('default/product.png'));
                     }
                     $final_product = [
                         'id' => $product -> id,
                         'name' => $product -> name,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'price' => $product -> price,
                         'description'  => $product -> descrption
                     ];
