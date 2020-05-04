@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\ProductPharmacy;
@@ -114,33 +115,35 @@ class CartController extends Controller
                                     $p_image = Image::where('id', $pharmacy_user -> image_id)->first();
                                     $p_image_path = null;
                                     if($p_image != null){
-                                        $p_image_path = $p_image -> path;
+                                        $p_image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                                        $p_image_url = asset($p_image_path);
                                     }
                                     else{
-                                        $p_image_path = "default/pharmacy.png";
+                                        $p_image_url = asset(Storage::url('default/pharmacy.png'));
                                     }
 
                                     $pharmacy_obj = [
                                         'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
-                                        'image' => $p_image_path,
+                                        'image' => $p_image_url,
                                         'product_pharmacy_id' => $item -> product_id,
                                         'count' => $product_pharmacy -> count,
                                     ];
                                     $image = Image::where('id', $product -> image_id)->first();
                                     $image_path = null;
                                     if($image != null){
-                                        $image_path = $image -> path;
+                                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                        $image_url = asset($image_path);
                                     }
                                     else{
-                                        $image_path = "default/product.png";
+                                        $image_url = asset(Storage::url('default/product.png'));
                                     }
                                     $product_obj = [
                                         'id' => $product -> id,
                                         'name' => $product -> name,
                                         'price' => $product -> price,
                                         'amount' => $amount,
-                                        'image' => $image_path,
+                                        'image' => $image_url,
                                         'pharmacy' => $pharmacy_obj
                                     ];
                                 }
@@ -348,32 +351,34 @@ class CartController extends Controller
                                     $p_image = Image::where('id', $pharmacy_user -> image_id)->first();
                                     $p_image_path = null;
                                     if($p_image != null){
-                                        $p_image_path = $p_image -> path;
+                                        $p_image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                                        $p_image_url = asset($p_image_path);
                                     }
                                     else{
-                                        $p_image_path = "default/pharmacy.png";
+                                        $p_image_url = asset(Storage::url('default/pharmacy.png'));
                                     }
                                     $pharmacy_obj = [
                                         'name' => $pharmacy_user -> full_name,
                                         'address' => $pharmacy -> address,
-                                        'image' => $p_image_path,
+                                        'image' => $p_image_url,
                                         'product_pharmacy_id' => $item -> product_id,
                                         'count' => $product_pharmacy -> count,
                                     ];
                                     $image = Image::where('id', $product -> image_id)->first();
                                     $image_path = null;
                                     if($image != null){
-                                        $image_path = $image -> path;
+                                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                        $image_url = asset($image_path);
                                     }
                                     else{
-                                        $image_path = "default/product.png";
+                                        $image_url = asset(Storage::url('default/product.png'));
                                     }
                                     $product_obj = [
                                         'id' => $product -> id,
                                         'name' => $product -> name,
                                         'price' => $product -> price,
                                         'amount' => $amount,
-                                        'image' => $image_path,
+                                        'image' => $image_url,
                                         'pharmacy' => $pharmacy_obj
                                     ];
                                 }
