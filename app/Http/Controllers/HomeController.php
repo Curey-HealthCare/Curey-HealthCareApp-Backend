@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\Image;
@@ -43,14 +44,15 @@ class HomeController extends Controller
             $image_id = $user -> image_id;
             $image = Image::where('id', $image_id)->first();
             if($image != null){
-                $image_path = $image -> path;
+                $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                $image_url = asset($image_path);
             }
             else{
-                $image_path = null;
+                $image_url = asset(Storage::url('default/user.png'));
             }
             $data += [
                 'full_name' => $user -> full_name,
-                'image' => $image_path
+                'image' => $image_url
             ];
         }
 
@@ -83,15 +85,24 @@ class HomeController extends Controller
             $image_id = $user -> image_id;
             $image = Image::where('id', $image_id)->first();
             if($image != null){
-                $image_path = $image -> path;
+                $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                $image_url = asset($image_path);
             }
             else{
-                $image_path = "default/user.png";
+                if($existing_data -> role_id == 1){
+                    $image_url = asset(Storage::url('default/user.png'));
+                }
+                elseif($existing_data -> role_id == 2){
+                    $image_url = asset(Storage::url('default/pharmacy.png'));
+                }
+                elseif($existing_data -> role_id == 3){
+                    $image_url = asset(Storage::url('default/doctor.png'));
+                }
             }
 
             $user_data = [
                 'name' => $user -> full_name,
-                'image' => $image_path,
+                'image' => $image_url,
             ];
 
             // get top 8 doctors
@@ -119,10 +130,11 @@ class HomeController extends Controller
                     $image_id = $doc -> image_id;
                     $image = Image::where('id', $image_id)->first();
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
-                        $image_path = "default/doctor.png";
+                        $image_url = asset(Storage::url('default/doctor.png'));
                     }
 
                     // TO DO
@@ -163,7 +175,7 @@ class HomeController extends Controller
                         'id' => $doc2 -> id,
                         'full_name' => $doc -> full_name,
                         'speciality' => $speciality -> name,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'city_id' => $doc -> city_id,
                         'offers_callup' => $doc2 -> offers_callup,
                         'fees' => $doc2 -> fees,
@@ -193,10 +205,11 @@ class HomeController extends Controller
                                 $image = Image::where('id', $image_id)->first();
 
                                 if($image != null){
-                                    $image_path = $image -> path;
+                                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                    $image_url = asset($image_path);
                                 }
                                 else{
-                                    $image_path = "default/product.png";
+                                    $image_url = asset(Storage::url('default/product.png'));
                                 }
                                 // check if the user have the product in favourites
                                 $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product -> id)->first();
@@ -207,7 +220,7 @@ class HomeController extends Controller
                                 $final_product = [
                                     'id' => $product -> id,
                                     'name' => $product -> name,
-                                    'image' => $image_path,
+                                    'image' => $image_url,
                                     'price' => $product -> price,
                                     'is_favourite' => $isFav,
                                 ];
