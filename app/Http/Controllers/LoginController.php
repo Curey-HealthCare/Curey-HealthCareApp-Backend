@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\City;
@@ -80,23 +81,24 @@ class LoginController extends Controller
                     $image = Image::where('id', $image_id)->first();
                     $image_path = null;
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
                         if($existing_data -> role_id == 1){
-                            $image_path = "default/user.png";
+                            $image_url = asset(Storage::url('default/user.png'));
                         }
                         elseif($existing_data -> role_id == 2){
-                            $image_path = "default/pharmacy.png";
+                            $image_url = asset(Storage::url('default/pharmacy.png'));
                         }
                         elseif($existing_data -> role_id == 3){
-                            $image_path = "default/doctor.png";
+                            $image_url = asset(Storage::url('default/doctor.png'));
                         }
                     }
                     $data = [
                         'api_token' => $api_token,
                         'full_name' => $existing_data -> full_name,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'role' => $existing_data -> role_id,
                     ];
                 }
@@ -190,23 +192,24 @@ class LoginController extends Controller
                     $image = Image::where('id', $image_id)->first();
                     $image_path = null;
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
                         if($existing_data -> role_id == 1){
-                            $image_path = "default/user.png";
+                            $image_url = asset(Storage::url('default/user.png'));
                         }
                         elseif($existing_data -> role_id == 2){
-                            $image_path = "default/pharmacy.png";
+                            $image_url = asset(Storage::url('default/pharmacy.png'));
                         }
                         elseif($existing_data -> role_id == 3){
-                            $image_path = "default/doctor.png";
+                            $image_url = asset(Storage::url('default/doctor.png'));
                         }
                     }
                     $data = [
                         'api_token' => $api_token,
                         'full_name' => $existing_data -> full_name,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'email' => $existing_data -> email,
                         'role' => $existing_data -> role_id,
                         'is_complete' => $existing_data -> is_complete,
