@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 use App\User;
@@ -46,10 +47,11 @@ class DoctorAppointmentsController extends Controller
                         $p_image_path = null;
                         $p_image = Image::where('id', $patient -> image_id)->first();
                         if($p_image != null){
-                            $p_image_path = $p_image -> path;
+                            $image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                            $p_image_path = asset($image_path);
                         }
                         else{
-                            $p_image_path = "default/user.png";
+                            $p_image_path = asset(Storage::url('default/user.png'));
                         }
                         $appointment = [
                             'id' => $app -> id,
@@ -111,10 +113,11 @@ class DoctorAppointmentsController extends Controller
                         $p_image_path = null;
                         $p_image = Image::where('id', $patient -> image_id)->first();
                         if($p_image != null){
-                            $p_image_path = $p_image -> path;
+                            $image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                            $p_image_path = asset($image_path);
                         }
                         else{
-                            $p_image_path = "default/user.png";
+                            $p_image_path = asset(Storage::url('default/user.png'));
                         }
                         $appointment = [
                             'id' => $app -> id,
