@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\Image;
@@ -45,10 +46,11 @@ class DoctorPrescriptionsController extends Controller
                             $p_image_path = null;
                             $p_image = Image::where('id', $patient -> image_id)->first();
                             if($p_image != null){
-                                $p_image_path = $p_image -> path;
+                                $image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                                $p_image_path = asset($image_path);
                             }
                             else{
-                                $p_image_path = "default/user.png";
+                                $p_image_path = asset(Storage::url('default/user.png'));
                             }
                             $prescriptions = DrPrescription::where('appointment_id', $appointment -> id)->get();
                             // echo $prescriptions;
@@ -63,14 +65,15 @@ class DoctorPrescriptionsController extends Controller
                                                 $image_path = null;
                                                 $image = Image::where('id', $product -> image_id)->first();
                                                 if($image != null){
-                                                    $image_path = $image -> path;
+                                                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                                    $image_url = asset($image_path);
                                                 }
                                                 else{
-                                                    $image_path = "default/product.png";
+                                                    $image_url = asset(Storage::url('default/product.png'));
                                                 }
                                                 $item = [
                                                     'name' => $product -> name,
-                                                    'image' => $image_path,
+                                                    'image' => $image_url,
                                                     'dosage' => $pro -> dosage,
                                                     'per_week' => $pro -> per_week
                                                 ];
