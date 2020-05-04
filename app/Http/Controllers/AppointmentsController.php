@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\City;
 use App\Doctor;
@@ -67,17 +68,18 @@ class AppointmentsController extends Controller
                     $img_id = $user_doc -> image_id;
                     $image = Image::where('id' ,$img_id)->first();
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
-                        $image_path = "default/doctor.png";
+                        $image_url = asset(Storage::url('default/doctor.png'));
                     }
                     //response
                     $appointment=[
                         'id' => $id ,
                         'full_name'=> $user_doc -> full_name,
                         'address' => $add,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'speciality'=> $spec -> name,
                         'app_time' => $app -> appointment_time,
                         'duration' => $doc -> duration,
@@ -439,17 +441,18 @@ class AppointmentsController extends Controller
                     $img_id = $user_doc -> image_id;
                     $image = Image::where('id' ,$img_id)->first();
                     if($image != null){
-                        $image_path = $image -> path;
+                        $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                        $image_url = asset($image_path);
                     }
                     else{
-                        $image_path = "default/doctor.png";
+                        $image_url = asset(Storage::url('default/doctor.png'));
                     }
                     //response
                     $appointment=[
                         'id' => $id ,
                         'full_name'=> $user_doc -> full_name,
                         'address' => $add,
-                        'image' => $image_path,
+                        'image' => $image_url,
                         'speciality'=> $spec -> name,
                         'app_time' => $app -> appointment_time,
                         'duration' => $doc -> duration,
