@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\City;
@@ -64,10 +65,11 @@ class MedicationsController extends Controller
                                 $image = Image::where('id', $image_id)->first();
 
                                 if($image != null){
-                                    $image_path = $image -> path;
+                                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                    $image_url = asset($image_path);
                                 }
                                 else{
-                                    $image_path = "default/product.png";
+                                    $image_url = asset(Storage::url('default/product.png'));
                                 }
                                 // check if the user have the product in favourites
                                 $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product -> id)->first();
@@ -86,7 +88,7 @@ class MedicationsController extends Controller
                                 $final_product = [
                                     'id' => $product -> id,
                                     'name' => $product -> name,
-                                    'image' => $image_path,
+                                    'image' => $image_url,
                                     'price' => $product -> price,
                                     'is_favourite' => $isFav,
                                     'keywords' => $keywords_ids,
@@ -174,10 +176,11 @@ class MedicationsController extends Controller
                 $image_id = $pro -> image_id;
                 $image = Image::where('id', $image_id)->first();
                 if($image != null){
-                    $image_path = $image -> path;
+                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                    $image_url = asset($image_path);
                 }
                 else{
-                    $image_path = "default/product.png";
+                    $image_url = asset(Storage::url('default/product.png'));
                 }
                 $city = City::find($user -> city_id);
 
@@ -192,7 +195,7 @@ class MedicationsController extends Controller
                 $product = [
                     'id' => $product_id,
                     'name' => $pro -> name,
-                    'image' => $image_path,
+                    'image' => $image_url,
                     'description' => $pro -> description,
                     'price' => $pro -> price,
                     'delivery_fees' => $delivery_fees,
@@ -216,10 +219,11 @@ class MedicationsController extends Controller
                                 $image_id = $pharmacy -> image_id;
                                 $image = Image::where('id', $image_id)->first();
                                 if($image != null){
-                                    $image_path = $image -> path;
+                                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                    $image_url = asset($image_path);
                                 }
                                 else{
-                                    $image_path = "default/pharmacy.png";
+                                    $image_url = asset(Storage::url('default/pharmacy.png'));
                                 }
                                 //ratings
                                 $overall_rating = 0;
@@ -248,7 +252,7 @@ class MedicationsController extends Controller
                                     'id' => $pharmacy -> id,
                                     'name' => $pharmacy -> full_name,
                                     'address' => $pharmacies -> address,
-                                    'image' => $image_path,
+                                    'image' => $image_url,
                                     'overall_rating' => $overall_rating,
                                     'city_id' => $pharmacy -> city_id,
                                     'product_pharmacy_id' => $pharmacy_product -> id,
@@ -347,10 +351,11 @@ class MedicationsController extends Controller
                                 $image = Image::where('id', $image_id)->first();
 
                                 if($image != null){
-                                    $image_path = $image -> path;
+                                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                    $image_url = asset($image_path);
                                 }
                                 else{
-                                    $image_path = "default/product.png";
+                                    $image_url = asset(Storage::url('default/product.png'));
                                 }
                                 // check if the user have the product in favourites
                                 $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $product -> id)->first();
@@ -369,7 +374,7 @@ class MedicationsController extends Controller
                                 $final_product = [
                                     'id' => $product -> id,
                                     'name' => $product -> name,
-                                    'image' => $image_path,
+                                    'image' => $image_url,
                                     'price' => $product -> price,
                                     'is_favourite' => $isFav,
                                     'description'  => $descrption,
@@ -458,10 +463,11 @@ class MedicationsController extends Controller
                 $image_id = $pro -> image_id;
                 $image = Image::where('id', $image_id)->first();
                 if($image != null){
-                    $image_path = $image -> path;
+                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                    $image_url = asset($image_path);
                 }
                 else{
-                    $image_path = "default/product.png";
+                    $image_url = asset(Storage::url('default/product.png'));
                 }
                 $city = City::find($user -> city_id);
 
@@ -476,7 +482,7 @@ class MedicationsController extends Controller
                 $product = [
                     'id' => $product_id,
                     'name' => $pro -> name,
-                    'image' => $image_path,
+                    'image' => $image_url,
                     'description' => $pro -> description,
                     'price' => $pro -> price,
                     'delivery_fees' => $delivery_fees,
@@ -500,10 +506,11 @@ class MedicationsController extends Controller
                                 $image_id = $pharmacy -> image_id;
                                 $image = Image::where('id', $image_id)->first();
                                 if($image != null){
-                                    $image_path = $image -> path;
+                                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                    $image_url = asset($image_path);
                                 }
                                 else{
-                                    $image_path = "default/pharmacy.png";
+                                    $image_url = asset(Storage::url('default/pharmacy.png'));
                                 }
                                 //ratings
                                 $overall_rating = 0;
@@ -532,7 +539,7 @@ class MedicationsController extends Controller
                                     'id' => $pharmacy -> id,
                                     'name' => $pharmacy -> full_name,
                                     'address' => $pharmacies -> address,
-                                    'image' => $image_path,
+                                    'image' => $image_url,
                                     'overall_rating' => $overall_rating,
                                     'city_id' => $pharmacy -> city_id,
                                     'product_pharmacy_id' => $pharmacy_product -> id,
