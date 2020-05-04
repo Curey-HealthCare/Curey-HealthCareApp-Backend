@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\City;
@@ -93,10 +94,11 @@ class SearchController extends Controller
                         $image_id = $doctor_user -> image_id;
                         $image = Image::where('id', $image_id)->first();
                         if($image != null){
-                            $image_path = $image -> path;
+                            $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                            $image_url = asset($image_path);
                         }
                         else{
-                            $image_path = "default/doctor.png";
+                            $image_url = asset(Storage::url('default/doctor.png'));
                         }
 
                         // show overall rating
@@ -131,7 +133,7 @@ class SearchController extends Controller
                             'id' => $doc -> id,
                             'full_name' => $doctor_user -> full_name,
                             'speciality' => $s_name,
-                            'image' => $image_path,
+                            'image' => $image_url,
                             'fees' => $doc -> fees,
                             'offers_callup' => $doc -> offers_callup,
                             'overall_rating' => $ratings,
@@ -226,10 +228,11 @@ class SearchController extends Controller
                             $image = Image::where('id', $image_id)->first();
 
                             if($image != null){
-                                $image_path = $image -> path;
+                                $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                $image_url = asset($image_path);
                             }
                             else{
-                                $image_path = "default/product.png";
+                                $image_url = asset(Storage::url('default/product.png'));
                             }
 
                             $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
@@ -248,7 +251,7 @@ class SearchController extends Controller
                             $final_product = [
                                 'id' => $pro -> id,
                                 'name' => $pro -> name,
-                                'image' => $image_path,
+                                'image' => $image_url,
                                 'price' => $pro -> price,
                                 'is_favourite' => $isFav,
                                 'keywords' => $keywords_ids,
@@ -264,10 +267,11 @@ class SearchController extends Controller
                         $image = Image::where('id', $image_id)->first();
 
                         if($image != null){
-                            $image_path = $image -> path;
+                            $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                            $image_url = asset($image_path);
                         }
                         else{
-                            $image_path = "default/product.png";
+                            $image_url = asset(Storage::url('default/product.png'));
                         }
 
                         $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
@@ -286,7 +290,7 @@ class SearchController extends Controller
                         $final_product = [
                             'id' => $pro -> id,
                             'name' => $pro -> name,
-                            'image' => $image_path,
+                            'image' => $image_url,
                             'price' => $pro -> price,
                             'is_favourite' => $isFav,
                             'keywords' => $keywords_ids,
@@ -403,10 +407,11 @@ class SearchController extends Controller
                         $image_id = $doctor_user -> image_id;
                         $image = Image::where('id', $image_id)->first();
                         if($image != null){
-                            $image_path = $image -> path;
+                            $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                            $image_url = asset($image_path);
                         }
                         else{
-                            $image_path = "default/doctor.png";
+                            $image_url = asset(Storage::url('default/doctor.png'));
                         }
 
                         // show overall rating
@@ -441,7 +446,7 @@ class SearchController extends Controller
                             'id' => $doc -> id,
                             'full_name' => $doctor_user -> full_name,
                             'speciality' => $s_name,
-                            'image' => $image_path,
+                            'image' => $image_url,
                             'fees' => $doc -> fees,
                             'offers_callup' => $doc -> offers_callup,
                             'overall_rating' => $ratings,
@@ -536,10 +541,11 @@ class SearchController extends Controller
                             $image = Image::where('id', $image_id)->first();
 
                             if($image != null){
-                                $image_path = $image -> path;
+                                $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                                $image_url = asset($image_path);
                             }
                             else{
-                                $image_path = "default/product.png";
+                                $image_url = asset(Storage::url('default/product.png'));
                             }
 
                             $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
@@ -558,7 +564,7 @@ class SearchController extends Controller
                             $final_product = [
                                 'id' => $pro -> id,
                                 'name' => $pro -> name,
-                                'image' => $image_path,
+                                'image' => $image_url,
                                 'price' => $pro -> price,
                                 'is_favourite' => $isFav,
                                 'description' => $pro -> description,
@@ -575,10 +581,11 @@ class SearchController extends Controller
                         $image = Image::where('id', $image_id)->first();
 
                         if($image != null){
-                            $image_path = $image -> path;
+                            $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                            $image_url = asset($image_path);
                         }
                         else{
-                            $image_path = "default/product.png";
+                            $image_url = asset(Storage::url('default/product.png'));
                         }
 
                         $favourite = Favourite::where('user_id', $user -> id)->where('product_id', $pro -> id)->first();
@@ -597,7 +604,7 @@ class SearchController extends Controller
                         $final_product = [
                             'id' => $pro -> id,
                             'name' => $pro -> name,
-                            'image' => $image_path,
+                            'image' => $image_url,
                             'price' => $pro -> price,
                             'is_favourite' => $isFav,
                             'description' => $pro -> description,
