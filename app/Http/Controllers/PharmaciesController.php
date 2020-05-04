@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 use App\User;
@@ -65,10 +66,11 @@ class PharmaciesController extends Controller
                 $image_id = $user -> image_id;
                 $image = Image::where('id', $image_id)->first();
                 if($image != null){
-                    $image_pharmacy = $image -> path;
+                    $image_path = Storage::url($image -> path . '.' .$image -> extension);
+                    $image_url = asset($image_path);
                 }
                 else{
-                    $image_pharmacy = "default/pharmacy.png";
+                    $image_url = asset(Storage::url('default/pharmacy.png'));
                 }
                 // get pharmacy overall rating and reviews
                 $ratings = 0;
@@ -99,10 +101,11 @@ class PharmaciesController extends Controller
                                         $product_image = null;
                                         $p_image = Image::where('id', $product -> image_id)->first();
                                         if($p_image != null){
-                                            $product_image = $p_image -> path;
+                                            $image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                                            $product_image = asset($image_path);
                                         }
                                         else{
-                                            $product_image = "default/product.png";
+                                            $product_image = asset(Storage::url('default/product.png'));
                                         }
                                         $item = [
                                             'product' => $product -> name,
@@ -115,10 +118,11 @@ class PharmaciesController extends Controller
                                     $user_image = null;
                                     $u_image = Image::where('id', $order_user -> image_id)->first();
                                     if($u_image != null){
-                                        $user_image = $u_image -> path;
+                                        $image_path = Storage::url($u_image -> path . '.' .$u_image -> extension);
+                                        $user_image = asset($image_path);
                                     }
                                     else{
-                                        $user_image = "default/user.png";
+                                        $user_image = asset(Storage::url('default/user.png'));
                                     }
                                     $order_data = [
                                         'buyer' => $order_user -> full_name,
@@ -136,7 +140,7 @@ class PharmaciesController extends Controller
 
                 $pharma = [
                     'name' => $user -> full_name,
-                    'image' => $image_pharmacy,
+                    'image' => $image_url,
                     'address' => $pharmacy -> address,
                     'rating' => $overall_rating,
                     'reviews_count' => $no_of_reviews,
@@ -271,10 +275,11 @@ class PharmaciesController extends Controller
                                         $product_image = null;
                                         $p_image = Image::where('id', $product -> image_id)->first();
                                         if($p_image != null){
-                                            $product_image = $p_image -> path;
+                                            $image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                                            $product_image = asset($image_path);
                                         }
                                         else{
-                                            $product_image = "default/product.png";
+                                            $product_image = asset(Storage::url('default/product.png'));
                                         }
                                         $item = [
                                             'product' => $product -> name,
@@ -287,10 +292,11 @@ class PharmaciesController extends Controller
                                     $user_image = null;
                                     $u_image = Image::where('id', $order_user -> image_id)->first();
                                     if($u_image != null){
-                                        $user_image = $u_image -> path;
+                                        $image_path = Storage::url($u_image -> path . '.' .$u_image -> extension);
+                                        $user_image = asset($image_path);
                                     }
                                     else{
-                                        $user_image = "default/user.png";
+                                        $user_image = asset(Storage::url('default/user.png'));
                                     }
                                     $order_data = [
                                         'id' => $order -> id,
@@ -403,10 +409,11 @@ class PharmaciesController extends Controller
                                         $product_image = null;
                                         $p_image = Image::where('id', $product -> image_id)->first();
                                         if($p_image != null){
-                                            $product_image = $p_image -> path;
+                                            $image_path = Storage::url($p_image -> path . '.' .$p_image -> extension);
+                                            $product_image = asset($image_path);
                                         }
                                         else{
-                                            $product_image = "default/product.png";
+                                            $product_image = asset(Storage::url('default/product.png'));
                                         }
                                         $item = [
                                             'product' => $product -> name,
@@ -419,10 +426,11 @@ class PharmaciesController extends Controller
                                     $user_image = null;
                                     $u_image = Image::where('id', $order_user -> image_id)->first();
                                     if($u_image != null){
-                                        $user_image = $u_image -> path;
+                                        $image_path = Storage::url($u_image -> path . '.' .$u_image -> extension);
+                                        $user_image = asset($image_path);
                                     }
                                     else{
-                                        $user_image = "default/user.png";
+                                        $user_image = asset(Storage::url('default/user.png'));
                                     }
                                     $order_data = [
                                         'id' => $order -> id,
