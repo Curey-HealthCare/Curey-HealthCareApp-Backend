@@ -84,6 +84,57 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/add_favourites', 'FavouritesController@mobileAddFavourite');
     // Remove from favourites
     Route::post('/delete_favourites', 'FavouritesController@mobileDeleteFavourite');
+    // *********************************************************** //
+    // pharmacy dashboard Page
+    Route::get('/pharmacy_dashboard', 'PharmaciesController@WebPharmacyDashboard');
+    //medication list
+    Route::get('/stock', 'PharmaciesController@webStock');
+    //requests
+    Route::get('/requests', 'PharmaciesController@webRequests');
+    Route::post('/accept_request', 'PharmaciesController@webAcceptRequest');
+    // packing list
+    Route::get('/packing_list', 'PharmaciesController@webPackingList');
+    Route::post('/order_ready', 'PharmaciesController@webOrderReady');
+    // *********************************************************** //
+    // doctor Dashboard
+    Route::get('/doctor_dashboard', 'DoctorDashboardController@webDashboard');
+    // doctor schedule
+    Route::post('/add_schedule', 'ScheduleController@webCreate');
+    Route::get('/schedule', 'ScheduleController@webRead');
+    Route::post('/update_day', 'ScheduleController@webUpdate');
+    Route::post('/delete_day', 'ScheduleController@webDelete');
+    // home visit status
+    Route::post('/homevisit_status', 'ScheduleController@webHomeVisitStatus');
+    // doctor appointments
+    Route::get('/doctor/requests', 'DoctorAppointmentsController@webReadRequests');
+    Route::get('/doctor/reExaminations', 'DoctorAppointmentsController@webReadReExamination');
+    Route::post('/doctor/set_reExamination', 'DoctorAppointmentsController@webSetReExamination');
+    // doctor prescriptions
+    Route::get('/doctor/prescriptions', 'DoctorPrescriptionsController@webReadAll');
+    Route::post('/doctor/send_prescription', 'DoctorPrescriptionsController@webCreate');
+    // *********************************************************** //
+//    Medical Wallet
+//    radiology
+    Route::post('/upload_radiology', 'MedicalWalletController@webSaveRadiology');
+    Route::get('/radiology', 'MedicalWalletController@webReadRadiology');
+    Route::post('/remove_radiology', 'MedicalWalletController@webDeleteRadiology');
+//    written prescriptions images
+    Route::post('/upload_prescription', 'MedicalWalletController@webSavePrescription');
+    Route::get('/my_prescriptions', 'MedicalWalletController@webReadPrescriptions');
+    Route::post('/remove_prescription', 'MedicalWalletController@webDeletePrescription');
+//    profile
+    Route::get('/profile', 'ProfileController@webGetData');
+    Route::post('/change_name', 'ProfileController@webChangeName');
+    Route::post('/change_image', 'ProfileController@webChangeImage');
+    Route::post('/change_address', 'ProfileController@webChangeAddress');
+    Route::post('/change_email', 'ProfileController@webChangeEmail');
+    Route::post('/change_password', 'ProfileController@webChangePassword');
+    Route::post('/change_phone', 'ProfileController@webChangePhone');
+//    doctor profile
+    Route::post('/change_speciality', 'ProfileController@webChangeSpeciality');
+    Route::post('/change_fees', 'ProfileController@webUpdateFees');
+    Route::post('/change_hv', 'ProfileController@webChangeHomeVisit');
+    Route::post('/change_duration', 'ProfileController@webUpdateDuration');
 });
 
 Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
@@ -179,4 +230,15 @@ Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
     Route::post('/remove_prescription', 'MedicalWalletController@webDeletePrescription');
 //    profile
     Route::get('/profile', 'ProfileController@webGetData');
+    Route::post('/change_name', 'ProfileController@webChangeName');
+    Route::post('/change_image', 'ProfileController@webChangeImage');
+    Route::post('/change_address', 'ProfileController@webChangeAddress');
+    Route::post('/change_email', 'ProfileController@webChangeEmail');
+    Route::post('/change_password', 'ProfileController@webChangePassword');
+    Route::post('/change_phone', 'ProfileController@webChangePhone');
+//    doctor profile
+    Route::post('/change_speciality', 'ProfileController@webChangeSpeciality');
+    Route::post('/change_fees', 'ProfileController@webUpdateFees');
+    Route::post('/change_hv', 'ProfileController@webChangeHomeVisit');
+    Route::post('/change_duration', 'ProfileController@webUpdateDuration');
 });
