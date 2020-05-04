@@ -89,13 +89,13 @@ class HomeController extends Controller
                 $image_url = asset($image_path);
             }
             else{
-                if($existing_data -> role_id == 1){
+                if($user -> role_id == 1){
                     $image_url = asset(Storage::url('default/user.png'));
                 }
-                elseif($existing_data -> role_id == 2){
+                elseif($user -> role_id == 2){
                     $image_url = asset(Storage::url('default/pharmacy.png'));
                 }
-                elseif($existing_data -> role_id == 3){
+                elseif($user -> role_id == 3){
                     $image_url = asset(Storage::url('default/doctor.png'));
                 }
             }
