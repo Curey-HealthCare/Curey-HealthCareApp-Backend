@@ -232,7 +232,8 @@ class DoctorsController extends Controller
                                 'rating' => $appointment_rating,
                                 'full_name' => $full_name,
                                 'review' => $review,
-                                'image' => $image_url
+                                'image' => $image_url,
+                                'timestamp' => $rating -> created_at
                             ];
                             $ratings[] = $rate;
                         }
@@ -525,7 +526,8 @@ class DoctorsController extends Controller
                                 'rating' => $appointment_rating,
                                 'full_name' => $full_name,
                                 'review' => $review,
-                                'image' => $image_url
+                                'image' => $image_url,
+                                'timestamp' => $rating -> created_at
                             ];
                             $ratings[] = $rate;
                         }

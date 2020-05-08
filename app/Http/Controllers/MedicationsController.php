@@ -231,6 +231,7 @@ class MedicationsController extends Controller
                                 $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
                                 $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                                 $ratings = [];
+                                $rating_count = 0;
                                 if($orders != null || $orders_count != 0){
                                     foreach($orders as $order)
                                     {
@@ -242,6 +243,7 @@ class MedicationsController extends Controller
                                         else
                                         {
                                             $rate += $rating -> rating ;
+                                            $rating_count += 1;
                                         }
                                     }
                                     $overall_rating = $rate / $orders_count;
@@ -257,6 +259,7 @@ class MedicationsController extends Controller
                                     'city_id' => $pharmacy -> city_id,
                                     'product_pharmacy_id' => $pharmacy_product -> id,
                                     'count' => $pharmacy_product -> count,
+                                    'rating_count' => $rating_count
                                 ];
                                 $pharmacies_response[] = $pharma;
                             }
@@ -518,6 +521,7 @@ class MedicationsController extends Controller
                                 $orders = Order::where('pharmacy_id', $pharmacy_id)->get();
                                 $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                                 $ratings = [];
+                                $rating_count = 0;
                                 if($orders != null || $orders_count != 0){
                                     foreach($orders as $order)
                                     {
@@ -529,6 +533,7 @@ class MedicationsController extends Controller
                                         else
                                         {
                                             $rate += $rating -> rating ;
+                                            $rating_count += 1;
                                         }
                                     }
                                     $overall_rating = $rate / $orders_count;
@@ -544,6 +549,7 @@ class MedicationsController extends Controller
                                     'city_id' => $pharmacy -> city_id,
                                     'product_pharmacy_id' => $pharmacy_product -> id,
                                     'count' => $pharmacy_product -> count,
+                                    'rating_count' => $rating_count
                                 ];
                                 $pharmacies_response[] = $pharma;
                             }
