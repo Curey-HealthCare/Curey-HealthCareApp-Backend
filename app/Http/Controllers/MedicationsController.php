@@ -232,7 +232,7 @@ class MedicationsController extends Controller
                                 $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                                 $ratings = [];
                                 $rating_count = 0;
-                                if($orders != null || $orders_count != 0){
+                                if($orders->isNotEmpty() || $orders_count != 0){
                                     foreach($orders as $order)
                                     {
                                         $order_id = $order -> id;
@@ -246,7 +246,7 @@ class MedicationsController extends Controller
                                             $rating_count += 1;
                                         }
                                     }
-                                    $overall_rating = $rate / $orders_count;
+                                    $overall_rating = $rate / $rating_count;
                                 }
 
                                 // build response for each pharmacy
@@ -522,7 +522,7 @@ class MedicationsController extends Controller
                                 $orders_count = Order::where('pharmacy_id', $pharmacy_id)->count();
                                 $ratings = [];
                                 $rating_count = 0;
-                                if($orders != null || $orders_count != 0){
+                                if($orders->isNotEmpty() || $orders_count != 0){
                                     foreach($orders as $order)
                                     {
                                         $order_id = $order -> id;
@@ -536,7 +536,7 @@ class MedicationsController extends Controller
                                             $rating_count += 1;
                                         }
                                     }
-                                    $overall_rating = $rate / $orders_count;
+                                    $overall_rating = $rate / $rating_count;
                                 }
 
                                 // build response for each pharmacy
