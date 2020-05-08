@@ -82,7 +82,9 @@ class DoctorPrescriptionsController extends Controller
                                             }
                                             else{
                                                 $isFailed = true;
-                                                $errors += ['product'];
+                                                $errors += [
+                                                    'product' => 'can not find this product'
+                                                ];
                                             }
                                         }
                                         $card = [
@@ -95,20 +97,26 @@ class DoctorPrescriptionsController extends Controller
                                     }
                                     else{
                                         $isFailed = true;
-                                        $errors += ['prescription details'];
+                                        $errors += [
+                                            'prescription_details' => 'can not retrieve data'
+                                        ];
                                     }
                                 }
                             }
                         }
                         else{
                             $isFailed = true;
-                            $errors += ['patient'];
+                            $errors += [
+                                'patient' => 'patient data not found'
+                            ];
                         }
                     }
                 }
                 else{
                     $isFailed = true;
-                    $errors += ['appointments'];
+                    $errors += [
+                        'appointment' => 'appointment data not fount'
+                    ];
                 }
             }
         }
@@ -160,6 +168,9 @@ class DoctorPrescriptionsController extends Controller
                                 $pres_detail -> per_week = $item['per_week'];
                                 $pres_detail -> save();
                             }
+                            $data = [
+                                'success' => 'prescription sent'
+                            ];
                         }
                     }
                     else{
@@ -178,9 +189,6 @@ class DoctorPrescriptionsController extends Controller
             }
         }
 
-        if($isFailed == false){
-
-        }
         $response = [
             'isFailed' => $isFailed,
             'data' => $data,

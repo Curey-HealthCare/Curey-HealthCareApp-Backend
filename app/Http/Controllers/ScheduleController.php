@@ -34,7 +34,7 @@ class ScheduleController extends Controller
             if($newSchedule == []){
                 $isFailed = true;
                 $errors += [
-
+                    'error' => 'empty schedule'
                 ];
             }
             else{
@@ -46,6 +46,9 @@ class ScheduleController extends Controller
                     $day -> to = $this_day['to'];
                     $day -> save();
                 }
+                $data = [
+                    'success' => 'schedule added successfully'
+                ];
             }
         }
 
@@ -79,6 +82,9 @@ class ScheduleController extends Controller
             $existing_schedule = TimeTable::where('user_id', $user -> id)->get();
             if($existing_schedule -> isEmpty()){
                 $isFailed = true;
+                $errors += [
+                    'error' => 'empty schedule'
+                ];
             }
             else{
                 foreach($existing_schedule as $day){
@@ -130,6 +136,9 @@ class ScheduleController extends Controller
                 'from' => $request -> from,
                 'to' => $request -> to,
             ]);
+            $data = [
+                'success' => 'day updates successfully'
+            ];
         }
 
         $response = [
@@ -160,6 +169,9 @@ class ScheduleController extends Controller
         else{
             $record_id = $request -> day_id;
             TimeTable::where('id', $record_id)->delete();
+            $data = [
+                'success' => 'day deleted successfully'
+            ];
         }
 
         $response = [
@@ -194,6 +206,9 @@ class ScheduleController extends Controller
                 Doctor::where('user_id', $user -> id)->update([
                     'offers_callup' => $request -> status,
                 ]);
+                $data = [
+                    'success' => 'status changed successfully'
+                ];
             }
         }
 

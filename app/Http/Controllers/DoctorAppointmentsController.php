@@ -39,7 +39,7 @@ class DoctorAppointmentsController extends Controller
                     ['doctor_id', '=', $doctor -> id],
                     ['appointment_time', '>', Carbon::now()],
                     ['re_examination', '=', 0]
-                    ])->get();
+                    ])->orderBy('appointment_time')->skip($request -> skip)->take($request -> limit)->get();
                 if($new_requests -> isNotEmpty()){
                     foreach($new_requests as $app){
                         // get patient data
@@ -64,6 +64,12 @@ class DoctorAppointmentsController extends Controller
 
                         $appointments[] = $appointment;
                     }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'no appointments available to view'
+                    ];
                 }
             }
 
@@ -105,7 +111,7 @@ class DoctorAppointmentsController extends Controller
                     ['doctor_id', '=', $doctor -> id],
                     ['appointment_time', '>', Carbon::now()],
                     ['re_examination', '=', 1]
-                    ])->get();
+                    ])->orderBy('appointment_time')->skip($request -> skip)->take($request -> limit)->get();
                 if($new_requests -> isNotEmpty()){
                     foreach($new_requests as $app){
                         // get patient data
@@ -130,6 +136,12 @@ class DoctorAppointmentsController extends Controller
 
                         $appointments[] = $appointment;
                     }
+                }
+                else{
+                    $isFailed = true;
+                    $errors += [
+                        'error' => 'no appointments available to view'
+                    ];
                 }
             }
 

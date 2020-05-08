@@ -111,7 +111,7 @@ class DoctorDashboardController extends Controller
 
                 // get all performed appointments
                 $past_appointments = Appointment::where(['doctor_id' => $doctor -> id,])
-                    ->where('appointment_time', '<', Carbon::now())->get();
+                    ->where('appointment_time', '<', Carbon::now())->orderBy('appointment_time', 'DESC')->get();
                 if($past_appointments -> isNotEmpty()){
                     foreach($past_appointments as $app){
                         // get patient data
@@ -138,10 +138,11 @@ class DoctorDashboardController extends Controller
                         $past[] = $past_app;
                     }
                 }
-                // else{
-                //     $isFailed = true;
-                //     $errors += [];
-                // }
+                 else{
+                     $past = [
+                         'empty'
+                     ];
+                 }
             }
         }
 
