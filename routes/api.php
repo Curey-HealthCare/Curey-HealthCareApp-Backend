@@ -135,6 +135,9 @@ Route::group(['prefix' => '/mobile'], function(){
     Route::post('/change_fees', 'ProfileController@webUpdateFees');
     Route::post('/change_hv', 'ProfileController@webChangeHomeVisit');
     Route::post('/change_duration', 'ProfileController@webUpdateDuration');
+//    Complete Signup
+    Route::get('/complete_signup', 'SignupController@completeSignupData');
+    Route::post('/complete_signup', 'SignupController@completeSignupSubmit');
 });
 
 Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
@@ -241,4 +244,7 @@ Route::group(['middleware' => ['cors'],'prefix' => '/web'], function(){
     Route::post('/change_fees', 'ProfileController@webUpdateFees');
     Route::post('/change_hv', 'ProfileController@webChangeHomeVisit');
     Route::post('/change_duration', 'ProfileController@webUpdateDuration');
+    //    Complete Signup
+    Route::get('/complete_signup', 'SignupController@completeSignupData');
+    Route::post('/complete_signup', 'SignupController@completeSignupSubmit');
 });

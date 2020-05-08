@@ -250,6 +250,9 @@ class LoginController extends Controller
         else{
             User::where('id', $user -> id)
                         -> update(['api_token' => Str::random(80)]);
+            $data = [
+                'success' => 'user logged out'
+            ];
         }
 
         $response = [
