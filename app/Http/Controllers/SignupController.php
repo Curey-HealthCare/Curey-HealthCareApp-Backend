@@ -183,6 +183,7 @@ class SignupController extends Controller
                 if($new_dr -> save()){
                     $doctor = new Doctor;
                     $doctor -> user_id = $new_dr -> id;
+                    $doctor -> duration = 0;
                     if($doctor -> save()){
                         $data = [
                             'success' => 'Registeration successful'
@@ -557,6 +558,7 @@ class SignupController extends Controller
                 if($new_dr -> save()){
                     $doctor = new Doctor;
                     $doctor -> user_id = $new_dr -> id;
+                    $doctor -> duration = 0;
                     if($doctor -> save()){
                         $data = [
                             'success' => 'Registeration successful'
