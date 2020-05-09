@@ -424,13 +424,26 @@ class AppointmentsController extends Controller
                     $doc_id = $app -> doctor_id;
                     $doc = Doctor::where('id',$doc_id)->first();
                     $add = $doc -> address;
+                    if($add == NULL){
+                        $add = 'Not set';
+                    }
                     $isCallUp = $app -> is_callup;
                     if($isCallUp == 1)
                     {
                         $fees = $doc -> callup_fees;
+                        if($fees == NULL){
+                            $fees = 'Not set';
+                        }
                     }
                     else{
                         $fees = $doc -> fees;
+                        if($fees == NULL){
+                            $fees = 'Not set';
+                        }
+                    }
+                    $docDur = $doc -> duration;
+                    if($docDur == NULL){
+                        $docDur = 'Not set';
                     }
                     $reExamine = $app -> re_examination;
                     if($reExamine==1)
@@ -441,7 +454,11 @@ class AppointmentsController extends Controller
                         $checkup = null;
                     }
                     $spec_id = $doc -> speciality_id;
-                    $spec= Speciality::find($spec_id);
+                    if($spec_id == NULL){
+                        $spec = 'Not set';
+                    }else{
+                        $spec= Speciality::find($spec_id) -> name;
+                    }
                     $Uid = $doc -> user_id;
                     $user_doc = User::find($Uid);
                     $img_id = $user_doc -> image_id;
@@ -459,9 +476,9 @@ class AppointmentsController extends Controller
                         'full_name'=> $user_doc -> full_name,
                         'address' => $add,
                         'image' => $image_url,
-                        'speciality'=> $spec -> name,
+                        'speciality'=> $spec,
                         'app_time' => $app -> appointment_time,
-                        'duration' => $doc -> duration,
+                        'duration' => $docDur,
                         'fees' => $fees,
                         'last_checkup' => $checkup,
                         'is_callup' => $app -> is_callup,
