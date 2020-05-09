@@ -59,7 +59,7 @@ class ProfileController extends Controller
             if($user -> role_id == 1){
                 $address = $user -> address;
                 if($image == null){
-                    $image_url = asset('default/user.png');
+                    $image_url = asset(Storage::url('default/user.png'));
                 }
             }
             elseif ($user -> role_id == 2){
@@ -74,7 +74,7 @@ class ProfileController extends Controller
                     ];
                 }
                 if($image == null){
-                    $image_url = asset('default/pharmacy.png');
+                    $image_url = asset(Storage::url('default/pharmacy.png'));
                 }
             }
             elseif ($user -> role_id == 3){
@@ -98,7 +98,7 @@ class ProfileController extends Controller
                     ];
                 }
                 if($image == null){
-                    $image_url = asset('default/doctor.png');
+                    $image_url = asset(Storage::url('default/doctor.png'));
                 }
                 $degree = Degree::where('doctor_id', $doctor -> id)->get();
                 if($degree -> isNotEmpty()){
