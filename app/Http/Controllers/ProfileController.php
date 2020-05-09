@@ -115,12 +115,13 @@ class ProfileController extends Controller
                 'email' => $user -> email,
                 'image' => $image_url,
                 'address' => $address,
+                'city_id' => $user -> city_id,
                 'phone' => $user -> phone,
                 'role' => $user -> role_id,
             ];
             if($user -> role_id == 3){
                 $profile += [
-                    'speciality' => $spec,
+                    'speciality' => $doctor -> speciality_id,
                     'fees' => $doctor -> fees,
                     'duration' => $doctor -> duration,
                     'callup' => $doctor -> offers_callup,
@@ -466,8 +467,8 @@ class ProfileController extends Controller
             ];
         }
         else{
-            if($request -> speciality != null || $request -> speciality != ''){
-                Doctor::where('user_id', $user -> id)->update(['speciality_id' => $request -> speciality]);
+            if($request -> speciality_id != null || $request -> speciality_id != ''){
+                Doctor::where('user_id', $user -> id)->update(['speciality_id' => $request -> speciality_id]);
                 $data += [
                     'success' => 'speciality changed successfully'
                 ];
@@ -584,7 +585,7 @@ class ProfileController extends Controller
         }
         else{
             if($request -> duration != null || $request -> duration != ''){
-                Doctor::where('user_id', $user -> id)->update(['fees' => $request -> duration]);
+                Doctor::where('user_id', $user -> id)->update(['duration' => $request -> duration]);
                 $data += [
                     'success' => 'duration changed successfully'
                 ];
