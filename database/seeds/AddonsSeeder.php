@@ -91,5 +91,9 @@ class AddonsSeeder extends Seeder
                 ['id' => '6', 'name' => 'Capsules', 'created_at' => NULL, 'updated_at' => NULL]
             ]);
         }
+
+        $this->command->info('    ---------------------------------------');
+        $this->command->info('     Appointments table updated ¯\_(ツ)_/¯');
+        $this->command->info('    ---------------------------------------');
     }
 }
