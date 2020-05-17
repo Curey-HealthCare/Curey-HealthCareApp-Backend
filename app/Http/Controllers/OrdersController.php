@@ -159,7 +159,7 @@ class OrdersController extends Controller
                     foreach($products_pharmacies as $product_pharmacy){
 //                        check the available ammount of each product in the order
                         $pharmacy_id_request = $product_pharmacy['id'];
-                        $the_pharmacy = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first();
+                        $the_pharmacy = ProductPharmacy::where('id', $pharmacy_id_request)->first();
                         if($the_pharmacy -> count < $product_pharmacy['amount']){
                             $isFailed = true;
                             $errors += [
@@ -442,7 +442,7 @@ class OrdersController extends Controller
                     foreach($products_pharmacies as $product_pharmacy){
 //                        check the available ammount of each product in the order
                         $pharmacy_id_request = $product_pharmacy['id'];
-                        $the_pharmacy = ProductPharmacy::select('pharmacy_id')->where('id', $pharmacy_id_request)->first();
+                        $the_pharmacy = ProductPharmacy::where('id', $pharmacy_id_request)->first();
                         if($the_pharmacy -> count < $product_pharmacy['amount']){
                             $isFailed = true;
                             $errors += [
