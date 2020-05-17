@@ -41,7 +41,7 @@ class ProfileController extends Controller
             $degrees = [];
             $spec = 0;
             $image_url = null;
-            $address = null;
+            $work_address = null;
             $image = Image::where('id', $user -> image_id)->first();
             if($image != null){
                 $image_path = Storage::url($image -> path . '.' . $image -> extension);
@@ -57,7 +57,6 @@ class ProfileController extends Controller
                 ];
             }
             if($user -> role_id == 1){
-                $address = $user -> address;
                 if($image == null){
                     $image_url = asset(Storage::url('default/user.png'));
                 }
@@ -65,7 +64,7 @@ class ProfileController extends Controller
             elseif ($user -> role_id == 2){
                 $pharmacy = Pharmacy::where('user_id', $user -> id)->first();
                 if($pharmacy != null){
-                    $address = $pharmacy -> address;
+                    $work_address = $pharmacy -> address;
                 }
                 else{
                     $isFailed = true;
@@ -80,7 +79,7 @@ class ProfileController extends Controller
             elseif ($user -> role_id == 3){
                 $doctor = Doctor::where('user_id', $user -> id)->first();
                 if($doctor != null){
-                    $address = $doctor -> address;
+                    $work_address = $doctor -> address;
                     $spec = $doctor -> speciality_id;
                 }
                 else{
@@ -114,10 +113,11 @@ class ProfileController extends Controller
                 'name' => $user -> full_name,
                 'email' => $user -> email,
                 'image' => $image_url,
-                'address' => $address,
+                'address' => $user -> address,
                 'city_id' => $user -> city_id,
                 'phone' => $user -> phone,
                 'role' => $user -> role_id,
+                'work_address' => $work_address,
             ];
             if($user -> role_id == 3){
                 $profile += [
@@ -275,12 +275,17 @@ class ProfileController extends Controller
                     User::where('api_token', $api_token)->update(['address' => $request -> address, 'city_id' => $request -> city_id]);
                 }
                 if($user -> role_id == 2){
-                    User::where('api_token', $api_token)->update(['city_id' => $request -> city_id]);
-                    Pharmacy::where('user_id', $user -> id)->update(['address' => $request -> address, ]);
+                    if($request -> work_address != null || $request -> work_address != ''){
+                        User::where('api_token', $api_token)->update(['address' => $request -> address, 'city_id' => $request -> city_id]);
+                        Pharmacy::where('user_id', $user -> id)->update(['address' => $request -> work_address,]);
+                    }
+
                 }
                 if($user -> role_id == 3){
-                    User::where('api_token', $api_token)->update(['city_id' => $request -> city_id]);
-                    Doctor::where('user_id', $user -> id)->update(['address' => $request -> address, ]);
+                    if($request -> work_address != null || $request -> work_address != ''){
+                        User::where('api_token', $api_token)->update(['address' => $request -> address, 'city_id' => $request -> city_id]);
+                        Doctor::where('user_id', $user -> id)->update(['address' => $request -> work_address,]);
+                    }
                 }
                 $data += [
                     'address' => 'changed successfully'
