@@ -279,12 +279,23 @@ class ProfileController extends Controller
                         User::where('api_token', $api_token)->update(['address' => $request -> address, 'city_id' => $request -> city_id]);
                         Pharmacy::where('user_id', $user -> id)->update(['address' => $request -> work_address,]);
                     }
-
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'address' => 'work address empty'
+                        ];
+                    }
                 }
                 if($user -> role_id == 3){
                     if($request -> work_address != null || $request -> work_address != ''){
                         User::where('api_token', $api_token)->update(['address' => $request -> address, 'city_id' => $request -> city_id]);
                         Doctor::where('user_id', $user -> id)->update(['address' => $request -> work_address,]);
+                    }
+                    else{
+                        $isFailed = true;
+                        $errors += [
+                            'address' => 'work address empty'
+                        ];
                     }
                 }
                 $data += [
