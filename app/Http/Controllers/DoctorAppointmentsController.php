@@ -190,7 +190,6 @@ class DoctorAppointmentsController extends Controller
                     $appointment -> appointment_time = $appointment_time;
                     $appointment -> re_examination = 1;
                     $appointment -> is_callup = $is_callup;
-                    $appointment -> duration = $duration;
                     $appointment -> save();
 
                     $data += [
