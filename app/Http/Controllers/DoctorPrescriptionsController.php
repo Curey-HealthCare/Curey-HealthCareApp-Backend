@@ -21,10 +21,8 @@ class DoctorPrescriptionsController extends Controller
         $isFailed = false;
         $data = [];
         $errors =  [];
-
         // Global variables
         $prescriptions_response = [];
-
         $api_token = $request -> api_token;
         $user = null;
         $user = User::where(['api_token' => $api_token, 'role_id' => 3])->first();
@@ -77,7 +75,6 @@ class DoctorPrescriptionsController extends Controller
                                                     'dosage' => $pro -> dosage,
                                                     'per_week' => $pro -> per_week
                                                 ];
-
                                                 $details[] = $item;
                                             }
                                             else{
@@ -87,13 +84,15 @@ class DoctorPrescriptionsController extends Controller
                                                 ];
                                             }
                                         }
-                                        $card = [
+                                        if($isFailed == false){
+                                            $card = [
                                             'patient' => $patient -> full_name,
                                             'address' => $patient -> address,
                                             'image' => $p_image_path,
                                             'details' => $details,
                                         ];
                                         $prescriptions_response[] = $card;
+                                        }
                                     }
                                     else{
                                         $isFailed = true;
@@ -120,7 +119,6 @@ class DoctorPrescriptionsController extends Controller
                 }
             }
         }
-
         if($isFailed == false){
             $data = $prescriptions_response;
         }
@@ -129,7 +127,6 @@ class DoctorPrescriptionsController extends Controller
             'data' => $data,
             'errors' => $errors
         ];
-
         return response()->json($response);
     }
 

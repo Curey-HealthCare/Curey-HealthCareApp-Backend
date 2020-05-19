@@ -50,7 +50,7 @@ class PharmaciesController extends Controller
         }
         else{
             $pharmacy_id = $user -> id;
-            $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
+            $pharmacy = Pharmacy::where('user_id', $pharmacy_id)->first();
 
             if($pharmacy == null)
             {
@@ -188,7 +188,7 @@ class PharmaciesController extends Controller
         else{
 
             $pharmacy_id = $user -> id;
-            $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
+            $pharmacy = Pharmacy::where('user_id',$pharmacy_id)->first();
 
             if($pharmacy == null)
             {
@@ -256,7 +256,7 @@ class PharmaciesController extends Controller
         }
         else{
             $pharmacy_id = $user -> id;
-            $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
+            $pharmacy = Pharmacy::where('user_id',$pharmacy_id)->first();
             if($pharmacy != null){
                 $orders = Order::where('pharmacy_id', $pharmacy -> id)->get();
                 if($orders -> isNotEmpty()){
@@ -383,7 +383,7 @@ class PharmaciesController extends Controller
         }
         else{
             $pharmacy_id = $user -> id;
-            $pharmacy = Pharmacy::where('id',$pharmacy_id)->first();
+            $pharmacy = Pharmacy::where('user_id',$pharmacy_id)->first();
             if($pharmacy == null)
             {
                 $isFailed = true;
