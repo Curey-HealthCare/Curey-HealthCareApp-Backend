@@ -179,27 +179,33 @@ class DoctorAppointmentsController extends Controller
             $doctor = Doctor::where('user_id', $user -> id)->first();
             if($doctor != null){
                 $doctor_id = $doctor -> id;
-                $user_id = $request -> user_id;
+                $app_id = $request -> appointment_id;
                 $appointment_time = $request -> appointment_time;
                 $is_callup = $request -> is_callup;
                 $duration = $doctor -> duration;
-                if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
-                    $appointment = new Appointment;
-                    $appointment -> user_id = $user_id;
-                    $appointment -> doctor_id = $doctor_id;
-                    $appointment -> appointment_time = $appointment_time;
-                    $appointment -> re_examination = 1;
-                    $appointment -> is_callup = $is_callup;
-                    $appointment -> save();
+                $previous_app = Appointment::where("id", $app_id)->first();
+                if($previous_app != null){
+                    if (Appointment::where(['doctor_id' => $doctor_id, 'appointment_time' => $appointment_time])->count() == 0){
+                        $appointment = new Appointment;
+                        $appointment -> user_id = $previous_app -> user_id;
+                        $appointment -> doctor_id = $doctor_id;
+                        $appointment -> last_checkup = $previous_app -> appointment_time;
+                        $appointment -> appointment_time = $appointment_time;
+                        $appointment -> re_examination = 1;
+                        $appointment -> is_callup = $is_callup;
+                        $appointment -> save();
 
-                    $data += [
-                        'message' => 'appointment booked successfully',
-                    ];
-                } else {
-                    $errors += [
-                        'error' => 'an appointment already exists at this time',
-                    ];
+                        $data += [
+                            'message' => 'appointment booked successfully',
+                        ];
+                    }
+                    else {
+                        $errors += [
+                            'error' => 'an appointment already exists at this time',
+                        ];
+                    }
                 }
+
             }
         }
 
