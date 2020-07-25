@@ -246,7 +246,12 @@ class MedicationsController extends Controller
                                             $rating_count += 1;
                                         }
                                     }
-                                    $overall_rating = $rate / $rating_count;
+                                    if($rating_count == 0){
+                                        $overall_rating = 0;
+                                    }
+                                    else{
+                                        $overall_rating = $rate / $rating_count;
+                                    }
                                 }
 
                                 // build response for each pharmacy
@@ -536,7 +541,13 @@ class MedicationsController extends Controller
                                             $rating_count += 1;
                                         }
                                     }
-                                    $overall_rating = $rate / $rating_count;
+                                    if($rating_count == 0){
+                                        $overall_rating = 0;
+                                    }
+                                    else{
+                                        $overall_rating = $rate / $rating_count;
+                                    }
+
                                 }
 
                                 // build response for each pharmacy
