@@ -83,7 +83,13 @@ class PharmaciesController extends Controller
                             $no_of_reviews += 1;
                         }
                     }
-                    $overall_rating = $ratings / $no_of_reviews;
+                    if($no_of_reviews == 0){
+                        $overall_rating = 0;
+                    }
+                    else{
+                        $overall_rating = $ratings / $no_of_reviews;
+                    }
+
 
                     // get performed orders
                     foreach($orders as $order){
@@ -131,7 +137,7 @@ class PharmaciesController extends Controller
                                         'details' => $items
                                     ];
 
-                                    $preformed[] = $order_data;
+                                    $performed[] = $order_data;
                                 }
                             }
                         }
@@ -399,6 +405,9 @@ class PharmaciesController extends Controller
                         $order_tracking = OrderTracking::where(['order_id' => $order -> id])->first();
                         if($order_tracking != null){
                             if($order_tracking -> is_accepted == 1){
+                                if($order_tracking -> is_delivered == 1){
+                                    continue;
+                                }
                                 // get the order details
                                 $order_data = [];
                                 $items = [];
@@ -485,7 +494,9 @@ class PharmaciesController extends Controller
                         'is_prepared' => 1,
                         'prepared_at' => Carbon::now(),
                         'is_ofd' => 1,
-                        'ofd_at' => Carbon::now()
+                        'ofd_at' => Carbon::now(),
+                        'is_delivered' => 1,
+                        'delivered_at' => Carbon::now()
                     ]);
             $data += [
                 'success' => 'order ready for delivery'
