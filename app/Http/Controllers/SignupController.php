@@ -97,12 +97,13 @@ class SignupController extends Controller
 //        Check existing records in database for conflicts
         $all_users = User::all();
         foreach ($all_users as $user){
-            if ($user -> email == $email and $user -> role_id == $role){
+            if ($user -> email == $email){
 //                Add error that this email is already in database with same user role
                 $errors += [
                     'email' => 'This email address is already in use'
                 ];
                 $isFailed = true;
+            break;
             }
         }
 
@@ -472,12 +473,13 @@ class SignupController extends Controller
 //        Check existing records in database for conflicts
         $all_users = User::all();
         foreach ($all_users as $user){
-            if ($user -> email == $email and $user -> role_id == $role){
+            if ($user -> email == $email){
 //                Add error that this email is already in database with same user role
                 $errors += [
                     'email' => 'This email address is already in use'
                 ];
                 $isFailed = true;
+            break;
             }
         }
 
